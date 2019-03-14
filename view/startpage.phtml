@@ -1,0 +1,63 @@
+<?php
+/**
+ * Gastrojobs24
+ *
+ * General layout template file. Defines the general layout.
+ *
+ * @copyright (c) 2013 - 2016 Cross Solution (http://cross-solution.de)
+ * @license   Gastrojobs
+ */
+
+/* @var $options \Core\Options\ModuleOptions */
+$options = $this->services('Core/Options');
+$languages = $options->getSupportedLanguages();
+$lang = $this->params('lang');
+
+
+// See: http://yawik.readthedocs.org/en/latest/modules/core/notifications.html
+
+$notifications = $this->partial('core/notifications');
+
+// set default page title
+
+$this->headTitle($this->translate('Gastrojob24'))->setSeparator(' | ')->setAutoEscape(false);
+
+// set default keywords
+
+$this->headMeta()->setCharset("utf-8");
+$this->headMeta()->appendName('viewport', 'width=device-width, initial-scale=1.0');
+
+$this->configHeadScript()->prependScript('var lang="' . $lang . '";'
+                                         . 'var basePath="' . $this->basePath() . '";');
+
+$this->headLink()->prependStylesheet($this->basePath('modules/Gastro24/Gastro24.css'));
+$this->headLink()->prependStylesheet($this->basePath('dist/css/core.min.css'));
+$this->configHeadScript()->prependFile($this->basepath('dist/js/core.js'));
+$this->configHeadScript()->appendFile($this->basePath('modules/Gastro24/jquery.matchHeight.js'))
+                         ->appendFile($this->basePath('modules/Gastro24/index.js'));
+
+$langScript = 'dist/locales/' . $lang . '.js';
+$this->configHeadScript()->appendFile($this->basePath($langScript));
+
+$this->configHeadScript()->appendScript('var lang="' . $this->params('lang') . '";'
+    . 'var basePath="' . $this->basePath() . '";');
+
+
+
+?>
+
+<?php echo $this->doctype(); ?>
+<html lang="<?php echo $this->params('lang') ?>">
+<head>
+    <?php echo $this->headTitle() ?>
+    <?php echo $this->headMeta() ?>
+</head>
+<body class="home startpage.phtml">
+<div id="wrapper">
+    <div id="bg-full">
+        <span class="bg-static"></span>
+    </div>
+<h1>Form2Mail</h1>
+<!-- /container -->
+</body>
+</html>

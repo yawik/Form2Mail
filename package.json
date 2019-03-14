@@ -1,0 +1,25 @@
+{
+  "name": "form2mail",
+  "version": "0.0.1",
+  "description": "build assets",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://gitlab.cross-solution.de/Personalwerk/form2mail.git"
+  },
+  "scripts": {
+    "postinstall": "grunt"
+  },
+  "private": false,
+  "devDependencies": {
+    "yawik-core": "test/sandbox/public/modules/Core",
+    "grunt": "^1.0.3",
+    "grunt-contrib-concat": "^1.0.1",
+    "grunt-contrib-copy": "^1.0.0",
+    "grunt-contrib-cssmin": "^3.0.0",
+    "grunt-contrib-less": "^2.0.0",
+    "grunt-contrib-uglify": "^4.0.0",
+    "grunt-contrib-watch": "^1.1.0",
+    "load-grunt-tasks": "^4.0.0"
+  }
+}
