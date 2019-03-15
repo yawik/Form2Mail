@@ -35,10 +35,6 @@ host('jobs-deutschland.de')
     
 before('deploy:symlink', 'deploy:build');
 
-task('deploy:build', function () {
-    run('cd {{release_path}}/test/sandbox && rm -R config/autoload var && ln -s ../../../../shared/shared/var/ && cd config && ln -s ../../../../../shared/shared/config/autoload');
-});
-
 // [Optional] if deploy fails automatically unlock.
 after('deploy:failed', 'deploy:unlock');
 
