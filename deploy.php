@@ -16,7 +16,10 @@ add('shared_dirs', [
 ]);
 
 // Writable dirs by web server 
-add('writable_dirs', ['/var/www/production/current/shared/var/']);
+add('writable_dirs', [
+    '/var/www/production/current/shared/var/cache',
+    '/var/www/production/current/shared/var/log'
+    ]);
 
 set('default_stage', 'prod');
 
