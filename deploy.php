@@ -10,17 +10,17 @@ set('application', 'Form2Mail');
 set('repository', 'git@gitlab.cross-solution.de:Personalwerk/form2mail.git');
 
 // Shared files/dirs between deploys 
-add('shared_files', ['/var/www/production/current/shared/test/sandbox/public/.htaccess']);
+add('shared_files', ['test/sandbox/public/.htaccess']);
 add('shared_dirs', [
-   '/www/production/current/shared/config',
-   '/var/www/production/current/shared/var/cache',
-   '/var/www/production/current/shared/var/log'
+    'test/sandbox/var/log',
+    'test/sandbox/var/cache',
+    'test/sandbox/config/autoload',
 ]);
 
 // Writable dirs by web server 
 add('writable_dirs', [
-    '/var/www/production/current/shared/var/cache',
-    '/var/www/production/current/shared/var/log'
+    'test/sandbox/var/log',
+    'test/sandbox/var/log',
     ]);
 
 set('default_stage', 'prod');
