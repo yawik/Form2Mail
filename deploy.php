@@ -7,7 +7,7 @@ require 'recipe/zend_framework.php';
 set('application', 'Form2Mail');
 
 // Project repository
-set('repository', 'https://gitlab.cross-solution.de/Personalwerk/form2mail.git');
+set('repository', 'git@gitlab.cross-solution.de:Personalwerk/form2mail.git');
 
 // Shared files/dirs between deploys 
 add('shared_files', []);
