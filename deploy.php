@@ -20,7 +20,7 @@ add('shared_dirs', [
 // Writable dirs by web server 
 add('writable_dirs', [
     'test/sandbox/var/log',
-    'test/sandbox/var/log',
+    'test/sandbox/var/cache',
     ]);
 
 set('default_stage', 'prod');
