@@ -32,8 +32,6 @@ host('jobs-deutschland.de')
     ->stage('prod')
     ->multiplexing(false) 
     ->set('deploy_path', '/var/www/production');   
-    
-before('deploy:symlink', 'deploy:build');
 
 // [Optional] if deploy fails automatically unlock.
 after('deploy:failed', 'deploy:unlock');
