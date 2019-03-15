@@ -12,7 +12,7 @@ return [
         'Cv',
         "Geo",
         "Pdf",
-        "Organisations",
+        "Organizations",
         "Form2Mail"
     ],
 ];
