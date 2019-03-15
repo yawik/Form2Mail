@@ -18,8 +18,7 @@
     "prefer-stable": true,
     "minimum-stability": "dev",
     "require": {
-      "yawik/application-pack": "*",
-        "yawik/organizations": "^0.32.0"
+        "yawik/application-pack": "*"
     },
     "require-dev": {
         "phpunit/phpunit": "^5.7",
@@ -30,7 +29,7 @@
     },
     "autoload-dev": {
 	"psr-4": {
-            "Form2MailTest\\": "test/Form2MailTest/",
+        "Form2MailTest\\": "test/Form2MailTest/",
 	    "CoreTestUtils\\": "vendor/yawik/core/test/CoreTestUtils/"
 	},
         "psr-0": {
