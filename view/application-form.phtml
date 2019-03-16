@@ -22,7 +22,7 @@ $this->configHeadScript()->setAllowArbitraryAttributes(true);
 $this->configHeadScript()->prependFile($this->basepath('dist/js/core.js'));
 $this->configHeadScript()->appendScript('var lang="' . $this->params('lang') . '";'
     . 'var basePath="' . $this->basePath() . '";');
-$this->headLink()->prependStylesheet($this->basePath('modules/YawikDemoSkin/dist/YawikDemoSkin.css'));
+$this->headLink()->prependStylesheet($this->basePath('modules/Form2Mail/dist/layout.css'));
 foreach ($languages as $lang) {
     $this->headLink()->appendAlternate(
         preg_replace('~^'.$this->basepath('/'.$this->params('lang')).'~',
@@ -54,22 +54,10 @@ foreach ($languages as $lang) {
 <footer id="yk-footer">
  <div class="container">
     <div class="row">
-           <div class="col-md-4">
-               <small>
-                   <a href="http://www.jetbrains.com/phpstorm/">
-                       <img src="<?php echo $this->basePath('modules/YawikDemoSkin/img/logo_PhpStorm.svg')?>"
-                           alt="Developed with PhpStorm" border="0" style="height: 30px"/></a>
-               </small>
-           </div>
-	   <div class="col-md-4">
-           </div>
-           <div class="col-md-4" align="right">
+           <div class="col-md-12" align="right">
                 <span class="pull-right"><small>
-                        &copy; <?php echo date("Y")?> <a href="http://cross-solution.de">
-                            Cross
-                            Solution</a>.
+                    &copy; <?php echo date("Y")?> <a href="https://www.personalwerk.de">Personalwerk</a>.
                         | <a href="<?php echo  $this->basePath($this->params('lang').'/content/imprint')?>"><?php echo $this->translate('Imprint') ?></a>
-                        | <?php passthru('git describe') ?> [<?php passthru('git rev-parse --abbrev-ref HEAD') ?>]<br/>
                         Powered by <a href="http://yawik.org">YAWIK</a>
                  </small></span>
            </div>
