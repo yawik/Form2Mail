@@ -1,0 +1,81 @@
+<?php
+/**
+ * YAWIK
+ *
+ * General layout template file. Defines the general layout.
+ *
+ * @copyright (c) 2019 Cross Solution (http://cross-solution.de)
+ * @license   MIT
+ */
+/* @var $options \Core\Options\ModuleOptions */
+$options = $this->services('Core/Options');
+$languages = $options->getSupportedLanguages();
+// See: http://yawik.readthedocs.org/en/latest/modules/core/notifications.html
+$notifications = $this->partial('core/notifications');
+// set default page title
+$this->headTitle($this->translate('YAWIK DEMO'))->setSeparator(' - ')->setAutoEscape(false);
+// set default keywords
+$this->headMeta()->setCharset("utf-8");
+$this->headMeta()->appendName("keywords", "Open Surce Bewerbermanagement System, Bewerberverwaltung");
+$this->headMeta()->appendName('viewport', 'width=device-width, initial-scale=1.0');
+$this->configHeadScript()->setAllowArbitraryAttributes(true);
+$this->configHeadScript()->prependFile($this->basepath('dist/js/core.js'));
+$this->configHeadScript()->appendScript('var lang="' . $this->params('lang') . '";'
+    . 'var basePath="' . $this->basePath() . '";');
+$this->headLink()->prependStylesheet($this->basePath('modules/YawikDemoSkin/dist/YawikDemoSkin.css'));
+foreach ($languages as $lang) {
+    $this->headLink()->appendAlternate(
+        preg_replace('~^'.$this->basepath('/'.$this->params('lang')).'~',
+            $this->basepath('/'.$lang),$_SERVER['REQUEST_URI']),
+        'hreflang',
+        $this->headTitle()->setTranslator()->renderTitle() ,
+        array('hreflang'=>$lang));
+}
+?>
+<?php echo $this->doctype(); ?>
+<html lang="<?php echo $this->params('lang') ?>">
+<head>
+    <?php echo $this->headTitle() ?>
+    <?php echo $this->headMeta() ?>
+    <?php echo $this->configHeadScript() ?>
+    <?php echo $this->headLink() ?>
+    <?php echo $this->headStyle() ?>
+<link rel="icon" href="<?=$this->basePath('modules/YawikDemoSkin/img/cropped-yawik-small-32x32.jpg')?>" sizes="32x32" />
+    <link rel="icon" href="<?=$this->basePath('modules/YawikDemoSkin/img/cropped-yawik-small-192x192.jpg')?>" sizes="192x192" />
+    <link rel="apple-touch-icon-precomposed" href="<?=$this->basePath('modules/YawikDemoSkin/img/cropped-yawik-small-180x180.jpg')?>" />
+    <meta name="msapplication-TileImage" content="<?=$this->basePath('modules/YawikDemoSkin/img/cropped-yawik-small-270x270.jpg')?>" />
+</head>
+<body>
+<main id="content" class="col-md-12">
+    <?php echo $notifications?>
+    <?php echo $this->content; ?>
+</main>
+<!-- /container -->
+<footer id="yk-footer">
+ <div class="container">
+    <div class="row">
+           <div class="col-md-4">
+               <small>
+                   <a href="http://www.jetbrains.com/phpstorm/">
+                       <img src="<?php echo $this->basePath('modules/YawikDemoSkin/img/logo_PhpStorm.svg')?>"
+                           alt="Developed with PhpStorm" border="0" style="height: 30px"/></a>
+               </small>
+           </div>
+	   <div class="col-md-4">
+           </div>
+           <div class="col-md-4" align="right">
+                <span class="pull-right"><small>
+                        &copy; <?php echo date("Y")?> <a href="http://cross-solution.de">
+                            Cross
+                            Solution</a>.
+                        | <a href="<?php echo  $this->basePath($this->params('lang').'/content/imprint')?>"><?php echo $this->translate('Imprint') ?></a>
+                        | <?php passthru('git describe') ?> [<?php passthru('git rev-parse --abbrev-ref HEAD') ?>]<br/>
+                        Powered by <a href="http://yawik.org">YAWIK</a>
+                 </small></span>
+           </div>
+    </div>
+  </div>
+</footer>
+<?php echo $this->partial("piwik") ?>
+</body>
+</html>

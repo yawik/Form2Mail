@@ -11,6 +11,7 @@ return [
   'view_manager' => [
            'template_map' => [
                 'startpage'  => __DIR__ . '/../view/startpage.phtml',
+                'layout/application-form' => __DIR__ . '/../view/application-form.phtml',
           ]
-  ] 
+  ]
 ];
