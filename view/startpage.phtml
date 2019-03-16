@@ -20,7 +20,7 @@ $notifications = $this->partial('core/notifications');
 
 // set default page title
 
-$this->headTitle($this->translate('Gastrojob24'))->setSeparator(' | ')->setAutoEscape(false);
+$this->headTitle($this->translate('Apply by mail'))->setSeparator(' | ')->setAutoEscape(false);
 
 // set default keywords
 
@@ -30,11 +30,9 @@ $this->headMeta()->appendName('viewport', 'width=device-width, initial-scale=1.0
 $this->configHeadScript()->prependScript('var lang="' . $lang . '";'
                                          . 'var basePath="' . $this->basePath() . '";');
 
-$this->headLink()->prependStylesheet($this->basePath('modules/Gastro24/Gastro24.css'));
+$this->headLink()->prependStylesheet($this->basePath('modules/Form2Mail/layout.css'));
 $this->headLink()->prependStylesheet($this->basePath('dist/css/core.min.css'));
 $this->configHeadScript()->prependFile($this->basepath('dist/js/core.js'));
-$this->configHeadScript()->appendFile($this->basePath('modules/Gastro24/jquery.matchHeight.js'))
-                         ->appendFile($this->basePath('modules/Gastro24/index.js'));
 
 $langScript = 'dist/locales/' . $lang . '.js';
 $this->configHeadScript()->appendFile($this->basePath($langScript));
