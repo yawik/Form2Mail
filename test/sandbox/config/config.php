@@ -10,6 +10,9 @@ return [
         'Settings',
         'Applications',
         'Cv',
+        "Geo",
+        "Pdf",
+        "Organizations",
         "Form2Mail"
     ],
 ];

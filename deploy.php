@@ -7,16 +7,21 @@ require 'recipe/zend_framework.php';
 set('application', 'Form2Mail');
 
 // Project repository
-set('repository', 'https://gitlab.cross-solution.de/Personalwerk/form2mail.git');
+set('repository', 'git@gitlab.cross-solution.de:Personalwerk/form2mail.git');
 
 // Shared files/dirs between deploys 
-add('shared_files', []);
+add('shared_files', ['test/sandbox/public/.htaccess']);
 add('shared_dirs', [
-   'shared',
+    'test/sandbox/var/log',
+    'test/sandbox/var/cache',
+    'test/sandbox/config/autoload',
 ]);
 
 // Writable dirs by web server 
-add('writable_dirs', []);
+add('writable_dirs', [
+    'test/sandbox/var/log',
+    'test/sandbox/var/cache',
+    ]);
 
 set('default_stage', 'prod');
 
@@ -26,13 +31,8 @@ host('jobs-deutschland.de')
     ->user('yawik')
     ->stage('prod')
     ->multiplexing(false) 
-    ->set('deploy_path', '/var/www/production');   
-    
-before('deploy:symlink', 'deploy:build');
-
-task('deploy:build', function () {
-    run('cd {{release_path}}/test/sandbox && rm -R config/autoload var && ln -s ../../../../shared/shared/var/ && cd config && ln -s ../../../../../shared/shared/config/autoload && cd ../public && ln -s ../../../../../shared/test/sandbox/public/.htaccess');
-});
+    ->set('deploy_path', '/var/www/production')
+    ->set('writableusesudo', true);   
 
 // [Optional] if deploy fails automatically unlock.
 after('deploy:failed', 'deploy:unlock');
