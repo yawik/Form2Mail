@@ -13,16 +13,16 @@ $languages = $options->getSupportedLanguages();
 // See: http://yawik.readthedocs.org/en/latest/modules/core/notifications.html
 $notifications = $this->partial('core/notifications');
 // set default page title
-$this->headTitle($this->translate('YAWIK DEMO'))->setSeparator(' - ')->setAutoEscape(false);
+$this->headTitle($this->translate('Bewerbungs per E-Mail'))->setSeparator(' - ')->setAutoEscape(false);
 // set default keywords
 $this->headMeta()->setCharset("utf-8");
-$this->headMeta()->appendName("keywords", "Open Surce Bewerbermanagement System, Bewerberverwaltung");
+$this->headMeta()->appendName("keywords", "Bewerbungsformular");
 $this->headMeta()->appendName('viewport', 'width=device-width, initial-scale=1.0');
 $this->configHeadScript()->setAllowArbitraryAttributes(true);
 $this->configHeadScript()->prependFile($this->basepath('dist/js/core.js'));
 $this->configHeadScript()->appendScript('var lang="' . $this->params('lang') . '";'
     . 'var basePath="' . $this->basePath() . '";');
-$this->headLink()->prependStylesheet($this->basePath('modules/Form2Mail/dist/layout.css'));
+$this->headLink()->prependStylesheet($this->basePath('modules/Form2Mail/layout.css'));
 foreach ($languages as $lang) {
     $this->headLink()->appendAlternate(
         preg_replace('~^'.$this->basepath('/'.$this->params('lang')).'~',
@@ -40,7 +40,7 @@ foreach ($languages as $lang) {
     <?php echo $this->configHeadScript() ?>
     <?php echo $this->headLink() ?>
     <?php echo $this->headStyle() ?>
-<link rel="icon" href="<?=$this->basePath('modules/YawikDemoSkin/img/cropped-yawik-small-32x32.jpg')?>" sizes="32x32" />
+    <link rel="icon" href="<?=$this->basePath('modules/YawikDemoSkin/img/cropped-yawik-small-32x32.jpg')?>" sizes="32x32" />
     <link rel="icon" href="<?=$this->basePath('modules/YawikDemoSkin/img/cropped-yawik-small-192x192.jpg')?>" sizes="192x192" />
     <link rel="apple-touch-icon-precomposed" href="<?=$this->basePath('modules/YawikDemoSkin/img/cropped-yawik-small-180x180.jpg')?>" />
     <meta name="msapplication-TileImage" content="<?=$this->basePath('modules/YawikDemoSkin/img/cropped-yawik-small-270x270.jpg')?>" />
