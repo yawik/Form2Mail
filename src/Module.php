@@ -13,6 +13,8 @@ namespace Form2Mail;
 
 use Core\ModuleManager\ModuleConfigLoader;
 use Zend\ModuleManager\Feature;
+use Zend\Console\Console;
+use Zend\Mvc\MvcEvent;
 
 /**
  * ${CARET}
@@ -22,6 +24,14 @@ use Zend\ModuleManager\Feature;
  */
 class Module implements Feature\ConfigProviderInterface
 {
+   /**
+    * indicates, that the autoload configuration for this module should be loaded.
+    * @see
+    *
+    * @var bool
+    */
+    public static $isLoaded=false;
+
     public function getConfig()
     {
         return ModuleConfigLoader::load(__DIR__ . '/../config');

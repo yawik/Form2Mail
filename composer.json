@@ -18,7 +18,8 @@
     "prefer-stable": true,
     "minimum-stability": "dev",
     "require": {
-        "yawik/application-pack": "*"
+        "yawik/application-pack": "*",
+        "yawik/jobs": "dev-develop as v0.32.0"
     },
     "require-dev": {
         "phpunit/phpunit": "^5.7",
