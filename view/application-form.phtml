@@ -19,6 +19,7 @@ $this->headMeta()->setCharset("utf-8");
 $this->headMeta()->appendName("keywords", "Bewerbungsformular");
 $this->headMeta()->appendName('viewport', 'width=device-width, initial-scale=1.0');
 $this->configHeadScript()->setAllowArbitraryAttributes(true);
+$this->configHeadScript()->prependFile($this->basepath('modules/Applications/js/application.form.js'));
 $this->configHeadScript()->prependFile($this->basepath('dist/js/core.js'));
 $this->configHeadScript()->appendScript('var lang="' . $this->params('lang') . '";'
     . 'var basePath="' . $this->basePath() . '";');
