@@ -1,0 +1,25 @@
+<?php
+/**
+ * YAWIK
+ *
+ * @filesource
+ * @copyright (c) 2013 - 2016 Cross Solution (http://cross-solution.de)
+ * @license   MIT
+ * @author Mathias Gelhausen <gelhausen@cross-solution.de>
+ */
+/**
+ * {{rtd: renders the contact information within the application form and the personal profile.}}
+ */
+ $info = $element->getObject(); /* @var \Auth\Entity\Info $info*/
+?>
+    <div class="row">
+        <div class="col-md-6">
+
+            <strong><?php echo $info->getDisplayName()?></strong><br><br>
+
+        </div>
+        <div class="col-md-6">
+            
+            <i class="yk-icon yk-icon-envelope"></i> <?php echo $info->getEmail()?><br>
+        </div>
+    </div>
