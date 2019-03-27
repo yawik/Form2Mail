@@ -26,7 +26,7 @@ return [
                         var $div = $("#attributes > div:nth-child(2)");
                         $div.find("> div").hide();
                         $div.append("<div class=\\"col-md-12\\"><p class=\\"small\\">Ihre Daten werden direkt an den Arbeitgeber weitergeleitet und unterliegen den Datenschutzbedingungen des Unternehmens. Für weitere Informationen zu den geltenden Datenschutzbedingungen, kontaktieren Sie bitte direkt das Unternehmen.</p></div>");
-                        $("application_incomplete").addClass("hidden");
+                        $("#application_incomplete").addClass("hidden");
                     });
                 })(jQuery);'],
             ],
