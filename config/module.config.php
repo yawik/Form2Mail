@@ -12,21 +12,43 @@ return [
         'template_map' => [
             'startpage'  => __DIR__ . '/../view/startpage.phtml',
             'layout/application-form' => __DIR__ . '/../view/application-form.phtml',
-            'form/auth/contact.form' => __DIR__ . '/../view/form/contact-form.phtml',
-            'form/auth/contact.view' => __DIR__ . '/../view/form/contact-view.phtml',
         ]
     ],
 
-    'form_elements' => [
-        'factories' => [
-            Form\AuthUserInfoFieldset::class => Form\AuthUserInfoFieldsetFactory::class
-        ],
-        'aliases' => [
-            'Auth/UserInfoFieldset' => Form\AuthUserInfoFieldset::class,
-        ],
-    ],
-
     'options' => [
-        Options\AuthUserInfoFieldsetOptions::class => []
+        \Auth\Options\UserInfoFieldsetOptions::class => [
+            'options' => [
+                'fields' => [
+                    'gender' => [
+                        'enabled' => false,
+                        'required' => false,
+                    ],
+                    'phone' => [
+                        'enabled' => false,
+                        'required' => false,
+                    ],
+                    'street' => [
+                        'enabled' => false,
+                        'required' => false,
+                    ],
+                    'houseNumber' => [
+                        'enabled' => false,
+                        'required' => false,
+                    ],
+                    'city' => [
+                        'enabled' => false,
+                        'required' => false,
+                    ],
+                    'postalCode' => [
+                        'enabled' => false,
+                        'required' => false,
+                    ],
+                    'country' => [
+                        'enabled' => false,
+                        'required' => false,
+                    ],
+                ],
+            ],
+        ],
     ],
 ];
