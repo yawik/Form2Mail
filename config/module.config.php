@@ -7,12 +7,29 @@
  */
 namespace Form2Mail;
 
+use Zend\ServiceManager\Factory\InvokableFactory;
+
 return [
     'view_manager' => [
         'template_map' => [
             'startpage'  => __DIR__ . '/../view/startpage.phtml',
             'layout/application-form' => __DIR__ . '/../view/application-form.phtml',
         ]
+    ],
+
+    'view_helper_config' => [
+        'headscript' => [
+            'lang/apply' => [
+                [\Zend\View\Helper\HeadScript::SCRIPT, ';(function($) {
+                    $(function() {
+                        $("#attributes-acceptedPrivacyPolicy").click();
+                        var $div = $("#attributes > div:nth-child(2)");
+                        $div.find("> div").hide();
+                        $div.append("<div class=\\"col-md-12\\"><p class=\\"small\\">Ihre Daten werden direkt an den Arbeitgeber weitergeleitet und unterliegen den Datenschutzbedingungen des Unternehmens. Für weitere Informationen zu den geltenden Datenschutzbedingungen, kontaktieren Sie bitte direkt das Unternehmen.</p></div>");
+                    });
+                })(jQuery);'],
+            ],
+        ],
     ],
 
     'options' => [
