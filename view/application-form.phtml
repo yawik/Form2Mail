@@ -23,7 +23,7 @@ $this->configHeadScript()->prependFile($this->basepath('modules/Applications/js/
 $this->configHeadScript()->prependFile($this->basepath('dist/js/core.js'));
 $this->configHeadScript()->appendScript('var lang="' . $this->params('lang') . '";'
     . 'var basePath="' . $this->basePath() . '";');
-$this->headLink()->prependStylesheet($this->basePath('modules/Form2Mail/layout.css'));
+$this->headLink()->prependStylesheet($this->basePath('modules/Form2Mail/dist/layout.css'));
 foreach ($languages as $lang) {
     $this->headLink()->appendAlternate(
         preg_replace('~^'.$this->basepath('/'.$this->params('lang')).'~',

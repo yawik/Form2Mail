@@ -19,9 +19,9 @@ module.exports = function(grunt) {
                             "./node_modules/pnotify/dist/pnotify.css",
                             "./node_modules/pnotify/dist/pnotify.buttons.css",
                             "./node_modules/bootsrap3-dialog/dist/css/bootstrap-dialog.css",
-                            targetDir+"/modules/Aviation/less/layout.less"
+                            targetDir+"/modules/Form2Mail/less/layout.less"
                         ],
-                        dest: targetDir+"/modules/Aviation/dist/layout.css"
+                        dest: targetDir+"/modules/Form2Mail/dist/layout.css"
                     }
                 ]
             },
@@ -38,8 +38,8 @@ module.exports = function(grunt) {
             aviation: {
                 files: [
                     {
-                        dest: targetDir+'/modules/Aviation/dist/layout.min.css',
-                        src: targetDir+'/modules/Aviation/dist/layout.css'
+                        dest: targetDir+'/modules/Form2Mail/dist/layout.min.css',
+                        src: targetDir+'/modules/Form2Mail/dist/layout.css'
                     }
                 ]
             }
