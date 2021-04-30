@@ -27,7 +27,7 @@ set('default_stage', 'prod');
 
 // Hosts
 
-host('jobs-deutschland.de')
+host('e-posting.de')
     ->user('yawik')
     ->stage('prod')
     ->multiplexing(false) 
