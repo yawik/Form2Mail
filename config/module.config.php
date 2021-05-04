@@ -7,9 +7,32 @@
  */
 namespace Form2Mail;
 
-use Zend\ServiceManager\Factory\InvokableFactory;
+use Form2Mail\Controller\SendMailController;
+use Form2Mail\Controller\SendMailControllerFactory;
 
 return [
+    'router' => [
+        'routes' => [
+            'sendmail' => [
+                'type' => 'Literal',
+                'options' => [
+                    'route' => '/sendmail',
+                    'defaults' => [
+                        'controller' => SendMailController::class,
+                        'action' => 'index',
+                    ],
+                ],
+                'may_terminate' => true,
+            ],
+        ],
+    ],
+
+    'controllers' => [
+        'factories' => [
+            SendMailController::class => SendMailControllerFactory::class,
+        ],
+    ],
+
     'view_manager' => [
         'template_map' => [
             'startpage'  => __DIR__ . '/../view/startpage.phtml',
