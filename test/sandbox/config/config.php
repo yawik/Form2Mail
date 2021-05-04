@@ -13,6 +13,7 @@ return [
         "Geo",
         "Pdf",
         "Organizations",
+        "SlmQueue",
         "Form2Mail"
     ],
 ];
