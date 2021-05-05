@@ -57,6 +57,8 @@ return [
     ],
 
     'options' => [
+        Options\SendmailOrganizationOptionsCollection::class => [],
+
         \Auth\Options\UserInfoFieldsetOptions::class => [
             'options' => [
                 'fields' => [
