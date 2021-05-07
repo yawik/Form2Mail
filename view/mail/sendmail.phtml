@@ -1,0 +1,61 @@
+<?php
+
+/**
+ * AMS Form2Mail
+ *
+ * @copyright 2013-2021 CROSS Solution
+ */
+
+declare(strict_types=1);
+
+use Laminas\Stdlib\ArrayUtils;
+
+/** @var \Auth\Entity\Info $user */
+?>
+<!DOCTYPE html>
+<html>
+<head></head>
+<body>
+<p>
+    Bewerbung auf <?=$job->getTitle()?>
+</p>
+<h2>Kontaktdaten</h2>
+<table>
+<tr><td>Anrede:</td><td><?=$user->getDisplayName(false)?></td></tr>
+<tr><td>Anschrift:</td><td> <?=$user->getStreet()?> <?=$user->getHouseNumber()?><br>
+                            <?=$user->getPostalCode()?> <?=$user->getCity()?></td></tr>
+<tr><td>Telefon:</td><td><?=$user->getPhone()?></td></tr>
+<tr><td>E-Mail:</td><td><?=$user->getEmail()?></td></tr>
+</table>
+<?php if (!empty($summary)): ?>
+<h2>Anschreiben</h2>
+<p>
+    <?=$summary?>
+</p>
+<?php endif?>
+<?php if (count($extras)): ?>
+<h2>Weitere Angaben</h2>
+<table>
+    <?php foreach ($extras as $key => $value):?>
+    <tr><td><?=$key?></td>
+    <td><?php
+        if (is_array($value)):
+            if (ArrayUtils::hasNumericKeys($values)):
+                echo join(', ', $value);
+            else:
+                ?>
+                <table><?php foreach ($value as $k => $v):?>
+                    <tr><td><?=$k?></td><td><?=$v?></td></tr>
+                <?php endforeach ?></table>
+            <?php endif;
+        else:
+            echo $value;
+        endif;
+    ?></td></tr>
+    <?php endforeach ?>
+</table>
+</body>
+</html>
+<?php endif ?>
+
+

@@ -10,6 +10,7 @@ declare(strict_types=1);
 
 namespace Form2Mail\Controller;
 
+use Auth\Entity\Info;
 use Core\Mail\MailService;
 use Form2Mail\Options\SendmailOrganizationOptions;
 use Form2Mail\Options\SendmailOrganizationOptionsCollection;
@@ -39,7 +40,7 @@ class SendMailController extends AbstractActionController
         self::ERROR_INVALID_JSON => 'Invalid json',
         self::ERROR_NO_REF => 'Missing job reference',
         self::ERROR_NO_JOB => 'No job found',
-        self::MAIl_FAILED => 'Sending of mail failed',
+        self::ERROR_MAIL_FAILED => 'Sending of mail failed',
     ];
 
     private $mails;
@@ -103,9 +104,12 @@ class SendMailController extends AbstractActionController
 
         //$options = $this->getOrganizationOptions()->getOrganizationOptions($job->getOrganization()->getId());
 
+        // normalite json data
+        $vars = $this->normalizeJsonData($json);
+        $vars['job'] = $job;
         $mail = $this->mails->get('htmltemplate');
-        $mail->setTemplate('form2mail/sendmail');
-        $mail->setVariables($json);
+        $mail->setTemplate('form2mail/mail/sendmail');
+        $mail->setVariables($vars);
         $mail->setSubject(sprintf('Bewerbung auf %s', $job->getTitle()));
         $mail->addTo($job->getOrganization()->getUser()->getInfo()->getEmail());
 
@@ -119,7 +123,8 @@ class SendMailController extends AbstractActionController
         return new JsonModel([
             'success' => true,
             'message' => 'Mail send successfully',
-            'payload' => $json
+            'payload' => $json,
+            'mail' => $mail->toString()
         ]);
     }
 
@@ -137,5 +142,22 @@ class SendMailController extends AbstractActionController
         }
 
         return new JsonModel($result);
+    }
+
+    private function normalizeJsonData($json)
+    {
+        $user = new Info();
+        foreach ($json['user'] as $key => $value) {
+            $setter = "set$key";
+            if (is_callable([$user, $setter])) {
+                $user->$setter($value);
+            }
+        }
+
+        return [
+            'user' => $user,
+            'summary' => $json['summary'] ?? '',
+            'extras' => $json['extras'] ?? [],
+        ];
     }
 }
