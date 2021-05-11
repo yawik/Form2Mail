@@ -24,6 +24,16 @@ return [
                 ],
                 'may_terminate' => true,
             ],
+            'details' => [
+                'type' => 'Literal',
+                'options' => [
+                    'route' => '/details',
+                    'defaults' => [
+                        'controller' => SendMailController::class,
+                        'action' => 'details',
+                    ],
+                ],
+            ],
         ],
     ],
 
