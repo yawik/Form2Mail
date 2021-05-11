@@ -17,7 +17,7 @@ use Laminas\Stdlib\ArrayUtils;
 <head></head>
 <body>
 <p>
-    Bewerbung auf <?=$job->getTitle()?>
+    <?= $job ? 'Bewerbung auf ' . $job->getTitle() : 'Initiale Bewerbung'?>
 </p>
 <h2>Kontaktdaten</h2>
 <table>

@@ -12,9 +12,9 @@ namespace Form2Mail\Controller;
 
 use Auth\Entity\Info;
 use Core\Mail\MailService;
-use Form2Mail\Options\SendmailOrganizationOptions;
 use Form2Mail\Options\SendmailOrganizationOptionsCollection;
 use Jobs\Repository\Job as JobsRepository;
+use Organizations\Repository\Organization as OrganizationRepository;
 use Laminas\Http\Request;
 use Laminas\Http\Response;
 use Laminas\Json\Json;
@@ -31,26 +31,28 @@ class SendMailController extends AbstractActionController
 {
     const ERROR_NO_POST = 'NO_POST';
     const ERROR_NO_REF = 'NO_REF';
-    const ERROR_NO_JOB = 'NO_JOB';
+    const ERROR_NO_ENTITY = 'NO_ENTITY';
     const ERROR_INVALID_JSON = 'INVALID_JSON';
     const ERROR_MAIL_FAILED = 'MAIL_FAILED';
 
     private static $errors = [
         self::ERROR_NO_POST => 'Must use POST request',
         self::ERROR_INVALID_JSON => 'Invalid json',
-        self::ERROR_NO_REF => 'Missing job reference',
-        self::ERROR_NO_JOB => 'No job found',
+        self::ERROR_NO_REF => 'Missing job or organization reference',
+        self::ERROR_NO_ENTITY => 'No job or organization found',
         self::ERROR_MAIL_FAILED => 'Sending of mail failed',
     ];
 
     private $mails;
     private $jobs;
+    private $orgs;
     private $organizationOptions;
 
-    public function __construct(MailService $mails, JobsRepository $jobs)
+    public function __construct(MailService $mails, JobsRepository $jobs, OrganizationRepository $orgs)
     {
         $this->mails = $mails;
         $this->jobs = $jobs;
+        $this->orgs = $orgs;
     }
 
     public function setOrganizationOptions(SendmailOrganizationOptionsCollection $options)
@@ -74,7 +76,7 @@ class SendMailController extends AbstractActionController
             return $this->createErrorModel(self::ERROR_NO_POST, Response::STATUS_CODE_405);
         }
 
-        $data = $this->getRequest()->getContent();
+        $data = $this->params()->fromPost('application');
         try {
             $json = Json::decode($data, Json::TYPE_ARRAY);
         } catch (\Laminas\Json\Exception\ExceptionInterface $e) {
@@ -86,20 +88,28 @@ class SendMailController extends AbstractActionController
             );
         }
 
-        $applyId = $json['ref'] ?? $this->params()->fromQuery('ref');
+        $applyId = $json['job'] ?? $json['org'];
 
         if (!$applyId) {
             return $this->createErrorModel(self::ERROR_NO_REF, Response::STATUS_CODE_400);
         }
 
-        $job = $this->jobs->findOneBy(['applyId' => $applyId]) ?? $this->jobs->findOneBy(['id' => $applyId]);
+        $job = $this->jobs->findOneBy(['applyId' => $applyId]) ?? $this->jobs->find($applyId);
 
         if (!$job) {
-            return $this->createErrorModel(
-                self::ERROR_NO_JOB,
-                Response::STATUS_CODE_400,
-                ['ref' => $applyId]
-            );
+            $org = $this->orgs->findOneBy(['id' => $applyId]);
+
+            if (!$org) {
+                return $this->createErrorModel(
+                    self::ERROR_NO_ENTITY,
+                    Response::STATUS_CODE_400,
+                    ['ref' => $applyId]
+                );
+            }
+            $to  = $org->getUser()->getInfo()->getEmail();
+        } else {
+            $org = $job->getOrganization();
+            $to = $job->getUser()->getInfo()->getEmail() ?? $org->getUser()->getInfo()->getEmail();
         }
 
         //$options = $this->getOrganizationOptions()->getOrganizationOptions($job->getOrganization()->getId());
@@ -107,11 +117,13 @@ class SendMailController extends AbstractActionController
         // normalite json data
         $vars = $this->normalizeJsonData($json);
         $vars['job'] = $job;
+        $vars['org'] = $org;
         $mail = $this->mails->get('htmltemplate');
         $mail->setTemplate('form2mail/mail/sendmail');
         $mail->setVariables($vars);
-        $mail->setSubject(sprintf('Bewerbung auf %s', $job->getTitle()));
-        $mail->addTo($job->getOrganization()->getUser()->getInfo()->getEmail());
+        $mail->setSubject($job ? sprintf('Bewerbung auf %s', $job->getTitle()) : 'Initiale Bewerbung');
+
+        $mail->addTo($to);
 
         try {
             $this->mails->send($mail);

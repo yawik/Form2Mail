@@ -27,9 +27,12 @@ class SendMailControllerFactory
         string $requestedName,
         ?array $options = null
     ): SendMailController {
+        $repos = $container->get('repositories');
+
         $controller = new SendMailController(
             $container->get('Core/MailService'),
-            $container->get('repositories')->get('Jobs')
+            $repos->get('Jobs'),
+            $repos->get('Organizations')
         );
 
         $controller->setOrganizationOptions($container->get(SendmailOrganizationOptionsCollection::class));
