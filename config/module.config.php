@@ -7,13 +7,47 @@
  */
 namespace Form2Mail;
 
-use Zend\ServiceManager\Factory\InvokableFactory;
+use Form2Mail\Controller\SendMailController;
+use Form2Mail\Controller\SendMailControllerFactory;
 
 return [
+    'router' => [
+        'routes' => [
+            'sendmail' => [
+                'type' => 'Literal',
+                'options' => [
+                    'route' => '/sendmail',
+                    'defaults' => [
+                        'controller' => SendMailController::class,
+                        'action' => 'index',
+                    ],
+                ],
+                'may_terminate' => true,
+            ],
+            'details' => [
+                'type' => 'Literal',
+                'options' => [
+                    'route' => '/details',
+                    'defaults' => [
+                        'controller' => SendMailController::class,
+                        'action' => 'details',
+                    ],
+                ],
+            ],
+        ],
+    ],
+
+    'controllers' => [
+        'factories' => [
+            SendMailController::class => SendMailControllerFactory::class,
+        ],
+    ],
+
     'view_manager' => [
         'template_map' => [
             'startpage'  => __DIR__ . '/../view/startpage.phtml',
             'layout/application-form' => __DIR__ . '/../view/application-form.phtml',
+            'form2mail/mail/sendmail' => __DIR__ . '/../view/mail/sendmail.phtml',
         ]
     ],
 
@@ -34,6 +68,8 @@ return [
     ],
 
     'options' => [
+        Options\SendmailOrganizationOptionsCollection::class => [],
+
         \Auth\Options\UserInfoFieldsetOptions::class => [
             'options' => [
                 'fields' => [

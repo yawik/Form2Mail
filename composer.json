@@ -1,4 +1,4 @@
-{   
+{
     "type": "yawik-module",
     "name": "personalwerk/form2mail",
     "description": "offers an application form for a job posting, which can be send by mail",
@@ -26,7 +26,7 @@
         "yawik/settings": "^0.35",
         "yawik/cv": "^0.35",
         "yawik/pdf": "^0.35",
-        "yawik/organizations": "^0.35",        
+        "yawik/organizations": "^0.35",
         "yawik/composer-plugin": "^3.0",
         "laminas/laminas-dependency-plugin": "^2.0  "
 
@@ -37,20 +37,11 @@
         "yawik/behat": "^0.34",
         "phpstan/extension-installer": "^1.1"
     },
-    "require-dev": {
-        "yawik/behat": "*"
-    },
     "autoload": {
         "psr-4": { "Form2Mail\\": "src/"}
     },
     "autoload-dev": {
-	"psr-4": {
-        "Form2MailTest\\": "test/Form2MailTest/",
-	    "CoreTestUtils\\": "vendor/yawik/core/test/CoreTestUtils/"
-	},
-        "psr-0": {
-            "": "test/"
-        }
+        "psr-4":  { "Form2MailTest\\": "test/src/" }
     },
     "scripts": {
         "auto-scripts": [
@@ -75,5 +66,5 @@
         }
     }
 
-    
+
 }
