@@ -12,6 +12,8 @@
 namespace Form2Mail;
 
 use Core\ModuleManager\ModuleConfigLoader;
+use Form2Mail\Controller\SendMailController;
+use Laminas\Mvc\MvcEvent as MvcMvcEvent;
 use Zend\ModuleManager\Feature;
 use Zend\Console\Console;
 use Zend\Mvc\MvcEvent;
@@ -50,8 +52,25 @@ class Module implements Feature\ConfigProviderInterface
         $services->setAllowOverride(true);
         $services->setService('config', $config);
         $services->setAllowOverride(false);
+
         if (!Console::isConsole()) {
             $sharedManager = $eventManager->getSharedManager();
+
+            $sharedManager->attach(
+                SendMailController::class,
+                MvcMvcEvent::EVENT_DISPATCH,
+                function (MvcEvent $e) use ($config) {
+                    /** @var \Laminas\Http\PhpEnvironment\Request $request */
+                    $request = $e->getRequest();
+                    $origins = $config['f2m_origins'] ?? [];
+                    $origin = $request->getHeader('Origin')->getFieldValue();
+                    if (in_array($origin, $origins)) {
+                        $e->getResponse()->getHeaders()->addHeaderLine('Access-Control-Allow-Origin', $origin);
+                    }
+                },
+                100
+            );
+
             /*
              * use a neutral layout, when rendering the application form and its result page.
              * Also the application preview should be rendered in this layout.
