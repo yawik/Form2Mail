@@ -18,6 +18,10 @@ use Organizations\Repository\Organization as OrganizationRepository;
 use Laminas\Http\Request;
 use Laminas\Http\Response;
 use Laminas\Json\Json;
+use Laminas\Mail\Message;
+use Laminas\Mime\Message as MimeMessage;
+use Laminas\Mime\Mime;
+use Laminas\Mime\Part as MimePart;
 use Laminas\Mvc\Controller\AbstractActionController;
 use Laminas\View\Model\JsonModel;
 
@@ -115,6 +119,7 @@ class SendMailController extends AbstractActionController
         //$options = $this->getOrganizationOptions()->getOrganizationOptions($job->getOrganization()->getId());
 
         // normalite json data
+        /** @var \Core\Mail\HTMLTemplateMessage $mail */
         $vars = $this->normalizeJsonData($json);
         $vars['job'] = $job;
         $vars['org'] = $org;
@@ -124,6 +129,33 @@ class SendMailController extends AbstractActionController
         $mail->setSubject($job ? sprintf('Bewerbung auf %s', $job->getTitle()) : 'Initiale Bewerbung');
 
         $mail->addTo($to);
+
+        // Attachments handling
+        $files = $this->getRequest()->getFiles()->toArray();
+        if (isset($files['uploads']) && count($files['uploads'])) {
+            $message = new MimeMessage();
+            $html = new MimePart($mail->getBodyText());
+            $html->type = Mime::TYPE_HTML;
+            $html->disposition = Mime::DISPOSITION_INLINE;
+            $html->charset = 'utf-8';
+            $message->addPart($html);
+
+            foreach ($files['uploads'] as $file) {
+                $attachment = new MimePart(fopen($file['tmp_name'], 'r'));
+                $attachment->type = mime_content_type($file['tmp_name']);
+                $attachment->filename = $file['name'];
+                $attachment->disposition = Mime::DISPOSITION_ATTACHMENT;
+                $attachment->encoding = Mime::ENCODING_BASE64;
+                $message->addPart($attachment);
+            }
+
+            $new = new Message();
+            $new->setBody($message);
+            $new->setSubject($mail->getSubject());
+            $new->addTo($to);
+
+            $mail = $new;
+        }
 
         try {
             $this->mails->send($mail);
