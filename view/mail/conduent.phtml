@@ -24,42 +24,33 @@ $style_p          = "font-family: Arial, Helvetica, sans-serif; font-weight: 400
 <h1>
     <?= $job ? 'Bewerbung auf ' . $job->getTitle() : 'Initiale Bewerbung'?>
 </h1>
-<h2>Kontaktdaten</h2>
+{
+  "job": "jobID-from-Query-Parameter",
+  "org": "organization id from .env, ONLY if jobID missing",
+  "user": {
+    "firstName":"m",
+    "lastName":"g",
+    "phone":"121212",
+    "email":"gelhausen@cross-solution.de",
+  },
+  "extras": {
+   "age": "selected value",
+   "city": "selected value",
+   "experience": "selected value",
+   "availability":"selected-value"
+  }
+}
+
 <table class="data-display">
 <tr><td>Anrede:</td><td><?=$user->getDisplayName(false)?></td></tr>
-<tr><td>Anschrift:</td><td> <?=$user->getStreet()?> <?=$user->getHouseNumber()?><br>
-                            <?=$user->getPostalCode()?> <?=$user->getCity()?></td></tr>
 <tr><td>Telefon:</td><td><?=$user->getPhone()?></td></tr>
 <tr><td>E-Mail:</td><td><?=$user->getEmail()?></td></tr>
-</table>
-<?php if (!empty($summary)): ?>
-<h2>Anschreiben</h2>
-<p>
-    <?=$summary?>
-</p>
-<?php endif?>
-<?php if (count($extras)): ?>
-<h2>Weitere Angaben</h2>
-<table class="data-display">
-    <?php foreach ($extras as $key => $value):?>
+
+<?php foreach ($extras as $key => $value):?>
     <tr><td><?=$key?></td>
-    <td><?php
-        if (is_array($value)):
-            if (ArrayUtils::hasNumericKeys($values)):
-                echo join(', ', $value);
-            else:
-                ?>
-                <table class="data-display"><?php foreach ($value as $k => $v):?>
-                    <tr><td><?=$k?></td><td><?=$v?></td></tr>
-                <?php endforeach ?></table>
-            <?php endif;
-        else:
-            echo $value;
-        endif;
-    ?></td></tr>
+    <td><?=$value?></td></tr>
     <?php endforeach ?>
 </table>
-<?php endif?>
 
 <?= $this->partial('form2mail/mail/footer', ['width' => $width, 'mail_white_color' => $mail_white_color, 'style' => $style_p]); ?>
 
