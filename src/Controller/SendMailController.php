@@ -24,6 +24,7 @@ use Laminas\Mime\Mime;
 use Laminas\Mime\Part as MimePart;
 use Laminas\Mvc\Controller\AbstractActionController;
 use Laminas\View\Model\JsonModel;
+use Laminas\View\Model\ViewModel;
 
 /**
  * TODO: description
@@ -124,7 +125,7 @@ class SendMailController extends AbstractActionController
         $vars['job'] = $job;
         $vars['org'] = $org;
         $mail = $this->mails->get('htmltemplate');
-        $mail->setTemplate('form2mail/mail/sendmail');
+        $mail->setTemplate('form2mail/mail/conduent');
         $mail->setVariables($vars);
         $mail->setSubject($job ? sprintf('Bewerbung auf %s', $job->getTitle()) : 'Initiale Bewerbung');
 
@@ -132,7 +133,7 @@ class SendMailController extends AbstractActionController
 
         // Attachments handling
         $files = $this->getRequest()->getFiles()->toArray();
-        if (isset($files['uploads']) && count($files['uploads'])) {
+        if (isset($files['attached']) && count($files['attached'])) {
             $message = new MimeMessage();
             $html = new MimePart($mail->getBodyText());
             $html->type = Mime::TYPE_HTML;
@@ -140,7 +141,7 @@ class SendMailController extends AbstractActionController
             $html->charset = 'utf-8';
             $message->addPart($html);
 
-            foreach ($files['uploads'] as $file) {
+            foreach ($files['attached'] as $file) {
                 $attachment = new MimePart(fopen($file['tmp_name'], 'r'));
                 $attachment->type = mime_content_type($file['tmp_name']);
                 $attachment->filename = $file['name'];

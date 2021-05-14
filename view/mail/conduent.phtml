@@ -1,0 +1,62 @@
+<?php
+
+/**
+ * AMS Form2Mail
+ *
+ * @copyright 2013-2021 CROSS Solution
+
+ */
+
+declare(strict_types=1);
+
+$width            = "600px";
+$mail_blue_color  = "#7b1738";
+$mail_white_color = "#fff";
+$style_p          = "font-family: Arial, Helvetica, sans-serif; font-weight: 400; font-size: 15px; line-height: 1.8;";
+
+?>
+       <?= $this->partial('mail/header', [
+            'title' => $mail->getSubject(),
+            'width'=>$width, 'mail_blue_color'=>$mail_blue_color,
+            'mail_white_color' => $mail_white_color]); ?>
+ <tr>
+   <td align="center" valign="top">
+                  <!-- CENTERING TABLE // -->
+                  <table border="0" cellpadding="0" cellspacing="0" width="100%" bgcolor="#FFF">
+                    <tbody><tr>
+                      <td align="center" valign="top">
+                        <!-- FLEXIBLE CONTAINER // -->
+                        <table border="0" cellpadding="0" cellspacing="0" width="500" class="flexibleContainer">
+                          <tbody><tr>
+                            <td align="center" valign="top" width="500" class="flexibleContainerCell">
+                              <table border="0" cellpadding="30" cellspacing="0" width="100%">
+                                <tbody><tr>
+                                  <td align="center" valign="top">
+
+                                    <!-- CONTENT TABLE // -->
+                                    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+                                      <tbody><tr>
+                                        <td valign="top" class="textContent">
+                                            <?=$this->partial('form2mail/mail/sendmail', ['job' => $job, 'user' => $user, 'summary' => $summary, 'extras' => $extras])?>
+                                        </td>
+                                      </tr>
+                                    </tbody></table>
+                                    <!-- // CONTENT TABLE -->
+
+                                  </td>
+                                </tr>
+                              </tbody></table>
+                            </td>
+                          </tr>
+                        </tbody></table>
+                        <!-- // FLEXIBLE CONTAINER -->
+                      </td>
+                    </tr>
+                  </tbody></table>
+                  <!-- // CENTERING TABLE -->
+                </td>
+              </tr>
+            <!-- MODULE ROW // -->
+         <?= $this->partial('mail/footer', ['width' => $width, 'mail_white_color' => $mail_white_color, 'style' => $style_p]); ?>
+
+
