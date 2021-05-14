@@ -9,54 +9,58 @@
 
 declare(strict_types=1);
 
+use Laminas\Stdlib\ArrayUtils;
+
 $width            = "600px";
 $mail_blue_color  = "#7b1738";
 $mail_white_color = "#fff";
 $style_p          = "font-family: Arial, Helvetica, sans-serif; font-weight: 400; font-size: 15px; line-height: 1.8;";
 
 ?>
-       <?= $this->partial('mail/header', [
+       <?= $this->partial('form2mail/mail/header', [
             'title' => $mail->getSubject(),
             'width'=>$width, 'mail_blue_color'=>$mail_blue_color,
             'mail_white_color' => $mail_white_color]); ?>
- <tr>
-   <td align="center" valign="top">
-                  <!-- CENTERING TABLE // -->
-                  <table border="0" cellpadding="0" cellspacing="0" width="100%" bgcolor="#FFF">
-                    <tbody><tr>
-                      <td align="center" valign="top">
-                        <!-- FLEXIBLE CONTAINER // -->
-                        <table border="0" cellpadding="0" cellspacing="0" width="500" class="flexibleContainer">
-                          <tbody><tr>
-                            <td align="center" valign="top" width="500" class="flexibleContainerCell">
-                              <table border="0" cellpadding="30" cellspacing="0" width="100%">
-                                <tbody><tr>
-                                  <td align="center" valign="top">
+<h1>
+    <?= $job ? 'Bewerbung auf ' . $job->getTitle() : 'Initiale Bewerbung'?>
+</h1>
+<h2>Kontaktdaten</h2>
+<table class="data-display">
+<tr><td>Anrede:</td><td><?=$user->getDisplayName(false)?></td></tr>
+<tr><td>Anschrift:</td><td> <?=$user->getStreet()?> <?=$user->getHouseNumber()?><br>
+                            <?=$user->getPostalCode()?> <?=$user->getCity()?></td></tr>
+<tr><td>Telefon:</td><td><?=$user->getPhone()?></td></tr>
+<tr><td>E-Mail:</td><td><?=$user->getEmail()?></td></tr>
+</table>
+<?php if (!empty($summary)): ?>
+<h2>Anschreiben</h2>
+<p>
+    <?=$summary?>
+</p>
+<?php endif?>
+<?php if (count($extras)): ?>
+<h2>Weitere Angaben</h2>
+<table class="data-display">
+    <?php foreach ($extras as $key => $value):?>
+    <tr><td><?=$key?></td>
+    <td><?php
+        if (is_array($value)):
+            if (ArrayUtils::hasNumericKeys($values)):
+                echo join(', ', $value);
+            else:
+                ?>
+                <table class="data-display"><?php foreach ($value as $k => $v):?>
+                    <tr><td><?=$k?></td><td><?=$v?></td></tr>
+                <?php endforeach ?></table>
+            <?php endif;
+        else:
+            echo $value;
+        endif;
+    ?></td></tr>
+    <?php endforeach ?>
+</table>
+<?php endif?>
 
-                                    <!-- CONTENT TABLE // -->
-                                    <table border="0" cellpadding="0" cellspacing="0" width="100%">
-                                      <tbody><tr>
-                                        <td valign="top" class="textContent">
-                                            <?=$this->partial('form2mail/mail/sendmail', ['job' => $job, 'user' => $user, 'summary' => $summary, 'extras' => $extras])?>
-                                        </td>
-                                      </tr>
-                                    </tbody></table>
-                                    <!-- // CONTENT TABLE -->
-
-                                  </td>
-                                </tr>
-                              </tbody></table>
-                            </td>
-                          </tr>
-                        </tbody></table>
-                        <!-- // FLEXIBLE CONTAINER -->
-                      </td>
-                    </tr>
-                  </tbody></table>
-                  <!-- // CENTERING TABLE -->
-                </td>
-              </tr>
-            <!-- MODULE ROW // -->
-         <?= $this->partial('mail/footer', ['width' => $width, 'mail_white_color' => $mail_white_color, 'style' => $style_p]); ?>
+<?= $this->partial('form2mail/mail/footer', ['width' => $width, 'mail_white_color' => $mail_white_color, 'style' => $style_p]); ?>
 
 

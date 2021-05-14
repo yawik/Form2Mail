@@ -49,6 +49,8 @@ return [
             'layout/application-form' => __DIR__ . '/../view/application-form.phtml',
             'form2mail/mail/sendmail' => __DIR__ . '/../view/mail/sendmail.phtml',
             'form2mail/mail/conduent' => __DIR__ . '/../view/mail/conduent.phtml',
+            'form2mail/mail/header' => __DIR__ . '/../view/mail/header.phtml',
+            'form2mail/mail/footer' => __DIR__ . '/../view/mail/footer.phtml',
         ]
     ],
 
