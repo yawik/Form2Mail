@@ -13,6 +13,8 @@ namespace Form2Mail;
 
 use Core\ModuleManager\ModuleConfigLoader;
 use Form2Mail\Controller\SendMailController;
+use Laminas\Http\Request;
+use Laminas\Http\Response;
 use Laminas\Mvc\MvcEvent as MvcMvcEvent;
 use Zend\ModuleManager\Feature;
 use Zend\Console\Console;
@@ -62,10 +64,22 @@ class Module implements Feature\ConfigProviderInterface
                 function (MvcEvent $e) use ($config) {
                     /** @var \Laminas\Http\PhpEnvironment\Request $request */
                     $request = $e->getRequest();
+                    $response = $e->getResponse();
                     $origins = $config['f2m_origins'] ?? [];
-                    $origin = $request->getHeader('Origin')->getFieldValue();
+                    $origin = $request->getHeader('Origin');
+                    $origin = is_bool($origin) ? "*" : $origin->getFieldValue();
                     if (in_array($origin, $origins)) {
                         $e->getResponse()->getHeaders()->addHeaderLine('Access-Control-Allow-Origin', $origin);
+                    }
+                    if ($request->isOptions()) {
+                        $response->setStatusCode(Response::STATUS_CODE_204);
+                        $response->getHeaders()->addHeaderLine('Allow', join(',', [Request::METHOD_GET, Request::METHOD_OPTIONS, Request::METHOD_POST]));
+                        $routeMatch = $e->getRouteMatch();
+                        $routeName = $routeMatch->getMatchedRouteName();
+                        $methods = $config['f2m_methods'][$routeName] ?? '';
+                        $response->getHeaders()->addHeaderLine('Access-Control-Allow-Methods', $methods);
+                        $response->getHeaders()->addHeaderLine('Access-Control-Allow-Headers', 'Content-Type');
+                        return $response;
                     }
                 },
                 100
