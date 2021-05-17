@@ -20,7 +20,8 @@ $style_p          = "font-family: Arial, Helvetica, sans-serif; font-weight: 400
        <?= $this->partial('form2mail/mail/header', [
             'title' => $mail->getSubject(),
             'width'=>$width, 'mail_blue_color'=>$mail_blue_color,
-            'mail_white_color' => $mail_white_color]); ?>
+            'mail_white_color' => $mail_white_color,
+            'org' => $org]); ?>
 <h1>
     <?= $job ? 'Bewerbung auf ' . $job->getTitle() : 'Initiale Bewerbung'?>
 </h1>
