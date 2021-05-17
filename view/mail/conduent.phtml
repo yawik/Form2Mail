@@ -24,22 +24,6 @@ $style_p          = "font-family: Arial, Helvetica, sans-serif; font-weight: 400
 <h1>
     <?= $job ? 'Bewerbung auf ' . $job->getTitle() : 'Initiale Bewerbung'?>
 </h1>
-{
-  "job": "jobID-from-Query-Parameter",
-  "org": "organization id from .env, ONLY if jobID missing",
-  "user": {
-    "firstName":"m",
-    "lastName":"g",
-    "phone":"121212",
-    "email":"gelhausen@cross-solution.de",
-  },
-  "extras": {
-   "age": "selected value",
-   "city": "selected value",
-   "experience": "selected value",
-   "availability":"selected-value"
-  }
-}
 
 <table class="data-display">
 <tr><td>Anrede:</td><td><?=$user->getDisplayName(false)?></td></tr>
