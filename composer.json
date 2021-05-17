@@ -53,7 +53,7 @@
         "post-update-cmd": [
             "@auto-scripts"
         ],
-        "serve": "php -S 0.0.0.0:8000 -t test/sandbox/public",
+        "serve": "php -S 0.0.0.0:8000 -t test/sandbox/public test/sandbox/public/router.php",
         "start-selenium": "./vendor/bin/selenium-server-standalone -p 4444 -Dwebdriver.chrome.driver=./vendor/bin/chromedriver",
         "test": "phpunit"
     },
