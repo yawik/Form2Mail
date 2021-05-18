@@ -1,6 +1,6 @@
 {
     "type": "yawik-module",
-    "name": "personalwerk/form2mail",
+    "name": "yawik/form2mail",
     "description": "offers an application form for a job posting, which can be send by mail",
     "license": "MIT",
     "authors": [
