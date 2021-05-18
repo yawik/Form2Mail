@@ -11,6 +11,8 @@
 /** */
 namespace Form2Mail;
 
+use Core\ModuleManager\Feature\VersionProviderInterface;
+use Core\ModuleManager\Feature\VersionProviderTrait;
 use Core\ModuleManager\ModuleConfigLoader;
 use Form2Mail\Controller\SendMailController;
 use Laminas\Http\Request;
@@ -26,8 +28,12 @@ use Zend\Mvc\MvcEvent;
  * @author Mathias Gelhausen <gelhausen@cross-solution.de>
  * @todo write test
  */
-class Module implements Feature\ConfigProviderInterface
+class Module implements Feature\ConfigProviderInterface, VersionProviderInterface
 {
+    use VersionProviderTrait;
+
+    const VERSION = '0.1.0';
+
    /**
     * indicates, that the autoload configuration for this module should be loaded.
     * @see

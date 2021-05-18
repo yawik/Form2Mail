@@ -9,6 +9,9 @@
             "email": "bleek@cross-solution.de"
         }
     ],
+    "support": {
+        "source": "https://github.com/yawik/form2mail"
+    },
     "config": {
         "platform": {
             "ext-mongo": "1.6.16"
