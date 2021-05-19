@@ -1,0 +1,21 @@
+site_name: Form2Mail
+site_description: Documentation yawik orders module
+site_url: https://yawik.github.io/Orders/
+copyright: 'Copyright &copy; 2021'
+repo_name: yawik/orders
+repo_url: https://github.com/yawik/Form2Mail
+site_dir: build/site
+theme: material
+markdown_extensions:
+  - codehilite:
+      guess_lang: true
+  - toc:
+      permalink: true
+  - admonition
+  - pymdownx.magiclink
+  - pymdownx.tasklist:
+      custom_checkbox: true
+  - pymdownx.mark
+  - pymdownx.tilde
+  - pymdownx.extra
+  - footnotes
