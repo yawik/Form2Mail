@@ -33,6 +33,7 @@ class DetailsControllerFactory
             $repos->get('Organizations'),
             $helper->get('jobUrl'),
             $helper->get('serverUrl'),
+            $helper->get('basePath'),
             $container->get('Organizations\ImageFileCache\Manager')
         );
     }
