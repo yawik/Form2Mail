@@ -40,7 +40,7 @@ class SendMailController extends AbstractActionController
     const ERROR_INVALID_JSON = 'INVALID_JSON';
     const ERROR_MAIL_FAILED = 'MAIL_FAILED';
 
-    private static $errors = [
+    protected static $errors = [
         self::ERROR_NO_POST => 'Must use POST request',
         self::ERROR_INVALID_JSON => 'Invalid json',
         self::ERROR_NO_REF => 'Missing job or organization reference',
@@ -173,53 +173,7 @@ class SendMailController extends AbstractActionController
         ]);
     }
 
-    public function detailsAction()
-    {
-        $jobId = $this->params()->fromQuery('job');
-        $orgId = null;
-
-        if (!$jobId) {
-            $orgId = $this->params()->fromQuery('org');
-
-            if (!$orgId) {
-                return $this->createErrorModel(self::ERROR_NO_REF, Response::STATUS_CODE_400);
-            }
-        }
-
-        if ($jobId) {
-            $job = $this->jobs->findOneBy(['applyId' => $jobId]) ?? $this->jobs->find($jobId);
-
-            if (!$job) {
-                return $this->createErrorModel(self::ERROR_NO_ENTITY, Response::STATUS_CODE_400, ['job' => $jobId]);
-            }
-
-            return new JsonModel([
-                'success' => true,
-                'payload' => [
-                    'title' => $job->getTitle(),
-                    'organization' => [
-                        'name' => $job->getOrganization()->getOrganizationName()->getName(),
-                        'ref' => $job->getOrganization()->getId(),
-                    ]
-                ]
-            ]);
-        }
-
-        $org = $this->orgs->find($orgId);
-
-        if (!$org) {
-            return $this->createErrorModel(self::ERROR_NO_ENTITY, Response::STATUS_CODE_400, ['org' => $orgId]);
-        }
-
-        return new JsonModel([
-            'success' => true,
-            'payload' => [
-                'name' => $org->getOrganizationName()->getName(),
-            ]
-        ]);
-    }
-
-    private function createErrorModel(string $type, $code = null, ?array $extras = null)
+    protected function createErrorModel(string $type, $code = null, ?array $extras = null)
     {
         $this->getResponse()->setStatusCode($code ?? Response::STATUS_CODE_500);
 

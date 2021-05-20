@@ -7,6 +7,8 @@
  */
 namespace Form2Mail;
 
+use Form2Mail\Controller\DetailsController;
+use Form2Mail\Controller\DetailsControllerFactory;
 use Form2Mail\Controller\SendMailController;
 use Form2Mail\Controller\SendMailControllerFactory;
 
@@ -29,8 +31,8 @@ return [
                 'options' => [
                     'route' => '/details',
                     'defaults' => [
-                        'controller' => SendMailController::class,
-                        'action' => 'details',
+                        'controller' => DetailsController::class,
+                        'action' => 'index',
                     ],
                 ],
             ],
@@ -40,6 +42,7 @@ return [
     'controllers' => [
         'factories' => [
             SendMailController::class => SendMailControllerFactory::class,
+            DetailsController::class => DetailsControllerFactory::class,
         ],
     ],
 
