@@ -14,7 +14,9 @@ namespace Form2Mail;
 use Core\ModuleManager\Feature\VersionProviderInterface;
 use Core\ModuleManager\Feature\VersionProviderTrait;
 use Core\ModuleManager\ModuleConfigLoader;
+use Form2Mail\Controller\DetailsController;
 use Form2Mail\Controller\SendMailController;
+use Form2Mail\Options\ModuleOptions;
 use Laminas\Http\Request;
 use Laminas\Http\Response;
 use Laminas\Mvc\MvcEvent as MvcMvcEvent;
@@ -63,33 +65,32 @@ class Module implements Feature\ConfigProviderInterface, VersionProviderInterfac
 
         if (!Console::isConsole()) {
             $sharedManager = $eventManager->getSharedManager();
+            $callback = function (MvcEvent $e) use ($config, $services) {
+                /** @var \Laminas\Http\PhpEnvironment\Request $request */
+                $request = $e->getRequest();
+                $response = $e->getResponse();
+                /** @var ModuleOptions $options */
+                $options = $services->get(ModuleOptions::class);
+                $origins = $options->getAllowedOrigins();
+                $origin = $request->getHeader('Origin');
+                $origin = is_bool($origin) ? "*" : $origin->getFieldValue();
+                if (in_array($origin, $origins)) {
+                    $e->getResponse()->getHeaders()->addHeaderLine('Access-Control-Allow-Origin', $origin);
+                }
+                if ($request->isOptions()) {
+                    $response->setStatusCode(Response::STATUS_CODE_204);
+                    $response->getHeaders()->addHeaderLine('Allow', join(',', [Request::METHOD_GET, Request::METHOD_OPTIONS, Request::METHOD_POST]));
+                    $routeMatch = $e->getRouteMatch();
+                    $routeName = $routeMatch->getMatchedRouteName();
+                    $methods = $options->getAllowedMethods($routeName);
+                    $response->getHeaders()->addHeaderLine('Access-Control-Allow-Methods', $methods);
+                    $response->getHeaders()->addHeaderLine('Access-Control-Allow-Headers', 'Content-Type');
+                    return $response;
+                }
+            };
 
-            $sharedManager->attach(
-                SendMailController::class,
-                MvcMvcEvent::EVENT_DISPATCH,
-                function (MvcEvent $e) use ($config) {
-                    /** @var \Laminas\Http\PhpEnvironment\Request $request */
-                    $request = $e->getRequest();
-                    $response = $e->getResponse();
-                    $origins = $config['f2m_origins'] ?? [];
-                    $origin = $request->getHeader('Origin');
-                    $origin = is_bool($origin) ? "*" : $origin->getFieldValue();
-                    if (in_array($origin, $origins)) {
-                        $e->getResponse()->getHeaders()->addHeaderLine('Access-Control-Allow-Origin', $origin);
-                    }
-                    if ($request->isOptions()) {
-                        $response->setStatusCode(Response::STATUS_CODE_204);
-                        $response->getHeaders()->addHeaderLine('Allow', join(',', [Request::METHOD_GET, Request::METHOD_OPTIONS, Request::METHOD_POST]));
-                        $routeMatch = $e->getRouteMatch();
-                        $routeName = $routeMatch->getMatchedRouteName();
-                        $methods = $config['f2m_methods'][$routeName] ?? '';
-                        $response->getHeaders()->addHeaderLine('Access-Control-Allow-Methods', $methods);
-                        $response->getHeaders()->addHeaderLine('Access-Control-Allow-Headers', 'Content-Type');
-                        return $response;
-                    }
-                },
-                100
-            );
+            $sharedManager->attach(SendMailController::class, MvcMvcEvent::EVENT_DISPATCH, $callback, 100);
+            $sharedManager->attach(DetailsController::class, MvcMvcEvent::EVENT_DISPATCH, $callback, 100);
 
             /*
              * use a neutral layout, when rendering the application form and its result page.
