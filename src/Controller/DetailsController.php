@@ -14,6 +14,7 @@ use Core\Entity\ImageSet;
 use Jobs\Repository\Job as JobRepository;
 use Jobs\View\Helper\JobUrl;
 use Laminas\Http\Response;
+use Laminas\View\Helper\BasePath;
 use Laminas\View\Helper\ServerUrl;
 use Laminas\View\Model\JsonModel;
 use Organizations\ImageFileCache\Manager as ImageFileCacheManager;
@@ -31,6 +32,7 @@ class DetailsController extends SendMailController
     private $orgs;
     private $jobLink;
     private $absoluteUrl;
+    private $basePath;
     private $orgLogo;
 
     public function __construct(
@@ -38,12 +40,14 @@ class DetailsController extends SendMailController
         OrganizationRepository $orgs,
         JobUrl $jobLinkHelper,
         ServerUrl $serverUrl,
+        BasePath $basePath,
         ImageFileCacheManager $organizationLogoCacheManager
     ) {
         $this->jobs = $jobs;
         $this->orgs = $orgs;
         $this->jobLink = $jobLinkHelper;
         $this->absoluteUrl = $serverUrl;
+        $this->basePath = $basePath;
         $this->orgLogo = $organizationLogoCacheManager;
     }
 
@@ -78,8 +82,8 @@ class DetailsController extends SendMailController
                     'uri' => ($this->jobLink)($job, ['linkOnly' => true, 'absolute' => true]),
                     'organization' => [
                         'name' => $org->getName(),
-                        'logo' => $logo ? ($this->absoluteUrl)($this->orgLogo->getUri($logo)) : null,
-                        'thumbnail' => $thumb ? ($this->absoluteUrl)($this->orgLogo->getUri($thumb)) : null,
+                        'logo' => $logo ? ($this->absoluteUrl)(($this->basePath)($this->orgLogo->getUri($logo))) : null,
+                        'thumbnail' => $thumb ? ($this->absoluteUrl)(($this->basePath)($this->orgLogo->getUri($thumb))) : null,
                         'ref' => $org->getId(),
                     ]
                 ]
@@ -99,8 +103,8 @@ class DetailsController extends SendMailController
             'success' => true,
             'payload' => [
                 'name' => $org->getOrganizationName()->getName(),
-                'logo' => $logo ? ($this->absoluteUrl)($this->orgLogo->getUri($logo)) : null,
-                'thumbnail' => $thumb ? ($this->absoluteUrl)($this->orgLogo->getUri($thumb)) : null,
+                'logo' => $logo ? ($this->absoluteUrl)(($this->basePath)($this->orgLogo->getUri($logo))) : null,
+                'thumbnail' => $thumb ? ($this->absoluteUrl)(($this->basePath)($this->orgLogo->getUri($thumb))) : null,
             ]
         ]);
     }
