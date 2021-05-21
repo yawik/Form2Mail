@@ -2,7 +2,7 @@ site_name: Form2Mail
 site_description: Documentation Form2Mail Module
 site_url: https://packagist.org/packages/yawik/form2mail
 copyright: 'Copyright &copy; 2021'
-repo_name: yawik/orders
+repo_name: yawik/form2mail
 repo_url: https://github.com/yawik/Form2Mail
 site_dir: build/site
 theme: material
