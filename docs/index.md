@@ -1,16 +1,52 @@
-# Welcome to MkDocs
+# Form2Mail
 
-For full documentation visit [mkdocs.org](https://www.mkdocs.org).
+form2mail takes formular data of an application form and generates a Mail.
 
-## Commands
+## Requirements
 
-* `mkdocs new [dir-name]` - Create a new project.
-* `mkdocs serve` - Start the live-reloading docs server.
-* `mkdocs build` - Build the documentation site.
-* `mkdocs -h` - Print help message and exit.
+- php 7.4
+- [yawik](https://yawik.org)
+
+## Install
+
+``` bash linenums="1"
+git clone https://github.com/yawik/Form2Mail.git
+cd Form2Mail 
+composer install
+```
 
 ## CORS
 
-configure in ...
+you can configure cors 
 
-TO BE COMPLETED
+``` php linenums="1"
+<?php
+
+declare(strict_types=1);
+
+namespace Form2Mail;
+
+/*
+ * List of allowed origins
+ * Needed for CORS;
+ */
+$options['allowedOrigins'] = [
+     'https://form.yawik.org',
+];
+
+/*
+ * Allowed methods for above origins.
+ * Map route names to request methods
+ * Multiple methods are specified as a comma separated string.
+ */
+//$options['allowedMethods'] = [
+//    'sendmail' => 'POST',
+//    'details' => 'GET',
+//];
+
+
+/*
+ * Do not change below
+ */
+return ['options' => [Options\ModuleOptions::class => ['options' => $options]]];
+```
