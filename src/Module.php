@@ -15,14 +15,14 @@ use Core\ModuleManager\Feature\VersionProviderInterface;
 use Core\ModuleManager\Feature\VersionProviderTrait;
 use Core\ModuleManager\ModuleConfigLoader;
 use Form2Mail\Controller\DetailsController;
+use Form2Mail\Controller\ExtractEmailsController;
 use Form2Mail\Controller\SendMailController;
 use Form2Mail\Options\ModuleOptions;
 use Laminas\Http\Request;
 use Laminas\Http\Response;
-use Laminas\Mvc\MvcEvent as MvcMvcEvent;
-use Zend\ModuleManager\Feature;
-use Zend\Console\Console;
-use Zend\Mvc\MvcEvent;
+use Laminas\Mvc\MvcEvent;
+use Laminas\ModuleManager\Feature;
+use Laminas\Console\Console;
 
 /**
  * ${CARET}
@@ -49,7 +49,7 @@ class Module implements Feature\ConfigProviderInterface, VersionProviderInterfac
         return ModuleConfigLoader::load(__DIR__ . '/../config');
     }
 
-    function onBootstrap(MvcEvent $e)
+    public function onBootstrap(MvcEvent $e)
     {
         self::$isLoaded=true;
         $eventManager = $e->getApplication()->getEventManager();
@@ -89,8 +89,9 @@ class Module implements Feature\ConfigProviderInterface, VersionProviderInterfac
                 }
             };
 
-            $sharedManager->attach(SendMailController::class, MvcMvcEvent::EVENT_DISPATCH, $callback, 100);
-            $sharedManager->attach(DetailsController::class, MvcMvcEvent::EVENT_DISPATCH, $callback, 100);
+            $sharedManager->attach(SendMailController::class, MvcEvent::EVENT_DISPATCH, $callback, 100);
+            $sharedManager->attach(DetailsController::class, MvcEvent::EVENT_DISPATCH, $callback, 100);
+            $sharedManager->attach(ExtractEmailsController::class, MvcEvent::EVENT_DISPATCH, $callback, 100);
 
             /*
              * use a neutral layout, when rendering the application form and its result page.

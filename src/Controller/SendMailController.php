@@ -179,7 +179,7 @@ class SendMailController extends AbstractActionController
 
         $result = [
             'success' => false,
-            'message' => self::$errors[$type] ?? 'An unknown error occured.',
+            'message' => self::$errors[$type] ?? $type,
         ];
 
         if ($extras) {

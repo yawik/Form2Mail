@@ -9,8 +9,10 @@ namespace Form2Mail;
 
 use Form2Mail\Controller\DetailsController;
 use Form2Mail\Controller\DetailsControllerFactory;
+use Form2Mail\Controller\ExtractEmailsController;
 use Form2Mail\Controller\SendMailController;
 use Form2Mail\Controller\SendMailControllerFactory;
+use Laminas\ServiceManager\Factory\InvokableFactory;
 
 return [
     'router' => [
@@ -36,6 +38,16 @@ return [
                     ],
                 ],
             ],
+            'extract' => [
+                'type' => 'Literal',
+                'options' => [
+                    'route' => '/extract',
+                    'defaults' => [
+                        'controller' => ExtractEmailsController::class,
+                        'action' => 'index',
+                    ],
+                ],
+            ],
         ],
     ],
 
@@ -43,6 +55,7 @@ return [
         'factories' => [
             SendMailController::class => SendMailControllerFactory::class,
             DetailsController::class => DetailsControllerFactory::class,
+            ExtractEmailsController::class => InvokableFactory::class,
         ],
     ],
 
