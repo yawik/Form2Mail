@@ -11,6 +11,7 @@ use Form2Mail\Controller\DetailsController;
 use Form2Mail\Controller\DetailsControllerFactory;
 use Form2Mail\Controller\SendMailController;
 use Form2Mail\Controller\SendMailControllerFactory;
+use Laminas\ServiceManager\Factory\InvokableFactory;
 
 return [
     'router' => [
@@ -46,6 +47,13 @@ return [
         ],
     ],
 
+    'controller_plugins' => [
+        'factories' => [
+            Controller\Plugins\SendMail::class => Controller\Plugins\SendMailFactory::class,
+            Controller\Plugins\StoreApplication::class => Controller\Plugins\StoreApplicationFactory::class,
+        ],
+    ],
+
     'view_manager' => [
         'template_map' => [
             'startpage'  => __DIR__ . '/../view/startpage.phtml',
@@ -60,7 +68,7 @@ return [
     'view_helper_config' => [
         'headscript' => [
             'lang/apply' => [
-                [\Zend\View\Helper\HeadScript::SCRIPT, ';(function($) {
+                [\Laminas\View\Helper\HeadScript::SCRIPT, ';(function($) {
                     $(function() {
                         $("#attributes-acceptedPrivacyPolicy").click();
                         var $div = $("#attributes > div:nth-child(2)");
@@ -70,6 +78,18 @@ return [
                     });
                 })(jQuery);'],
             ],
+        ],
+    ],
+
+    'hydrators' => [
+        'factories' => [
+            Hydrator\ApplicationHydrator::class => InvokableFactory::class,
+        ],
+    ],
+
+    'filters' => [
+        'factories' => [
+            Filter\JsonDataFilter::class => InvokableFactory::class,
         ],
     ],
 
