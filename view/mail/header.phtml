@@ -323,7 +323,7 @@ table{
                     $bytes = $image->getFile()->getBytes();
                     $data = base64_encode($bytes);
                     $imgsrc = 'data:' . $image->getType() . ';base64,' . $data;
-                    ?> <img alt="<?$org->getName()?> border="0" src="<?=$imgsrc?>">
+                    ?> <img alt="<?=$org->getName()?> border="0" src="<?=$imgsrc?>">
                 <?php else:?>
                     <p><?=$org->getName()?></p>
                 <?php endif ?>

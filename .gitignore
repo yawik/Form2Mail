@@ -3,3 +3,4 @@ phpunit.xml
 vendor
 node_modules
 public/layout.css
+public/dist/
