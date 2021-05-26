@@ -127,7 +127,7 @@ class SendMailController extends AbstractActionController
         $mail = $this->mails->get('htmltemplate');
         $mail->setTemplate('form2mail/mail/conduent');
         $mail->setVariables($vars);
-        $mail->setSubject($job ? sprintf('Bewerbung auf %s', $job->getTitle()) : 'Initiale Bewerbung');
+        $mail->setSubject($job ? sprintf('Bewerbung auf %s', $job->getTitle()) : 'Initiativbewerbung');
 
         $mail->addTo($to);
 

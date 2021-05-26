@@ -15,6 +15,17 @@ $width            = "600px";
 $mail_blue_color  = "#7b1738";
 $mail_white_color = "#fff";
 $style_p          = "font-family: Arial, Helvetica, sans-serif; font-weight: 400; font-size: 15px; line-height: 1.8;";
+$mapLabel = [
+    'age' => 'Alter',
+    'city' => 'Standort',
+    'experience' => 'Erfahrung',
+    'availability' => 'Verfügbarkeit'
+];
+$mapValue = [
+    'partial' => 'Teilzeit',
+    'full' => 'Vollzeit',
+    'full' => 'unter 20 Stunden pro Woche'
+];
 
 ?>
        <?= $this->partial('form2mail/mail/header', [
@@ -27,13 +38,13 @@ $style_p          = "font-family: Arial, Helvetica, sans-serif; font-weight: 400
 </h1>
 
 <table class="data-display">
-<tr><td>Anrede:</td><td><?=$user->getDisplayName(false)?></td></tr>
+<tr><td>Name:</td><td><?=$user->getDisplayName(false)?></td></tr>
 <tr><td>Telefon:</td><td><?=$user->getPhone()?></td></tr>
 <tr><td>E-Mail:</td><td><?=$user->getEmail()?></td></tr>
 
 <?php foreach ($extras as $key => $value):?>
-    <tr><td><?=$key?></td>
-    <td><?=$value?></td></tr>
+    <tr><td><?=$mapLabel[$key] ? : $key ?></td>
+    <td><?=$mapValue[$value] ? : $value ?></td></tr>
     <?php endforeach ?>
 </table>
 
