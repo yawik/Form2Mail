@@ -24,7 +24,7 @@ $mapLabel = [
 $mapValue = [
     'partial' => 'Teilzeit',
     'full' => 'Vollzeit',
-    'full' => 'unter 20 Stunden pro Woche'
+    'half' => 'unter 20 Stunden pro Woche'
 ];
 
 ?>
@@ -34,7 +34,7 @@ $mapValue = [
             'mail_white_color' => $mail_white_color,
             'org' => $org]); ?>
 <h1>
-    <?= $job ? 'Bewerbung auf ' . $job->getTitle() : 'Initiale Bewerbung'?>
+    <?= $job ? 'Bewerbung auf ' . $job->getTitle() : 'Initiativbewerbung'?>
 </h1>
 
 <table class="data-display">
