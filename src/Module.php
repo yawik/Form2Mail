@@ -14,6 +14,7 @@ namespace Form2Mail;
 use Core\ModuleManager\Feature\VersionProviderInterface;
 use Core\ModuleManager\Feature\VersionProviderTrait;
 use Core\ModuleManager\ModuleConfigLoader;
+use Form2Mail\Controller\AbstractApiResponseController;
 use Form2Mail\Controller\DetailsController;
 use Form2Mail\Controller\ExtractEmailsController;
 use Form2Mail\Controller\SendMailController;
@@ -92,6 +93,7 @@ class Module implements Feature\ConfigProviderInterface, VersionProviderInterfac
             $sharedManager->attach(SendMailController::class, MvcEvent::EVENT_DISPATCH, $callback, 100);
             $sharedManager->attach(DetailsController::class, MvcEvent::EVENT_DISPATCH, $callback, 100);
             $sharedManager->attach(ExtractEmailsController::class, MvcEvent::EVENT_DISPATCH, $callback, 100);
+            $sharedManager->attach(AbstractApiResponseController::class, MvcEvent::EVENT_DISPATCH, $callback, 100);
 
             /*
              * use a neutral layout, when rendering the application form and its result page.

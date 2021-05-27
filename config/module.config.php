@@ -10,6 +10,8 @@ namespace Form2Mail;
 use Form2Mail\Controller\DetailsController;
 use Form2Mail\Controller\DetailsControllerFactory;
 use Form2Mail\Controller\ExtractEmailsController;
+use Form2Mail\Controller\RegisterJobController;
+use Form2Mail\Controller\RegisterJobControllerFactory;
 use Form2Mail\Controller\SendMailController;
 use Form2Mail\Controller\SendMailControllerFactory;
 use Laminas\ServiceManager\Factory\InvokableFactory;
@@ -48,6 +50,16 @@ return [
                     ],
                 ],
             ],
+            'register' => [
+                'type' => 'Literal',
+                'options' => [
+                    'route' => '/register',
+                    'defaults' => [
+                        'controller' => RegisterJobController::class,
+                        'action' => 'index',
+                    ],
+                ],
+            ]
         ],
     ],
 
@@ -56,6 +68,7 @@ return [
             SendMailController::class => SendMailControllerFactory::class,
             DetailsController::class => DetailsControllerFactory::class,
             ExtractEmailsController::class => InvokableFactory::class,
+            RegisterJobController::class => RegisterJobControllerFactory::class,
         ],
     ],
 
@@ -73,7 +86,7 @@ return [
     'view_helper_config' => [
         'headscript' => [
             'lang/apply' => [
-                [\Zend\View\Helper\HeadScript::SCRIPT, ';(function($) {
+                [\Laminas\View\Helper\HeadScript::SCRIPT, ';(function($) {
                     $(function() {
                         $("#attributes-acceptedPrivacyPolicy").click();
                         var $div = $("#attributes > div:nth-child(2)");
