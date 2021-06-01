@@ -79,7 +79,7 @@ class ExtractEmailsController extends SendMailController
         }
         $content = $response->getBody();
 
-        preg_match_all("/b\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*\b/", $content, $matches);
+        preg_match_all("/\b\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*\b/", $content, $matches);
         $mails = $matches[0];
         $mails = array_unique($mails);
         return new JsonModel([
