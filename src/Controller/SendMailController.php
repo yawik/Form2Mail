@@ -142,6 +142,9 @@ class SendMailController extends AbstractActionController
             $message->addPart($html);
 
             foreach ($files['attached'] as $file) {
+                if ($file['error'] !== UPLOAD_ERR_OK) {
+                    continue;
+                }
                 $attachment = new MimePart(fopen($file['tmp_name'], 'r'));
                 $attachment->type = mime_content_type($file['tmp_name']);
                 $attachment->filename = $file['name'];
