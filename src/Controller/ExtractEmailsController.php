@@ -81,6 +81,8 @@ class ExtractEmailsController extends SendMailController
 
         preg_match_all("/\b\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*\b/", $content, $matches);
         $mails = $matches[0];
+        $strtolower = (function_exists('mb_strtolower') ? 'mb_' : '') . 'strtolower';
+        $mails = array_map($strtolower, $mails);
         $mails = array_unique($mails);
         return new JsonModel([
             'success' => true,
