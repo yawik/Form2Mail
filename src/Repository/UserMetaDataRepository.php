@@ -32,4 +32,14 @@ class UserMetaDataRepository extends AbstractRepository
 
         return $entity;
     }
+
+    public function findMetaDataOfInvitableUsers()
+    {
+        $criteria = [
+            'type' => UserMetaData::TYPE_INVITED,
+            'state' => UserMetaData::STATE_NEW,
+        ];
+
+        return $this->findBy($criteria);
+    }
 }

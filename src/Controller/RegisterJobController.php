@@ -16,6 +16,7 @@ use Auth\Repository\User as UserRepository;
 use Core\Entity\PermissionsInterface;
 use Form2Mail\Entity\UserMetaData;
 use Form2Mail\Repository\UserMetaDataRepository;
+use Jobs\Entity\JobInterface;
 use Organizations\Repository\Organization as OrganizationRepository;
 use Jobs\Repository\Job as JobRepository;
 use Jobs\View\Helper\JobUrl;
@@ -47,6 +48,7 @@ class RegisterJobController extends AbstractApiResponseController
         $this->users = $users;
         $this->organizations = $organizations;
         $this->jobs = $jobs;
+        $this->meta = $meta;
         $this->jobUrl = $jobUrl;
     }
 
@@ -70,7 +72,7 @@ class RegisterJobController extends AbstractApiResponseController
             $user = $this->createUser($email, $this->params()->fromPost('name', ''));
             $organization = $this->createOrganization($user, $this->params()->fromPost('organization'));
             $job = $this->createJob($user, $organization, $uri);
-            $meta = $this->createUserMeta($user);
+            $meta = $this->createUserMeta($user, $job);
 
             $dm = $this->users->getDocumentManager();
             $dm->persist($user);
@@ -134,10 +136,11 @@ class RegisterJobController extends AbstractApiResponseController
         return $user;
     }
 
-    private function createUserMeta(UserInterface $user, string $type = UserMetaData::TYPE_INVITED)
+    private function createUserMeta(UserInterface $user, JobInterface $job, string $type = UserMetaData::TYPE_INVITED)
     {
         $meta = $this->meta->findOrCreateMetaData($user);
         $meta->setState(UserMetaData::STATE_NEW);
+        $meta->setJob($job);
         $meta->setType($type);
 
         return $meta;

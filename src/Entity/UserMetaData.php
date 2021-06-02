@@ -15,8 +15,6 @@ use Core\Entity\EntityInterface;
 use Core\Entity\EntityTrait;
 use Core\Entity\IdentifiableEntityInterface;
 use Core\Entity\IdentifiableEntityTrait;
-use Core\Entity\MetaDataProviderInterface;
-use Core\Entity\MetaDataProviderTrait;
 use Core\Exception\ImmutablePropertyException;
 use Doctrine\ODM\MongoDB\Mapping\Annotations as ODM;
 
@@ -26,7 +24,7 @@ use Doctrine\ODM\MongoDB\Mapping\Annotations as ODM;
  * @author Mathias Gelhausen
  * TODO: write tests
  *
- * @ODM\Document(repositoryClass="\Form2Mail\Repository\UserMetaDataRepository")
+ * @ODM\Document(collection="form2mail.usermeta", repositoryClass="\Form2Mail\Repository\UserMetaDataRepository")
  */
 class UserMetaData implements EntityInterface, IdentifiableEntityInterface
 {
@@ -41,7 +39,7 @@ class UserMetaData implements EntityInterface, IdentifiableEntityInterface
 
     /**
      * @var \Auth\Entity\UserInterface
-     * @ODM\ReferenceOne(targetDocument="\Auth\Entity\User")
+     * @ODM\ReferenceOne(targetDocument="\Auth\Entity\User", storeAs="id", cascade="persist")
      * */
     private $user;
 
@@ -55,7 +53,13 @@ class UserMetaData implements EntityInterface, IdentifiableEntityInterface
      * @var string
      * @ODM\Field(type="string")
      */
-    private $type = self::TYPE_REGISTERED;
+    private $type;
+
+    /**
+     * @var \Jobs\Entity\JobInterface
+     * @ODM\ReferenceOne(targetDocument="\Jobs\Entity\Job", storeAs="id",  nullable=true, cascade="persist")
+     */
+    private $job;
 
     /**
      * Get user
@@ -111,7 +115,7 @@ class UserMetaData implements EntityInterface, IdentifiableEntityInterface
 
     public function setType(string $type): void
     {
-        if ($this->state) {
+        if ($this->type) {
             throw new ImmutablePropertyException('type', $this);
         }
 
@@ -127,11 +131,34 @@ class UserMetaData implements EntityInterface, IdentifiableEntityInterface
 
     public function getType(): string
     {
+        if (!$this->type) {
+            $this->setType(self::TYPE_REGISTERED);
+        }
         return $this->type;
     }
 
     public function isType(string $type): bool
     {
         return $this->type === $type;
+    }
+
+    /**
+     * Get job
+     *
+     * @return \Jobs\Entity\JobInterface
+     */
+    public function getJob(): \Jobs\Entity\JobInterface
+    {
+        return $this->job;
+    }
+
+    /**
+     * Set job
+     *
+     * @param \Jobs\Entity\JobInterface $job
+     */
+    public function setJob(\Jobs\Entity\JobInterface $job): void
+    {
+        $this->job = $job;
     }
 }

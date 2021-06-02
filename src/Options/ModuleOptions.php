@@ -10,7 +10,9 @@ declare(strict_types=1);
 
 namespace Form2Mail\Options;
 
+use Jobs\Entity\JobInterface;
 use Laminas\Stdlib\AbstractOptions;
+use Organizations\Entity\OrganizationInterface;
 
 /**
  * TODO: description
@@ -29,6 +31,12 @@ class ModuleOptions extends AbstractOptions
         'details' => 'GET',
     ];
 
+    /**
+     * use `%s` as placeholder for the job/apply id
+     *
+     * @var string
+     */
+    private $formFrontendUri = '';
 
 
     /**
@@ -73,5 +81,25 @@ class ModuleOptions extends AbstractOptions
     public function setAllowedMethods(array $allowedMethods): void
     {
         $this->allowedMethods = $allowedMethods;
+    }
+
+    /**
+     * Get formFrontendUri
+     *
+     * @return string
+     */
+    public function getFormFrontendUri(): string
+    {
+        return $this->formFrontendUri;
+    }
+
+    /**
+     * Set formFrontendUri
+     *
+     * @param string $formFrontendUri
+     */
+    public function setFormFrontendUri(string $formFrontendUri): void
+    {
+        $this->formFrontendUri = $formFrontendUri;
     }
 }
