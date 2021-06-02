@@ -20,5 +20,57 @@ use Laminas\Stdlib\AbstractOptions;
  */
 class SendmailOrganizationOptions extends AbstractOptions
 {
+    private $sendConfirmEmail = false;
+    private $confirmEmailSubject = '';
+    private $confirmEmailTemplate = '';
 
+    public function setSendConfirmEmail(bool $flag): void
+    {
+        $this->sendConfirmEmail = $flag;
+    }
+
+    public function shouldSendConfirmEmail(): bool
+    {
+        return $this->sendConfirmEmail;
+    }
+
+    /**
+     * Get confirmEmailSubject
+     *
+     * @return string
+     */
+    public function getConfirmEmailSubject(): string
+    {
+        return $this->confirmEmailSubject;
+    }
+
+    /**
+     * Set confirmEmailSubject
+     *
+     * @param string $confirmEmailSubject
+     */
+    public function setConfirmEmailSubject(string $confirmEmailSubject): void
+    {
+        $this->confirmEmailSubject = $confirmEmailSubject;
+    }
+
+    /**
+     * Get confirmEmailTemplate
+     *
+     * @return string
+     */
+    public function getConfirmEmailTemplate(): string
+    {
+        return $this->confirmEmailTemplate;
+    }
+
+    /**
+     * Set confirmEmailTemplate
+     *
+     * @param string $confirmEmailTemplate
+     */
+    public function setConfirmEmailTemplate(string $confirmEmailTemplate): void
+    {
+        $this->confirmEmailTemplate = $confirmEmailTemplate;
+    }
 }

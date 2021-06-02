@@ -117,7 +117,7 @@ class SendMailController extends AbstractActionController
             $to = $job->getUser()->getInfo()->getEmail() ?? $org->getUser()->getInfo()->getEmail();
         }
 
-        //$options = $this->getOrganizationOptions()->getOrganizationOptions($job->getOrganization()->getId());
+        $options = $this->getOrganizationOptions()->getOrganizationOptions($job->getOrganization()->getId());
 
         // normalite json data
         /** @var \Core\Mail\HTMLTemplateMessage $mail */
@@ -168,11 +168,40 @@ class SendMailController extends AbstractActionController
             return $this->createErrorModel(self::ERROR_MAIL_FAILED, Response::STATUS_CODE_500, ['error' => $e->getMessage()]);
         }
 
+        $extras = [
+            'payload' => $json,
+            'mail' => $mail->toString(),
+        ];
+
+        if ($options->shouldSendConfirmEmail() && ($emailAddress = $vars['user']->getEmail())) {
+            $mail = $this->mails->get('htmltemplate');
+            $mail->addTo($emailAddress);
+            $mail->setSubject($options->getConfirmEmailSubject());
+            $mail->setTemplate($options->getConfirmEmailTemplate());
+            $mail->setVariables([
+                'org' => $org,
+                'job' => $job,
+                'recruiter' => $job->getUser() ?? $org->getUser(),
+                'applicant' => $vars['user'],
+            ]);
+            try {
+                $this->mails->send($mail);
+                $extras['confirmMailSuccess'] = true;
+                $extras['confirmMail'] = $mail->toString();
+            } catch (\Throwable $e) {
+                $extras['confirmMailSuccess'] = false;
+                $extras['confirmMail'] = sprintf(
+                    '[%s] %s',
+                    get_class($e),
+                    $e->getMessage()
+                );
+            }
+        }
+
         return new JsonModel([
             'success' => true,
             'message' => 'Mail send successfully',
-            'payload' => $json,
-            'mail' => $mail->toString()
+            'extras' => $extras
         ]);
     }
 
