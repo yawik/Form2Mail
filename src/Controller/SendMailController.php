@@ -117,7 +117,7 @@ class SendMailController extends AbstractActionController
             $to = $job->getUser()->getInfo()->getEmail() ?? $org->getUser()->getInfo()->getEmail();
         }
 
-        $options = $this->getOrganizationOptions()->getOrganizationOptions($job->getOrganization()->getId());
+        $options = $this->getOrganizationOptions()->getOrganizationOptions($org->getId());
 
         // normalite json data
         /** @var \Core\Mail\HTMLTemplateMessage $mail */
