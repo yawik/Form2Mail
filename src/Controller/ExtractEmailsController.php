@@ -12,6 +12,7 @@ namespace Form2Mail\Controller;
 
 use Laminas\Http\Client;
 use Laminas\Http\Response;
+use Laminas\Uri\Uri;
 use Laminas\View\Model\JsonModel;
 
 /**
@@ -78,9 +79,34 @@ class ExtractEmailsController extends SendMailController
             );
         }
         $content = $response->getBody();
+        $urlObj = new Uri($url);
 
-        preg_match_all("/\b\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*\b/", $content, $matches);
-        $mails = $matches[0];
+        try {
+            switch ($urlObj->getHost()) {
+                case "jobs.kliniken.de":
+                    $mails = $this->extractMailsFromKlinikenDe($content);
+                    break;
+
+                case "stellenmarkt.sueddeutsche.de":
+                    $mails = $this->extractMailsFromSueddeutscheDe($content);
+                    break;
+
+                case "www.yourfirm.de":
+                    $mails = $this->extractMailsFromYourfirmDe($content);
+                    break;
+
+                default:
+                    $mails = $this->extractMailsFromHtml($content);
+                    break;
+            }
+        } catch (\Throwable $e) {
+            return $this->createErrorModel(
+                'Could not extract email addresses',
+                Response::STATUS_CODE_500,
+                ['message' => $e->getMessage()]
+            );
+        }
+
         $strtolower = (function_exists('mb_strtolower') ? 'mb_' : '') . 'strtolower';
         $mails = array_map($strtolower, $mails);
         $mails = array_unique($mails);
@@ -89,5 +115,70 @@ class ExtractEmailsController extends SendMailController
             'message' => count($mails) . ' emails extracted.',
             'emails' => $mails
         ]);
+    }
+
+    private function fetchHtmlContent($url)
+    {
+        $response = $this->getHttpClient($url)->send();
+
+        if ($response->getStatusCode() !== Response::STATUS_CODE_200) {
+            throw new \DomainException('Fetching html failed from ' . $url);
+        }
+
+        return $response->getBody();
+    }
+
+    private function extractMailsFromHtml($content, $pattern = null)
+    {
+        $pattern = $pattern ?: "/\b\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*\b/";
+        preg_match_all($pattern, $content, $matches);
+        return $matches[0];
+    }
+
+    private function extractMailsFromKlinikenDe($content)
+    {
+        libxml_use_internal_errors(true);
+
+        $doc = new \DOMDocument();
+        $doc->loadHTML($content);
+
+        $iframes = $doc->getElementsByTagName('iframe');
+        $iframe = $iframes->item(0);
+        $iframeSrc = $iframe->getAttribute('data-src');
+        $iframeContent = $this->fetchHtmlContent($iframeSrc);
+
+        return $this->extractMailsFromHtml($iframeContent);
+    }
+
+    private function extractMailsFromSueddeutscheDe($content)
+    {
+        libxml_use_internal_errors(true);
+
+        $doc = new \DOMDocument();
+        $doc->loadHTML($content);
+
+        $iframes = $doc->getElementsByTagName('iframe');
+        foreach ($iframes as $iframe) {
+            $src = $iframe->getAttribute('src');
+            if (strpos($src, '/jobs') === 0) {
+                return $this->extractMailsFromHtml(
+                    $this->fetchHtmlContent(
+                        "https://stellenmarkt.sueddeutsche.de$src"
+                    )
+                );
+            }
+        }
+        return [];
+    }
+
+    private function extractMailsFromYourfirmDe($content)
+    {
+        preg_match('~"iframe_url": "([^"]+)"~s', $content, $match);
+
+        if (!isset($match[1])) {
+            return [];
+        }
+
+        return $this->extractMailsFromHtml($this->fetchHtmlContent($match[1]));
     }
 }
