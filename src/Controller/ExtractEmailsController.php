@@ -91,6 +91,10 @@ class ExtractEmailsController extends SendMailController
                     $mails = $this->extractMailsFromSueddeutscheDe($content);
                     break;
 
+                case "www.yourfirm.de":
+                    $mails = $this->extractMailsFromYourfirmDe($content);
+                    break;
+
                 default:
                     $mails = $this->extractMailsFromHtml($content);
                     break;
@@ -165,5 +169,16 @@ class ExtractEmailsController extends SendMailController
             }
         }
         return [];
+    }
+
+    private function extractMailsFromYourfirmDe($content)
+    {
+        preg_match('~"iframe_url": "([^"]+)"~s', $content, $match);
+
+        if (!isset($match[1])) {
+            return [];
+        }
+
+        return $this->extractMailsFromHtml($this->fetchHtmlContent($match[1]));
     }
 }
