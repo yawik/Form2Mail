@@ -87,6 +87,10 @@ class ExtractEmailsController extends SendMailController
                     $mails = $this->extractMailsFromKlinikenDe($content);
                     break;
 
+                case "stellenmarkt.sueddeutsche.de":
+                    $mails = $this->extractMailsFromSueddeutscheDe($content);
+                    break;
+
                 default:
                     $mails = $this->extractMailsFromHtml($content);
                     break;
@@ -140,5 +144,26 @@ class ExtractEmailsController extends SendMailController
         $iframeContent = $this->fetchHtmlContent($iframeSrc);
 
         return $this->extractMailsFromHtml($iframeContent);
+    }
+
+    private function extractMailsFromSueddeutscheDe($content)
+    {
+        libxml_use_internal_errors(true);
+
+        $doc = new \DOMDocument();
+        $doc->loadHTML($content);
+
+        $iframes = $doc->getElementsByTagName('iframe');
+        foreach ($iframes as $iframe) {
+            $src = $iframe->getAttribute('src');
+            if (strpos($src, '/jobs') === 0) {
+                return $this->extractMailsFromHtml(
+                    $this->fetchHtmlContent(
+                        "https://stellenmarkt.sueddeutsche.de$src"
+                    )
+                );
+            }
+        }
+        return [];
     }
 }
