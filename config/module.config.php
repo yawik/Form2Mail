@@ -72,6 +72,12 @@ return [
         ],
     ],
 
+    'controller_plugins' => [
+        'factories' => [
+            Controller\Plugin\RegisterJob::class => Controller\Plugin\RegisterJobFactory::class,
+        ],
+    ],
+
     'view_manager' => [
         'template_map' => [
             'startpage'  => __DIR__ . '/../view/startpage.phtml',
