@@ -41,25 +41,31 @@ class RegisterJob extends AbstractPlugin
 
     }
 
-    public function __invoke(array $spec)
+    public function __invoke(array $spec, bool $allowMultiple = false)
     {
         extract([
-            'userEmail' => $spec['user']['email'] ?? null,
-            'userName' => $spec['user']['name'] ?? null,
-            'orgName' => $spec['org']['name'] ?? $spec['user']['email'] ?? null,
-            'jobUri' => $spec['job']['uri'] ?? null,
-            'jobTitle' => $spec['job']['title'] ?? null,
+            'userEmail' => $spec['user']['email'] ?? '',
+            'userName' => $spec['user']['name'] ?? '',
+            'orgName' => $spec['org']['name'] ?? $spec['user']['email'] ?? '',
+            'jobUri' => $spec['job']['uri'] ?? '',
+            'jobTitle' => $spec['job']['title'] ?? '',
         ]);
 
-        $user = $this->createUser($email, $userName);
-        $organization = $this->createOrganization($user, $orgName);
-        $job = $this->createJob($user, $organization, $jobUri);
+        if ($allowMultiple && ($user = $this->users->findByLoginOrEmail($userEmail))) {
+            $organization = $user->getOrganization()->getOrganization();
+        } else {
+            $user = $this->createUser($userEmail, $userName);
+            $organization = $this->createOrganization($user, $orgName);
+        }
+        $job = $this->createJob($user, $organization, $jobUri, $jobTitle);
 
-        $dm = $this->users->getDocumentManager();
-        $dm->persist($user);
-        $dm->persist($organization);
-        $dm->persist($job);
-        $dm->flush();
+        // $dm = $this->users->getDocumentManager();
+        // $dm->persist($user);
+        // $dm->persist($organization);
+        // $dm->persist($job);
+        // $dm->flush();
+
+        return $job;
     }
 
     private function createUser(string $email, string $name = '')
@@ -104,13 +110,14 @@ class RegisterJob extends AbstractPlugin
         return $organization;
     }
 
-    protected function createJob($user, $organization, $uri)
+    protected function createJob($user, $organization, $uri, $title)
     {
         /** @var \Jobs\Entity\Job $job */
         $job = $this->jobs->create();
         $job->setOrganization($organization);
         $job->setUser($user);
         $job->setLink($uri);
+        $job->setTitle($title);
 
         return $job;
     }
