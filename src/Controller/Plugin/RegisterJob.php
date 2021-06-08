@@ -11,8 +11,12 @@ declare(strict_types=1);
 namespace Form2Mail\Controller\Plugin;
 
 use Auth\Entity\User;
+use Auth\Entity\UserInterface;
 use Core\Entity\PermissionsInterface;
 use Auth\Repository\User as UserRepository;
+use Form2Mail\Entity\UserMetaData;
+use Form2Mail\Repository\UserMetaDataRepository;
+use Jobs\Entity\JobInterface;
 use Organizations\Repository\Organization as OrganizationRepository;
 use Jobs\Repository\Job as JobRepository;
 use Laminas\Mvc\Controller\Plugin\AbstractPlugin;
@@ -29,16 +33,18 @@ class RegisterJob extends AbstractPlugin
     private $users;
     private $organizations;
     private $jobs;
+    private $meta;
 
     public function __construct(
         UserRepository $users,
         OrganizationRepository $organizations,
-        JobRepository $jobs
+        JobRepository $jobs,
+        UserMetaDataRepository $meta
     ) {
         $this->users = $users;
         $this->organizations = $organizations;
         $this->jobs = $jobs;
-
+        $this->meta = $meta;
     }
 
     public function __invoke(array $spec, bool $allowMultiple = false)
@@ -58,12 +64,14 @@ class RegisterJob extends AbstractPlugin
             $organization = $this->createOrganization($user, $orgName);
         }
         $job = $this->createJob($user, $organization, $jobUri, $jobTitle);
+        $meta = $this->createUserMeta($user, $job);
 
-        // $dm = $this->users->getDocumentManager();
-        // $dm->persist($user);
-        // $dm->persist($organization);
-        // $dm->persist($job);
-        // $dm->flush();
+        $dm = $this->users->getDocumentManager();
+        $dm->persist($user);
+        $dm->persist($organization);
+        $dm->persist($job);
+        $dm->persist($meta);
+        $dm->flush();
 
         return $job;
     }
@@ -97,6 +105,16 @@ class RegisterJob extends AbstractPlugin
 
         $user->setPassword(uniqid('credentials', true));
         return $user;
+    }
+
+    private function createUserMeta(UserInterface $user, JobInterface $job, string $type = UserMetaData::TYPE_INVITED)
+    {
+        $meta = $this->meta->findOrCreateMetaData($user);
+        $meta->setState(UserMetaData::STATE_NEW);
+        $meta->setJob($job);
+        $meta->setType($type);
+
+        return $meta;
     }
 
     private function createOrganization($user, ?string $name = null)

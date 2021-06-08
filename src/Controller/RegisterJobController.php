@@ -11,9 +11,13 @@ declare(strict_types=1);
 namespace Form2Mail\Controller;
 
 use Auth\Entity\User;
+use Auth\Entity\UserInterface;
 use Auth\Repository\User as UserRepository;
 use Core\Entity\PermissionsInterface;
 use Form2Mail\Controller\Plugin\RegisterJob;
+use Form2Mail\Entity\UserMetaData;
+use Form2Mail\Repository\UserMetaDataRepository;
+use Jobs\Entity\JobInterface;
 use Organizations\Repository\Organization as OrganizationRepository;
 use Jobs\Repository\Job as JobRepository;
 use Jobs\View\Helper\JobUrl;
@@ -29,10 +33,14 @@ class RegisterJobController extends AbstractApiResponseController
 {
 
     private $jobUrl;
+    /** @var UserMetaDataRepository */
+    private $meta;
 
     public function __construct(
+        UserMetaDataRepository $meta,
         JobUrl $jobUrl
     ) {
+        $this->meta = $meta;
         $this->jobUrl = $jobUrl;
     }
 

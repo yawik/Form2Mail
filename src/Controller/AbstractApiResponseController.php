@@ -10,6 +10,7 @@ declare(strict_types=1);
 
 namespace Form2Mail\Controller;
 
+use Laminas\Http\Response;
 use Laminas\Mvc\Controller\AbstractActionController;
 use Laminas\View\Model\JsonModel;
 

@@ -11,6 +11,7 @@ declare(strict_types=1);
 
 namespace Form2Mail\Controller;
 
+use Form2Mail\Entity\UserMetaData;
 use Psr\Container\ContainerInterface;
 
 /**
@@ -32,6 +33,7 @@ class RegisterJobControllerFactory
             $repositories->get('Auth/User'),
             $repositories->get('Organizations'),
             $repositories->get('Jobs'),
+            $repositories->get(UserMetaData::class),
             $helper->get('jobUrl')
         );
     }
