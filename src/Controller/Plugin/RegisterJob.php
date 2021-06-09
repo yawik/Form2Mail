@@ -109,9 +109,8 @@ class RegisterJob extends AbstractPlugin
 
     private function createUserMeta(UserInterface $user, JobInterface $job, string $type = UserMetaData::TYPE_INVITED)
     {
-        $meta = $this->meta->findOrCreateMetaData($user);
+        $meta = $this->meta->findOrCreateMetaData($user, $job);
         $meta->setState(UserMetaData::STATE_NEW);
-        $meta->setJob($job);
         $meta->setType($type);
 
         return $meta;

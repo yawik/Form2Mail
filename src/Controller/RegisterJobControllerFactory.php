@@ -27,13 +27,8 @@ class RegisterJobControllerFactory
         string $requestedName,
         ?array $options = null
     ): RegisterJobController {
-        $repositories = $container->get('repositories');
         $helper = $container->get('ViewHelperManager');
         return new RegisterJobController(
-            $repositories->get('Auth/User'),
-            $repositories->get('Organizations'),
-            $repositories->get('Jobs'),
-            $repositories->get(UserMetaData::class),
             $helper->get('jobUrl')
         );
     }

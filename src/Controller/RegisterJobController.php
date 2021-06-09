@@ -33,14 +33,10 @@ class RegisterJobController extends AbstractApiResponseController
 {
 
     private $jobUrl;
-    /** @var UserMetaDataRepository */
-    private $meta;
 
     public function __construct(
-        UserMetaDataRepository $meta,
         JobUrl $jobUrl
     ) {
-        $this->meta = $meta;
         $this->jobUrl = $jobUrl;
     }
 
@@ -55,6 +51,7 @@ class RegisterJobController extends AbstractApiResponseController
 
         $email = $this->params()->fromPost('email');
         $uri = $this->params()->fromPost('uri');
+        $multi = (bool) $this->params()->fromPost('multi');
 
         if (!$email || !$uri) {
             return $this->createErrorModel('Missing email or job uri.', Response::STATUS_CODE_400);
@@ -72,7 +69,7 @@ class RegisterJobController extends AbstractApiResponseController
                     'title' => $this->params()->fromPost('title'),
                 ],
             ];
-            $job = ($this->plugin(RegisterJob::class))($spec);
+            $job = ($this->plugin(RegisterJob::class))($spec, $multi);
         } catch (\UnexpectedValueException $e) {
             return $this->createErrorModel(
                 'Duplicate email detected',
