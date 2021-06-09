@@ -133,7 +133,7 @@ class SendMailController extends AbstractActionController
 
         // Attachments handling
         $files = $this->getRequest()->getFiles()->toArray();
-        if (isset($files['attached']) && count($files['attached'])) {
+        if (isset($files) && count($files)) {
             $message = new MimeMessage();
             $html = new MimePart($mail->getBodyText());
             $html->type = Mime::TYPE_HTML;
@@ -141,8 +141,11 @@ class SendMailController extends AbstractActionController
             $html->charset = 'utf-8';
             $message->addPart($html);
 
-            foreach ($files['attached'] as $file) {
+            foreach ($files as $key => $file) {
                 if ($file['error'] !== UPLOAD_ERR_OK) {
+                    continue;
+                }
+                if ($key !== 'attached' && $key !== 'photo') {
                     continue;
                 }
                 $attachment = new MimePart(fopen($file['tmp_name'], 'r'));
@@ -150,6 +153,7 @@ class SendMailController extends AbstractActionController
                 $attachment->filename = $file['name'];
                 $attachment->disposition = Mime::DISPOSITION_ATTACHMENT;
                 $attachment->encoding = Mime::ENCODING_BASE64;
+                $attachment->id = ($key==='photo' ?: 'photo');
                 $message->addPart($attachment);
             }
 
