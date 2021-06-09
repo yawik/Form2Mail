@@ -69,7 +69,7 @@ class RegisterJobController extends AbstractApiResponseController
                     'title' => $this->params()->fromPost('title'),
                 ],
             ];
-            $job = ($this->plugin(RegisterJob::class))($spec, $multi);
+            $job = ($this->plugin(RegisterJob::class))($spec, ['allowMultiple' => $multi]);
         } catch (\UnexpectedValueException $e) {
             return $this->createErrorModel(
                 'Duplicate email detected',

@@ -11,6 +11,7 @@ declare(strict_types=1);
 namespace Form2Mail\Controller;
 
 use Form2Mail\Controller\Plugin\RegisterJob;
+use Form2Mail\Entity\UserMetaData;
 use Laminas\Http\Client;
 use Laminas\Http\Response;
 use Laminas\Uri\Uri;
@@ -130,7 +131,7 @@ class ExtractEmailsController extends SendMailController
                         'title' => $jsonLd['title'],
                     ],
                 ];
-                $job = ($this->plugin(RegisterJob::class))($spec);
+                $job = ($this->plugin(RegisterJob::class))($spec, ['allowMultiple' => true, 'userMetaType' => UserMetaData::TYPE_INVITED]);
                 $extras = [
                     'register' => true,
                     'user' => $job->getUser()->getId(),

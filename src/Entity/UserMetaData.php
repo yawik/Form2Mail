@@ -11,11 +11,13 @@ declare(strict_types=1);
 namespace Form2Mail\Entity;
 
 use Auth\Entity\UserInterface;
+use Core\Entity\Collection\ArrayCollection;
 use Core\Entity\EntityInterface;
 use Core\Entity\EntityTrait;
 use Core\Entity\IdentifiableEntityInterface;
 use Core\Entity\IdentifiableEntityTrait;
 use Core\Exception\ImmutablePropertyException;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ODM\MongoDB\Mapping\Annotations as ODM;
 
 /**
@@ -57,9 +59,9 @@ class UserMetaData implements EntityInterface, IdentifiableEntityInterface
 
     /**
      * @var \Jobs\Entity\JobInterface
-     * @ODM\ReferenceOne(targetDocument="\Jobs\Entity\Job", storeAs="id",  nullable=true, cascade="persist")
+     * @ODM\ReferenceMany(targetDocument="\Jobs\Entity\Job", storeAs="id",  nullable=true, cascade="persist")
      */
-    private $job;
+    private $jobs;
 
     /**
      * Get user
@@ -147,9 +149,18 @@ class UserMetaData implements EntityInterface, IdentifiableEntityInterface
      *
      * @return \Jobs\Entity\JobInterface
      */
-    public function getJob(): \Jobs\Entity\JobInterface
+    public function getJob(?string $id = null): ?\Jobs\Entity\JobInterface
     {
-        return $this->job;
+        if ($id) {
+            foreach ($this->getJobs() as $job) {
+                if ($job->getId() == $id) {
+                    return $job;
+                }
+            }
+            return null;
+        }
+
+        return $this->getJobs()->first();
     }
 
     /**
@@ -157,8 +168,19 @@ class UserMetaData implements EntityInterface, IdentifiableEntityInterface
      *
      * @param \Jobs\Entity\JobInterface $job
      */
-    public function setJob(\Jobs\Entity\JobInterface $job): void
+    public function addJob(\Jobs\Entity\JobInterface $job): void
     {
-        $this->job = $job;
+        $this->getJobs()->add($job);
     }
+
+    public function getJobs(): Collection
+    {
+        if (!$this->jobs) {
+            $this->jobs = new ArrayCollection();
+        }
+
+        return $this->jobs;
+    }
+
+
 }

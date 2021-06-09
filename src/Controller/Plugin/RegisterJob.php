@@ -47,7 +47,7 @@ class RegisterJob extends AbstractPlugin
         $this->meta = $meta;
     }
 
-    public function __invoke(array $spec, bool $allowMultiple = false)
+    public function __invoke(array $spec, array $options = [])
     {
         extract([
             'userEmail' => $spec['user']['email'] ?? '',
@@ -56,6 +56,13 @@ class RegisterJob extends AbstractPlugin
             'jobUri' => $spec['job']['uri'] ?? '',
             'jobTitle' => $spec['job']['title'] ?? '',
         ]);
+        extract(array_merge(
+            [
+                'allowMultiple' => false,
+                'userMetaType' => UserMetaData::TYPE_REGISTERED,
+            ],
+            $options
+        ));
 
         if ($allowMultiple && ($user = $this->users->findByLoginOrEmail($userEmail))) {
             $organization = $user->getOrganization()->getOrganization();
@@ -64,7 +71,7 @@ class RegisterJob extends AbstractPlugin
             $organization = $this->createOrganization($user, $orgName);
         }
         $job = $this->createJob($user, $organization, $jobUri, $jobTitle);
-        $meta = $this->createUserMeta($user, $job);
+        $meta = $this->createUserMeta($user, $job, $userMetaType);
 
         $dm = $this->users->getDocumentManager();
         $dm->persist($user);
@@ -107,11 +114,10 @@ class RegisterJob extends AbstractPlugin
         return $user;
     }
 
-    private function createUserMeta(UserInterface $user, JobInterface $job, string $type = UserMetaData::TYPE_INVITED)
+    private function createUserMeta(UserInterface $user, JobInterface $job, ?string $type = null)
     {
-        $meta = $this->meta->findOrCreateMetaData($user, $job);
-        $meta->setState(UserMetaData::STATE_NEW);
-        $meta->setType($type);
+        $meta = $this->meta->findOrCreateMetaData($user, $type);
+        $meta->addJob($job);
 
         return $meta;
     }

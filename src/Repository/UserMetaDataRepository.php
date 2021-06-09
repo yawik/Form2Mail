@@ -13,7 +13,6 @@ namespace Form2Mail\Repository;
 use Auth\Entity\UserInterface;
 use Core\Repository\AbstractRepository;
 use Form2Mail\Entity\UserMetaData;
-use Jobs\Entity\JobInterface;
 
 /**
  * TODO: description
@@ -23,12 +22,19 @@ use Jobs\Entity\JobInterface;
  */
 class UserMetaDataRepository extends AbstractRepository
 {
-    public function findOrCreateMetaData(UserInterface $user, JobInterface $job): UserMetaData
+    public function findOrCreateMetaData(UserInterface $user, string $type = UserMetaData::TYPE_REGISTERED): UserMetaData
     {
-        $entity = $this->findOneBy(['user' => $user->getId(), 'job' => $job->getId()]);
+        $entity = $this->findOneBy(['user' => $user->getId()]);
 
         if (!$entity) {
-            $entity = $this->create(['user' => $user, 'job' => $job], true);
+            $entity = $this->create(
+                [
+                    'user' => $user,
+                    'state' => UserMetaData::STATE_NEW,
+                    'type' => $type,
+                ],
+                true
+            );
         }
 
         return $entity;
