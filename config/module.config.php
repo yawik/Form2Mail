@@ -118,6 +118,15 @@ return [
         ]
     ],
 
+    'view_helpers' => [
+        'factories' => [
+            View\Helper\PortalName::class => InvokableFactory::class
+        ],
+        'aliases' => [
+            'f2mPortalName' => View\Helper\PortalName::class,
+        ],
+    ],
+
     'view_helper_config' => [
         'headscript' => [
             'lang/apply' => [

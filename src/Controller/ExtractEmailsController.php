@@ -85,6 +85,7 @@ class ExtractEmailsController extends SendMailController
         $content = $response->getBody();
         $urlObj = new Uri($url);
         $jsonLd = false;
+        $portal = $urlObj->getHost();
 
         try {
             switch ($urlObj->getHost()) {
@@ -101,6 +102,7 @@ class ExtractEmailsController extends SendMailController
                     break;
 
                 default:
+                    $portal = '__internet__';
                     $mails = $this->extractMailsFromHtml($content);
                     break;
             }
@@ -129,6 +131,9 @@ class ExtractEmailsController extends SendMailController
                     'job' => [
                         'uri' => $url,
                         'title' => $jsonLd['title'],
+                    ],
+                    'meta' => [
+                        'portal' => $portal,
                     ],
                 ];
                 $job = ($this->plugin(RegisterJob::class))($spec, ['allowMultiple' => true, 'userMetaType' => UserMetaData::TYPE_INVITED]);

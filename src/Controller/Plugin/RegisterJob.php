@@ -55,6 +55,7 @@ class RegisterJob extends AbstractPlugin
             'orgName' => $spec['org']['name'] ?? $spec['user']['email'] ?? '',
             'jobUri' => $spec['job']['uri'] ?? '',
             'jobTitle' => $spec['job']['title'] ?? '',
+            'metaPortal' => $spec['meta']['portal'] ?? null,
         ]);
         extract(array_merge(
             [
@@ -71,7 +72,7 @@ class RegisterJob extends AbstractPlugin
             $organization = $this->createOrganization($user, $orgName);
         }
         $job = $this->createJob($user, $organization, $jobUri, $jobTitle);
-        $meta = $this->createUserMeta($user, $job, $userMetaType);
+        $meta = $this->createUserMeta($user, $job, $userMetaType, $metaPortal);
 
         $dm = $this->users->getDocumentManager();
         $dm->persist($user);
@@ -114,10 +115,15 @@ class RegisterJob extends AbstractPlugin
         return $user;
     }
 
-    private function createUserMeta(UserInterface $user, JobInterface $job, ?string $type = null)
-    {
+    private function createUserMeta(
+        UserInterface $user,
+        JobInterface $job,
+        ?string $type = null,
+        ?string $portal = null
+    ) {
         $meta = $this->meta->findOrCreateMetaData($user, $type);
         $meta->addJob($job);
+        $meta->setPortal($portal);
 
         return $meta;
     }

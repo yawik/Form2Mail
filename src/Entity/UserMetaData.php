@@ -58,6 +58,12 @@ class UserMetaData implements EntityInterface, IdentifiableEntityInterface
     private $type;
 
     /**
+     * @var string
+     * @ODM\Field(type="string")
+     */
+    private $portal;
+
+    /**
      * @var \Jobs\Entity\JobInterface
      * @ODM\ReferenceMany(targetDocument="\Jobs\Entity\Job", storeAs="id",  nullable=true, cascade="persist")
      */
@@ -183,4 +189,24 @@ class UserMetaData implements EntityInterface, IdentifiableEntityInterface
     }
 
 
+
+    /**
+     * Get portal
+     *
+     * @return string
+     */
+    public function getPortal(): string
+    {
+        return $this->portal;
+    }
+
+    /**
+     * Set portal
+     *
+     * @param string $portal
+     */
+    public function setPortal(string $portal): void
+    {
+        $this->portal = $portal;
+    }
 }
