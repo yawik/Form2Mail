@@ -53,6 +53,18 @@ class ExtractEmailsController extends SendMailController
         return $client;
     }
 
+    /**
+     * Extract email addresses from job ads.
+     *
+     * Must be called with a post request.
+     *
+     * Parameters
+     *
+     * * uri : [string] the URI of the job ad (required)
+     * * register : [bool(0|1)] if '1', registers a user with the first found email address
+     *              Organization name and JOb title are extracted from the JSON-LD
+     *              if available
+     */
     public function indexAction()
     {
         $url = $this->params()->fromPost('uri') ?? $this->params()->fromQuery('uri');
