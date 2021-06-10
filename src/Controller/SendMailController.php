@@ -119,11 +119,14 @@ class SendMailController extends AbstractActionController
 
         $options = $this->getOrganizationOptions()->getOrganizationOptions($org->getId());
 
+        $files = $this->getRequest()->getFiles()->toArray();
+
         // normalite json data
         /** @var \Core\Mail\HTMLTemplateMessage $mail */
         $vars = $this->normalizeJsonData($json);
         $vars['job'] = $job;
         $vars['org'] = $org;
+        $vars['photo'] = isset($files['photo]']) && count($files['photo]']);
         $mail = $this->mails->get('htmltemplate');
         $mail->setTemplate('form2mail/mail/conduent');
         $mail->setVariables($vars);
@@ -132,7 +135,6 @@ class SendMailController extends AbstractActionController
         $mail->addTo($to);
 
         // Attachments handling
-        $files = $this->getRequest()->getFiles()->toArray();
         if (isset($files) && count($files)) {
             $message = new MimeMessage();
             $html = new MimePart($mail->getBodyText());
@@ -165,7 +167,6 @@ class SendMailController extends AbstractActionController
             $new->setBody($message);
             $new->setSubject($mail->getSubject());
             $new->addTo($to);
-
             $mail = $new;
         }
 
@@ -189,7 +190,6 @@ class SendMailController extends AbstractActionController
             $mail->setVariables([
                 'org' => $org,
                 'job' => $job,
-                'photo' => isset($files['photo]']),
                 'recruiter' => $job ? $job->getUser() : $org->getUser(),
                 'applicant' => $vars['user'],
             ]);
