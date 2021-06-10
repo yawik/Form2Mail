@@ -126,7 +126,7 @@ class SendMailController extends AbstractActionController
         $vars = $this->normalizeJsonData($json);
         $vars['job'] = $job;
         $vars['org'] = $org;
-        $vars['photo'] = isset($files['photo]']) && count($files['photo]']);
+        $vars['photo'] = isset($files['photo]']) ? 1 : 0;
         $mail = $this->mails->get('htmltemplate');
         $mail->setTemplate('form2mail/mail/conduent');
         $mail->setVariables($vars);
@@ -143,11 +143,7 @@ class SendMailController extends AbstractActionController
             $html->charset = 'utf-8';
             $message->addPart($html);
 
-            if (
-                isset($files['photo']) &&
-                isset($files['photo']['error']) &&
-                $files['photo']['error'] !== UPLOAD_ERR_OK
-                ){
+            if (isset($files['photo'])){
 
                 $file = $files['photo'];
                 $photo = new MimePart(fopen($file['tmp_name'], 'r'));
