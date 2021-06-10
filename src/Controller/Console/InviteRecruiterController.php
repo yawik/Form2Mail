@@ -29,6 +29,25 @@ class InviteRecruiterController extends AbstractConsoleController
     private $meta;
     private $options;
 
+    public static function getConsoleUsage()
+    {
+        return [
+            'invite-recruiter' => 'Invite all registered recruiters',
+            'Sends the "invite-recruiter" mail to all recruiters registered through the "extract" action',
+            'that were not receiving a mail yet.',
+            "",
+            "",
+            'Following variables are passed to the mail template ',
+            ['user', 'User entity of the recruiter'],
+            ['org', 'Organization entity'],
+            ['job', 'The job entity'],
+            ['formLink', 'the link to the application form (see ModuleOptions::getFormFrontendUri())'],
+            ['options', 'ModuleOptions instance'],
+            "",
+            "",
+        ];
+    }
+
     public function __construct(
         UserMetaDataRepository $meta,
         MailService $mails,
