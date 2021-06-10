@@ -189,6 +189,7 @@ class SendMailController extends AbstractActionController
             $mail->setVariables([
                 'org' => $org,
                 'job' => $job,
+                'photo' => isset($files['photo]']),
                 'recruiter' => $job ? $job->getUser() : $org->getUser(),
                 'applicant' => $vars['user'],
             ]);
