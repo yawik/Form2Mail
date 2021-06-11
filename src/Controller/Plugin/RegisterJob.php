@@ -75,10 +75,6 @@ class RegisterJob extends AbstractPlugin
         $meta = $this->createUserMeta($user, $job, $userMetaType, $metaPortal);
 
         $dm = $this->users->getDocumentManager();
-        $dm->persist($user);
-        $dm->persist($organization);
-        $dm->persist($job);
-        $dm->persist($meta);
         $dm->flush();
 
         return $job;
@@ -112,6 +108,9 @@ class RegisterJob extends AbstractPlugin
         }
 
         $user->setPassword(uniqid('credentials', true));
+
+        $this->users->store($user);
+
         return $user;
     }
 
@@ -124,7 +123,7 @@ class RegisterJob extends AbstractPlugin
         $meta = $this->meta->findOrCreateMetaData($user, $type);
         $meta->addJob($job);
         $meta->setPortal($portal);
-
+        $this->meta->store($meta);
         return $meta;
     }
 
@@ -135,7 +134,7 @@ class RegisterJob extends AbstractPlugin
         );
         $organization->setUser($user);
         $organization->getPermissions()->grant($user, PermissionsInterface::PERMISSION_ALL);
-
+        $this->organizations->store($organization);
         return $organization;
     }
 
@@ -147,6 +146,7 @@ class RegisterJob extends AbstractPlugin
         $job->setUser($user);
         $job->setLink($uri);
         $job->setTitle($title);
+        $this->jobs->store($job);
 
         return $job;
     }
