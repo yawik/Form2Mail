@@ -17,6 +17,7 @@ use Auth\Repository\User as UserRepository;
 use Form2Mail\Entity\UserMetaData;
 use Form2Mail\Repository\UserMetaDataRepository;
 use Jobs\Entity\JobInterface;
+use Jobs\Entity\StatusInterface as JobStatus;
 use Organizations\Repository\Organization as OrganizationRepository;
 use Jobs\Repository\Job as JobRepository;
 use Laminas\Mvc\Controller\Plugin\AbstractPlugin;
@@ -146,6 +147,7 @@ class RegisterJob extends AbstractPlugin
         $job->setUser($user);
         $job->setLink($uri);
         $job->setTitle($title);
+        $job->setStatus(JobStatus::ACTIVE);
         $this->jobs->store($job);
 
         return $job;
