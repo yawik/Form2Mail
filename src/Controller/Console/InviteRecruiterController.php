@@ -32,7 +32,7 @@ class InviteRecruiterController extends AbstractConsoleController
     public static function getConsoleUsage()
     {
         return [
-            'invite-recruiter' => 'Invite all registered recruiters',
+            'form2mail invite-recruiters' => 'Invite all registered recruiters',
             'Sends the "invite-recruiter" mail to all recruiters registered through the "extract" action',
             'that were not receiving a mail yet.',
             "",
