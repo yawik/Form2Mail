@@ -32,7 +32,8 @@
         "yawik/organizations": "^0.35",
         "yawik/composer-plugin": "^3.0",
         "laminas/laminas-dependency-plugin": "^2.0 ",
-        "ml/json-ld": "^1.2"
+        "ml/json-ld": "^1.2",
+        "sabre/vobject": "^4.3"
     },
     "require-dev": {
         "yawik/application-pack": "^1.1",
