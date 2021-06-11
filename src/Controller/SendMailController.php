@@ -11,6 +11,7 @@ declare(strict_types=1);
 namespace Form2Mail\Controller;
 
 use Auth\Entity\Info;
+use Auth\Entity\InfoInterface;
 use Core\Mail\MailService;
 use Form2Mail\Options\SendmailOrganizationOptionsCollection;
 use Jobs\Repository\Job as JobsRepository;
@@ -25,6 +26,7 @@ use Laminas\Mime\Part as MimePart;
 use Laminas\Mvc\Controller\AbstractActionController;
 use Laminas\View\Model\JsonModel;
 use Laminas\View\Model\ViewModel;
+use Sabre\VObject\Component\VCard;
 
 /**
  * TODO: description
@@ -133,14 +135,23 @@ class SendMailController extends AbstractActionController
 
         // Attachments handling
         $files = $this->getRequest()->getFiles()->toArray();
-        if (isset($files) && count($files)) {
-            $message = new MimeMessage();
-            $html = new MimePart($mail->getBodyText());
-            $html->type = Mime::TYPE_HTML;
-            $html->disposition = Mime::DISPOSITION_INLINE;
-            $html->charset = 'utf-8';
-            $message->addPart($html);
 
+        $message = new MimeMessage();
+        $html = new MimePart($mail->getBodyText());
+        $html->type = Mime::TYPE_HTML;
+        $html->disposition = Mime::DISPOSITION_INLINE;
+        $html->charset = 'utf-8';
+        $message->addPart($html);
+
+        $vcard = $this->createVcard($vars['user'], $files['photo'] ?? null);
+        $attachment = new MimePart($vcard);
+        $attachment->type = Mime::TYPE_TEXT;
+        $attachment->charset = 'utf8';
+        $attachment->disposition = Mime::DISPOSITION_ATTACHMENT;
+        $attachment->filename = 'kontakt.vcf';
+        $message->addPart($attachment);
+
+        if (isset($files) && count($files)) {
             foreach ($files as $key => $file) {
                 if ($file['error'] !== UPLOAD_ERR_OK) {
                     continue;
@@ -160,14 +171,14 @@ class SendMailController extends AbstractActionController
                 $attachment->encoding = Mime::ENCODING_BASE64;
                 $message->addPart($attachment);
             }
-
-            $new = new Message();
-            $new->setBody($message);
-            $new->setSubject($mail->getSubject());
-            $new->addTo($to);
-
-            $mail = $new;
         }
+
+        $new = new Message();
+        $new->setBody($message);
+        $new->setSubject($mail->getSubject());
+        $new->addTo($to);
+
+        $mail = $new;
 
         try {
             $this->mails->send($mail);
@@ -245,5 +256,45 @@ class SendMailController extends AbstractActionController
             'summary' => $json['summary'] ?? '',
             'extras' => $json['extras'] ?? [],
         ];
+    }
+
+    private function createVcard(InfoInterface $user, ?array $photo)
+    {
+        $card = new VCard([
+            'FN' => $user->getDisplayname(false),
+            'N' => [$user->getLastName(), $user->getFirstName(), '', '', ''],
+            'EMAIL' => $user->getEmail(),
+        ]);
+
+        if ($user->getBirthYear()) {
+            $card->add('BDAY', $user->getBirthYear() . '-' . $user->getBirthMonth() . '-' . $user->getBirthDay());
+        }
+        if ($user->getCity()) {
+            $card->add(
+                'ADDR',
+                ['', '', $user->getStreet(), $user->getCity(), '', $user->getPostalCode(), $user->getCountry()],
+                ['TYPE' => 'home']
+            );
+        }
+        if ($user->getPhone()) {
+            $card->add(
+                'TEL',
+                $user->getPhone(),
+                ['TYPE' => 'home']
+            );
+        }
+        if ($photo) {
+            $data = base64_encode(file_get_contents($photo['tmp_name']));
+            $mime = mime_content_type($photo['tmp_name']);
+            $img = "data:$mime;base64,$data";
+
+            $card->add(
+                'PHOTO',
+                $img,
+                ['VALUE' => 'URI']
+            );
+        }
+
+        return $card->serialize();
     }
 }
