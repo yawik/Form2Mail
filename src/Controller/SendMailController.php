@@ -121,11 +121,14 @@ class SendMailController extends AbstractActionController
 
         $options = $this->getOrganizationOptions()->getOrganizationOptions($org->getId());
 
+        $files = $this->getRequest()->getFiles()->toArray();
+
         // normalite json data
         /** @var \Core\Mail\HTMLTemplateMessage $mail */
         $vars = $this->normalizeJsonData($json);
         $vars['job'] = $job;
         $vars['org'] = $org;
+        $vars['photo'] = isset($files['photo]']) ? 1 : 0;
         $mail = $this->mails->get('htmltemplate');
         $mail->setTemplate('form2mail/mail/conduent');
         $mail->setVariables($vars);
@@ -152,20 +155,25 @@ class SendMailController extends AbstractActionController
         $message->addPart($attachment);
 
         if (isset($files) && count($files)) {
+
+            if (isset($files['photo'])){
+
+                $file = $files['photo'];
+                $photo = new MimePart(fopen($file['tmp_name'], 'r'));
+                $photo->disposition = Mime::DISPOSITION_INLINE;
+                $photo->id = 'photo';
+                $photo->type = mime_content_type($file['tmp_name']);
+                $photo->filename = $file['name'];
+                $photo->encoding = Mime::ENCODING_BASE64;
+                $message->addPart($photo);
+            }
+
             foreach ($files as $key => $file) {
                 if ($file['error'] !== UPLOAD_ERR_OK) {
                     continue;
                 }
-                if ($key !== 'attached' && $key !== 'photo') {
-                    continue;
-                }
                 $attachment = new MimePart(fopen($file['tmp_name'], 'r'));
-                if ($key === 'photo') {
-                    $attachment->id = $key;
-                    $attachment->disposition = Mime::DISPOSITION_INLINE;
-                }else{
-                    $attachment->disposition = Mime::DISPOSITION_ATTACHMENT;
-                }
+                $attachment->disposition = Mime::DISPOSITION_ATTACHMENT;
                 $attachment->type = mime_content_type($file['tmp_name']);
                 $attachment->filename = $file['name'];
                 $attachment->encoding = Mime::ENCODING_BASE64;
@@ -200,7 +208,6 @@ class SendMailController extends AbstractActionController
             $mail->setVariables([
                 'org' => $org,
                 'job' => $job,
-                'photo' => isset($files['photo]']),
                 'recruiter' => $job ? $job->getUser() : $org->getUser(),
                 'applicant' => $vars['user'],
             ]);
