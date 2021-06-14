@@ -154,21 +154,19 @@ class SendMailController extends AbstractActionController
         $attachment->filename = 'kontakt.vcf';
         $message->addPart($attachment);
 
-        if (isset($files) && count($files)) {
+        if (isset($files['photo']) && $files['photo']['error'] === UPLOAD_ERR_OK) {
+            $file = $files['photo'];
+            $photo = new MimePart(fopen($file['tmp_name'], 'r'));
+            $photo->disposition = Mime::DISPOSITION_INLINE;
+            $photo->id = 'photo';
+            $photo->type = mime_content_type($file['tmp_name']);
+            $photo->filename = $file['name'];
+            $photo->encoding = Mime::ENCODING_BASE64;
+            $message->addPart($photo);
+        }
 
-            if (isset($files['photo'])){
-
-                $file = $files['photo'];
-                $photo = new MimePart(fopen($file['tmp_name'], 'r'));
-                $photo->disposition = Mime::DISPOSITION_INLINE;
-                $photo->id = 'photo';
-                $photo->type = mime_content_type($file['tmp_name']);
-                $photo->filename = $file['name'];
-                $photo->encoding = Mime::ENCODING_BASE64;
-                $message->addPart($photo);
-            }
-
-            foreach ($files as $key => $file) {
+        if (isset($files['attached']) && count($files['attached'])) {
+            foreach ($files as $file) {
                 if ($file['error'] !== UPLOAD_ERR_OK) {
                     continue;
                 }
