@@ -128,7 +128,7 @@ class SendMailController extends AbstractActionController
         $vars = $this->normalizeJsonData($json);
         $vars['job'] = $job;
         $vars['org'] = $org;
-        $vars['photo'] = isset($files['photo]']) ? 1 : 0;
+        $vars['photo'] = isset($files['photo']) ? 1 : 0;
         $mail = $this->mails->get('htmltemplate');
         $mail->setTemplate('form2mail/mail/conduent');
         $mail->setVariables($vars);
