@@ -8,7 +8,6 @@ before_script:
    - export PATH=$PATH:/usr/local/bin
    
 after_script:
-  - killall ssh-agent
   - date
 
 stages:
