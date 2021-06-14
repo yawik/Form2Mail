@@ -288,7 +288,7 @@ class SendMailController extends AbstractActionController
                 ['TYPE' => 'home']
             );
         }
-        if ($photo) {
+        if ($photo && $photo['error'] === UPLOAD_ERR_OK) {
             $data = base64_encode(file_get_contents($photo['tmp_name']));
             $mime = mime_content_type($photo['tmp_name']);
             $img = "data:$mime;base64,$data";
