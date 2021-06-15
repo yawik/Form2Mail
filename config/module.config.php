@@ -78,7 +78,7 @@ return [
             'routes' => [
                 'form2mail-invite-recruiters' => [
                     'options' => [
-                        'route' => 'form2mail invite-recruiters',
+                        'route' => 'form2mail invite-recruiters [--limit=]',
                         'defaults' => [
                             'controller' => Controller\Console\InviteRecruiterController::class,
                             'action' => 'index',

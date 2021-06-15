@@ -36,6 +36,7 @@ class InviteRecruiterController extends AbstractConsoleController
             'Sends the "invite-recruiter" mail to all recruiters registered through the "extract" action',
             'that were not receiving a mail yet.',
             "",
+            ['--limit=INT', 'Send the invite email only to the first INT recruiters'],
             "",
             'Following variables are passed to the mail template ',
             ['user', 'User entity of the recruiter'],
@@ -63,7 +64,9 @@ class InviteRecruiterController extends AbstractConsoleController
         $console = $this->getConsole();
         $console->writeLine('Fetching uninvited recruiters...');
 
-        $data = $this->meta->findMetaDataOfInvitableUsers();
+        $data = $this->meta->findMetaDataOfInvitableUsers(
+            (int) $this->params('limit')
+        );
 
         $console->writeLine('Found ' . count($data) . ' recruiters.');
 
