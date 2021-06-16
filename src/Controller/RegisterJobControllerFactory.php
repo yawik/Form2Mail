@@ -11,6 +11,7 @@ declare(strict_types=1);
 
 namespace Form2Mail\Controller;
 
+use Form2Mail\Entity\UserMetaData;
 use Psr\Container\ContainerInterface;
 
 /**
@@ -26,12 +27,8 @@ class RegisterJobControllerFactory
         string $requestedName,
         ?array $options = null
     ): RegisterJobController {
-        $repositories = $container->get('repositories');
         $helper = $container->get('ViewHelperManager');
         return new RegisterJobController(
-            $repositories->get('Auth/User'),
-            $repositories->get('Organizations'),
-            $repositories->get('Jobs'),
             $helper->get('jobUrl')
         );
     }

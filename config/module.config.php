@@ -17,6 +17,16 @@ use Form2Mail\Controller\SendMailControllerFactory;
 use Laminas\ServiceManager\Factory\InvokableFactory;
 
 return [
+    'doctrine' => [
+        'driver' => array(
+            'odm_default' => array(
+                'drivers' => array(
+                    'Form2Mail\Entity' => 'annotation'
+                ),
+            ),
+        ),
+    ],
+
     'router' => [
         'routes' => [
             'sendmail' => [
@@ -63,12 +73,35 @@ return [
         ],
     ],
 
+    'console' => [
+        'router' => [
+            'routes' => [
+                'form2mail-invite-recruiters' => [
+                    'options' => [
+                        'route' => 'form2mail invite-recruiters [--limit=]',
+                        'defaults' => [
+                            'controller' => Controller\Console\InviteRecruiterController::class,
+                            'action' => 'index',
+                        ],
+                    ],
+                ],
+            ],
+        ],
+    ],
+
     'controllers' => [
         'factories' => [
             SendMailController::class => SendMailControllerFactory::class,
             DetailsController::class => DetailsControllerFactory::class,
             ExtractEmailsController::class => InvokableFactory::class,
             RegisterJobController::class => RegisterJobControllerFactory::class,
+            Controller\Console\InviteRecruiterController::class => Controller\Console\InviteRecruiterControllerFactory::class,
+        ],
+    ],
+
+    'controller_plugins' => [
+        'factories' => [
+            Controller\Plugin\RegisterJob::class => Controller\Plugin\RegisterJobFactory::class,
         ],
     ],
 
@@ -81,7 +114,17 @@ return [
             'form2mail/mail/conduent-confirm' => __DIR__ . '/../view/mail/conduent-confirm.phtml',
             'form2mail/mail/header' => __DIR__ . '/../view/mail/header.phtml',
             'form2mail/mail/footer' => __DIR__ . '/../view/mail/footer.phtml',
+            'form2mail/mail/invite-recruiter' => __DIR__ . '/../view/mail/invite-recruiter.phtml',
         ]
+    ],
+
+    'view_helpers' => [
+        'factories' => [
+            View\Helper\PortalName::class => InvokableFactory::class
+        ],
+        'aliases' => [
+            'f2mPortalName' => View\Helper\PortalName::class,
+        ],
     ],
 
     'view_helper_config' => [

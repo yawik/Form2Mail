@@ -11,8 +11,13 @@ declare(strict_types=1);
 namespace Form2Mail\Controller;
 
 use Auth\Entity\User;
+use Auth\Entity\UserInterface;
 use Auth\Repository\User as UserRepository;
 use Core\Entity\PermissionsInterface;
+use Form2Mail\Controller\Plugin\RegisterJob;
+use Form2Mail\Entity\UserMetaData;
+use Form2Mail\Repository\UserMetaDataRepository;
+use Jobs\Entity\JobInterface;
 use Organizations\Repository\Organization as OrganizationRepository;
 use Jobs\Repository\Job as JobRepository;
 use Jobs\View\Helper\JobUrl;
@@ -27,20 +32,11 @@ use Laminas\Http\Response;
 class RegisterJobController extends AbstractApiResponseController
 {
 
-    private $users;
-    private $organizations;
-    private $jobs;
     private $jobUrl;
 
     public function __construct(
-        UserRepository $users,
-        OrganizationRepository $organizations,
-        JobRepository $jobs,
         JobUrl $jobUrl
     ) {
-        $this->users = $users;
-        $this->organizations = $organizations;
-        $this->jobs = $jobs;
         $this->jobUrl = $jobUrl;
     }
 
@@ -55,21 +51,25 @@ class RegisterJobController extends AbstractApiResponseController
 
         $email = $this->params()->fromPost('email');
         $uri = $this->params()->fromPost('uri');
+        $multi = (bool) $this->params()->fromPost('multi');
 
         if (!$email || !$uri) {
             return $this->createErrorModel('Missing email or job uri.', Response::STATUS_CODE_400);
         }
 
         try {
-            $user = $this->createUser($email, $this->params()->fromPost('name', ''));
-            $organization = $this->createOrganization($user, $this->params()->fromPost('organization'));
-            $job = $this->createJob($user, $organization, $uri);
-
-            $dm = $this->users->getDocumentManager();
-            $dm->persist($user);
-            $dm->persist($organization);
-            $dm->persist($job);
-            $dm->flush();
+            $spec = [
+                'user' => [
+                    'email' => $email,
+                    'name' => $this->params()->fromPost('name'),
+                ],
+                'org' => ['name' => $this->params()->fromPost('name')],
+                'job' => [
+                    'uri' => $uri,
+                    'title' => $this->params()->fromPost('title'),
+                ],
+            ];
+            $job = ($this->plugin(RegisterJob::class))($spec, ['allowMultiple' => $multi]);
         } catch (\UnexpectedValueException $e) {
             return $this->createErrorModel(
                 'Duplicate email detected',
@@ -83,6 +83,9 @@ class RegisterJobController extends AbstractApiResponseController
             );
         }
 
+        $user = $job->getUser();
+        $organization = $job->getOrganization();
+
         return $this->createSuccessModel(
             'Registration successful',
             [
@@ -93,58 +96,5 @@ class RegisterJobController extends AbstractApiResponseController
 
             ]
         );
-    }
-
-    private function createUser(string $email, string $name = '')
-    {
-        $role = User::ROLE_RECRUITER;
-
-        if (($this->users->findByLoginOrEmail($email))) {
-            throw new \UnexpectedValueException('User already exists');
-        }
-
-        $user = $this->users->create([
-            'login' => $email,
-            'role' => $role,
-        ]);
-
-        $info = $user->getInfo();
-        $info->setEmail($email);
-        $info->setFirstName($name);
-        $info->setEmailVerified(true);
-
-        if (strstr($name, ' ') !== false) {
-            $nameParts = explode(' ', $name);
-            $firstName = array_shift($nameParts);
-            $lastName = implode(' ', $nameParts);
-
-            $info->setFirstName($firstName);
-            $info->setLastName($lastName);
-        }
-
-        $user->setPassword(uniqid('credentials', true));
-        return $user;
-    }
-
-    private function createOrganization($user, ?string $name = null)
-    {
-        $organization = $this->organizations->createWithName(
-            $name ?? $user->getLogin()
-        );
-        $organization->setUser($user);
-        $organization->getPermissions()->grant($user, PermissionsInterface::PERMISSION_ALL);
-
-        return $organization;
-    }
-
-    protected function createJob($user, $organization, $uri)
-    {
-        /** @var \Jobs\Entity\Job $job */
-        $job = $this->jobs->create();
-        $job->setOrganization($organization);
-        $job->setUser($user);
-        $job->setLink($uri);
-
-        return $job;
     }
 }

@@ -10,10 +10,13 @@ declare(strict_types=1);
 
 namespace Form2Mail\Controller;
 
+use Form2Mail\Controller\Plugin\RegisterJob;
+use Form2Mail\Entity\UserMetaData;
 use Laminas\Http\Client;
 use Laminas\Http\Response;
 use Laminas\Uri\Uri;
 use Laminas\View\Model\JsonModel;
+use ML\JsonLD\JsonLD;
 
 /**
  * TODO: description
@@ -50,9 +53,22 @@ class ExtractEmailsController extends SendMailController
         return $client;
     }
 
+    /**
+     * Extract email addresses from job ads.
+     *
+     * Must be called with a post request.
+     *
+     * Parameters
+     *
+     * * uri : [string] the URI of the job ad (required)
+     * * register : [bool(0|1)] if '1', registers a user with the first found email address
+     *              Organization name and JOb title are extracted from the JSON-LD
+     *              if available
+     */
     public function indexAction()
     {
         $url = $this->params()->fromPost('uri') ?? $this->params()->fromQuery('uri');
+        $register = (bool) ($this->params()->fromPost('register') ?? $this->params()->fromQuery('register'));
 
         if (!$url) {
             return $this->createErrorModel('Missing job ad URI', Response::STATUS_CODE_400);
@@ -80,6 +96,8 @@ class ExtractEmailsController extends SendMailController
         }
         $content = $response->getBody();
         $urlObj = new Uri($url);
+        $jsonLd = false;
+        $portal = $urlObj->getHost();
 
         try {
             switch ($urlObj->getHost()) {
@@ -96,8 +114,12 @@ class ExtractEmailsController extends SendMailController
                     break;
 
                 default:
+                    $portal = '__internet__';
                     $mails = $this->extractMailsFromHtml($content);
                     break;
+            }
+            if ($register && !$jsonLd && count($mails)) {
+                $jsonLd = $this->extractJsonLd($content);
             }
         } catch (\Throwable $e) {
             return $this->createErrorModel(
@@ -106,14 +128,49 @@ class ExtractEmailsController extends SendMailController
                 ['message' => $e->getMessage()]
             );
         }
-
+        $extras = [];
         $strtolower = (function_exists('mb_strtolower') ? 'mb_' : '') . 'strtolower';
         $mails = array_map($strtolower, $mails);
         $mails = array_unique($mails);
+
+        if ($register && count($mails)) {
+            try {
+                $spec = [
+                    'user' => [
+                        'email' => $mails[0],
+                    ],
+                    'org' => ['name' => $jsonLd['org'] ?? 'Company_' . uniqid()],
+                    'job' => [
+                        'uri' => $url,
+                        'title' => $jsonLd['title'],
+                    ],
+                    'meta' => [
+                        'portal' => $portal,
+                    ],
+                ];
+                $job = ($this->plugin(RegisterJob::class))($spec, ['allowMultiple' => true, 'userMetaType' => UserMetaData::TYPE_INVITED]);
+                $extras = [
+                    'register' => true,
+                    'user' => $job->getUser()->getId(),
+                    'job' => $job->getId(),
+                    'org' => $job->getOrganization()->getId(),
+                    'jsonLd' => $jsonLd,
+                ];
+            } catch (\Throwable $e) {
+                return $this->createErrorModel(
+                    'Register the user with job and organization failed.',
+                    Response::STATUS_CODE_500,
+                    ['message' => $e->getMessage()]
+                );
+            }
+        }
+
+
         return new JsonModel([
             'success' => true,
             'message' => count($mails) . ' emails extracted.',
-            'emails' => $mails
+            'emails' => $mails,
+            'extras' => $extras,
         ]);
     }
 
@@ -180,5 +237,26 @@ class ExtractEmailsController extends SendMailController
         }
 
         return $this->extractMailsFromHtml($this->fetchHtmlContent($match[1]));
+    }
+
+    private function extractJsonLd($content)
+    {
+        libxml_use_internal_errors(true);
+        $doc = new \DOMDocument();
+        $doc->loadHTML($content);
+
+        $xpath = new \DOMXPath($doc);
+        $tags = $xpath->query('//script[@type="application/ld+json"]');
+        $rawJsonLd = count($tags) ? $tags->item(0)->nodeValue : null;
+        $jsonLd = JsonLD::compact($rawJsonLd, 'http://schema.org');
+
+        $title = $jsonLd->title ?? null;
+        $org =
+            property_exists($jsonLd, 'hiringOrganization') && property_exists($jsonLd->hiringOrganization, 'name')
+            ? $jsonLd->hiringOrganization->name
+            : null
+        ;
+
+        return compact('title', 'org');
     }
 }
