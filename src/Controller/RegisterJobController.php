@@ -68,6 +68,9 @@ class RegisterJobController extends AbstractApiResponseController
                     'uri' => $uri,
                     'title' => $this->params()->fromPost('title'),
                 ],
+                'meta' => [
+                    'portal' => $this->params()->fromPost('portal', ''),
+                ]
             ];
             $job = ($this->plugin(RegisterJob::class))($spec, ['allowMultiple' => $multi]);
         } catch (\UnexpectedValueException $e) {

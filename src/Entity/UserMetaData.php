@@ -61,7 +61,7 @@ class UserMetaData implements EntityInterface, IdentifiableEntityInterface
      * @var string
      * @ODM\Field(type="string")
      */
-    private $portal;
+    private $portal = '';
 
     /**
      * @var \Jobs\Entity\JobInterface
@@ -176,7 +176,11 @@ class UserMetaData implements EntityInterface, IdentifiableEntityInterface
      */
     public function addJob(\Jobs\Entity\JobInterface $job): void
     {
-        $this->getJobs()->add($job);
+        $jobs = $this->getJobs();
+
+        if (!$jobs->contains($job)) {
+            $jobs->add($job);
+        }
     }
 
     public function getJobs(): Collection
@@ -208,5 +212,13 @@ class UserMetaData implements EntityInterface, IdentifiableEntityInterface
     public function setPortal(string $portal): void
     {
         $this->portal = $portal;
+    }
+
+    public function addPortal(string $portal): void
+    {
+        $parts = explode(',', $this->portal);
+        $parts[] = $portal;
+        $parts = array_unique(array_filter($parts));
+        $this->portal = join(',', $parts);
     }
 }

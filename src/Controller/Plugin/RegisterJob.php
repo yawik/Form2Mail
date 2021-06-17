@@ -56,7 +56,7 @@ class RegisterJob extends AbstractPlugin
             'orgName' => $spec['org']['name'] ?? $spec['user']['email'] ?? '',
             'jobUri' => $spec['job']['uri'] ?? '',
             'jobTitle' => $spec['job']['title'] ?? '',
-            'metaPortal' => $spec['meta']['portal'] ?? null,
+            'metaPortal' => $spec['meta']['portal'] ?? '',
         ]);
         extract(array_merge(
             [
@@ -66,34 +66,43 @@ class RegisterJob extends AbstractPlugin
             $options
         ));
 
-        if ($allowMultiple && ($user = $this->users->findByLoginOrEmail($userEmail))) {
-            $organization = $user->getOrganization()->getOrganization();
-        } else {
-            $user = $this->createUser($userEmail, $userName);
-            $organization = $this->createOrganization($user, $orgName);
-        }
-        $job = $this->createJob($user, $organization, $jobUri, $jobTitle);
-        $meta = $this->createUserMeta($user, $job, $userMetaType, $metaPortal);
+        $result = [
+            'user' => null,
+            'org' => null,
+            'job' => null,
+            'meta' => null,
+            'flags' => [
+                'user_created' => true,
+                'job_created' => true,
+            ]
+        ];
 
-        $dm = $this->users->getDocumentManager();
-        $dm->flush();
+        $result = $this->createUser($result, $userEmail, $userName, $allowMultiple);
+        $result = $this->createOrganization($result, $orgName);
+        $result = $this->createJob($result, $jobUri, $jobTitle);
+        $result = $this->createUserMeta($result, $userMetaType, $metaPortal);
 
-        return $job;
+        return $result['job'];
     }
 
-    private function createUser(string $email, string $name = '')
+    private function createUser(array $result, string $email, string $name = '', bool $multi = false)
     {
         $role = User::ROLE_RECRUITER;
 
-        if (($this->users->findByLoginOrEmail($email))) {
-            throw new \UnexpectedValueException('User already exists');
+        if ($user = $this->users->findByLoginOrEmail($email)) {
+            if (!$multi) {
+                throw new \UnexpectedValueException('User already exists');
+            }
+
+            $result['user'] = $user;
+            $result['flags']['user_created'] = false;
+            return $result;
         }
 
         $user = $this->users->create([
             'login' => $email,
             'role' => $role,
         ]);
-
         $info = $user->getInfo();
         $info->setEmail($email);
         $info->setFirstName($name);
@@ -112,35 +121,60 @@ class RegisterJob extends AbstractPlugin
 
         $this->users->store($user);
 
-        return $user;
+        $result['user'] = $user;
+        return $result;
     }
 
     private function createUserMeta(
-        UserInterface $user,
-        JobInterface $job,
+        array $result,
         ?string $type = null,
         ?string $portal = null
     ) {
+        $user = $result['user'];
+        $job = $result['job'];
         $meta = $this->meta->findOrCreateMetaData($user, $type);
-        $meta->addJob($job);
-        $meta->setPortal($portal);
+
+        if ($result['flags']['job_created']) {
+            $meta->addJob($job);
+        }
+        if ($portal) {
+            $meta->addPortal($portal);
+        }
         $this->meta->store($meta);
-        return $meta;
+        $result['meta'] = $meta;
+        return $result;
     }
 
-    private function createOrganization($user, ?string $name = null)
+    private function createOrganization(array $result, ?string $name = null)
     {
+        $user = $result['user'];
+
+        if (!$result['flags']['user_created']) {
+            $result['org'] = $user->getOrganization()->getOrganization();
+            return $result;
+        }
+
         $organization = $this->organizations->createWithName(
             $name ?? $user->getLogin()
         );
         $organization->setUser($user);
         $organization->getPermissions()->grant($user, PermissionsInterface::PERMISSION_ALL);
         $this->organizations->store($organization);
-        return $organization;
+        $result['org'] = $organization;
+        return $result;
     }
 
-    protected function createJob($user, $organization, $uri, $title)
+    protected function createJob(array $result, $uri, $title)
     {
+        $user = $result['user'];
+        $organization = $result['org'];
+
+        if ($job = $this->jobs->findOneBy(['link' => $uri])) {
+            $result['job'] = $job;
+            $result['flags']['job_created'] = false;
+            return $result;
+        }
+
         /** @var \Jobs\Entity\Job $job */
         $job = $this->jobs->create();
         $job->setOrganization($organization);
@@ -150,6 +184,7 @@ class RegisterJob extends AbstractPlugin
         $job->setStatus(JobStatus::ACTIVE);
         $this->jobs->store($job);
 
-        return $job;
+        $result['job'] = $job;
+        return $result;
     }
 }
