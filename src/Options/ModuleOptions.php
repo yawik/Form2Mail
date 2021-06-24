@@ -38,6 +38,10 @@ class ModuleOptions extends AbstractOptions
      */
     private $formFrontendUri = '';
 
+    /**
+     * @var array
+     */
+    private $emailDomainsBlacklist = [];
 
     /**
      * Get allowedOrigins
@@ -101,5 +105,25 @@ class ModuleOptions extends AbstractOptions
     public function setFormFrontendUri(string $formFrontendUri): void
     {
         $this->formFrontendUri = $formFrontendUri;
+    }
+
+    /**
+     * Get emailDomainsBlacklist
+     *
+     * @return array
+     */
+    public function getEmailDomainsBlacklist(): array
+    {
+        return $this->emailDomainsBlacklist;
+    }
+
+    /**
+     * Set emailDomainsBlacklist
+     *
+     * @param array $emailDomainsBlacklist
+     */
+    public function setEmailDomainsBlacklist(array $emailDomainsBlacklist): void
+    {
+        $this->emailDomainsBlacklist = $emailDomainsBlacklist;
     }
 }

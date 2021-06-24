@@ -10,6 +10,7 @@ declare(strict_types=1);
 
 namespace Form2Mail\Controller;
 
+use Form2Mail\Controller\Plugin\EmailBlacklist;
 use Form2Mail\Controller\Plugin\RegisterJob;
 use Form2Mail\Entity\UserMetaData;
 use Laminas\Http\Client;
@@ -114,11 +115,11 @@ class ExtractEmailsController extends SendMailController
                     break;
 
                 default:
-                    $portal = '__internet__';
                     $mails = $this->extractMailsFromHtml($content);
                     break;
             }
-            if ($register && !$jsonLd && count($mails)) {
+
+            if (!$jsonLd) {
                 $jsonLd = $this->extractJsonLd($content);
             }
         } catch (\Throwable $e) {
@@ -132,44 +133,70 @@ class ExtractEmailsController extends SendMailController
         $strtolower = (function_exists('mb_strtolower') ? 'mb_' : '') . 'strtolower';
         $mails = array_map($strtolower, $mails);
         $mails = array_unique($mails);
+        $mailsCount = count($mails);
 
-        if ($register && count($mails)) {
-            try {
-                $spec = [
-                    'user' => [
-                        'email' => $mails[0],
-                    ],
-                    'org' => ['name' => $jsonLd['org'] ?? 'Company_' . uniqid()],
-                    'job' => [
-                        'uri' => $url,
-                        'title' => $jsonLd['title'],
-                    ],
-                    'meta' => [
-                        'portal' => $portal,
-                    ],
-                ];
-                $job = ($this->plugin(RegisterJob::class))($spec, ['allowMultiple' => true, 'userMetaType' => UserMetaData::TYPE_INVITED]);
-                $extras = [
-                    'register' => true,
-                    'user' => $job->getUser()->getId(),
-                    'job' => $job->getId(),
-                    'org' => $job->getOrganization()->getId(),
-                    'jsonLd' => $jsonLd,
-                ];
-            } catch (\Throwable $e) {
-                return $this->createErrorModel(
-                    'Register the user with job and organization failed.',
-                    Response::STATUS_CODE_500,
-                    ['message' => $e->getMessage()]
-                );
+        if ($register) {
+            switch (true) {
+                case !$mailsCount:
+                    $extras = [
+                        'register' => false,
+                        'reason' => 'No emails found.',
+                    ];
+                    break;
+
+                case $mailsCount > 1:
+                    $extras = [
+                        'register' => false,
+                        'reason' => 'Too many emails found.',
+                    ];
+                    break;
+
+                case $this->plugin(EmailBlacklist::class)->check($mails):
+                    $extras = [
+                        'register' => false,
+                        'reason' => 'Email domain is blacklisted.',
+                    ];
+                    break;
+
+                default:
+                    try {
+                        $spec = [
+                            'user' => [
+                                'email' => $mails[0],
+                            ],
+                            'org' => ['name' => $jsonLd['org'] ?? 'Company_' . uniqid()],
+                            'job' => [
+                                'uri' => $url,
+                                'title' => $jsonLd['title'],
+                            ],
+                            'meta' => [
+                                'portal' => $portal,
+                            ],
+                        ];
+
+                        $job = ($this->plugin(RegisterJob::class))($spec, ['allowMultiple' => true, 'userMetaType' => UserMetaData::TYPE_INVITED]);
+                        $extras = [
+                            'register' => true,
+                            'user' => $job->getUser()->getId(),
+                            'job' => $job->getId(),
+                            'org' => $job->getOrganization()->getId(),
+                        ];
+                    } catch (\Throwable $e) {
+                        $extras = [
+                            'register' => false,
+                            'reason' => get_class($e) . ': ' . $e->getMessage(),
+                        ];
+                    }
+                    break;
             }
         }
-
 
         return new JsonModel([
             'success' => true,
             'message' => count($mails) . ' emails extracted.',
             'emails' => $mails,
+            'jsonLd' => $jsonLd,
+            'portal' => $portal,
             'extras' => $extras,
         ]);
     }
