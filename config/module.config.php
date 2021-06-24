@@ -102,6 +102,7 @@ return [
     'controller_plugins' => [
         'factories' => [
             Controller\Plugin\RegisterJob::class => Controller\Plugin\RegisterJobFactory::class,
+            Controller\Plugin\EmailBlacklist::class => Controller\Plugin\EmailBlacklistFactory::class,
         ],
     ],
 

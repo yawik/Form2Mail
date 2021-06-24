@@ -10,6 +10,7 @@ declare(strict_types=1);
 
 namespace Form2Mail\Controller;
 
+use Form2Mail\Controller\Plugin\EmailBlacklist;
 use Form2Mail\Controller\Plugin\RegisterJob;
 use Form2Mail\Entity\UserMetaData;
 use Laminas\Http\Client;
@@ -118,6 +119,7 @@ class ExtractEmailsController extends SendMailController
                     $mails = $this->extractMailsFromHtml($content);
                     break;
             }
+
             if ($register && !$jsonLd && count($mails)) {
                 $jsonLd = $this->extractJsonLd($content);
             }
@@ -148,14 +150,22 @@ class ExtractEmailsController extends SendMailController
                         'portal' => $portal,
                     ],
                 ];
-                $job = ($this->plugin(RegisterJob::class))($spec, ['allowMultiple' => true, 'userMetaType' => UserMetaData::TYPE_INVITED]);
-                $extras = [
-                    'register' => true,
-                    'user' => $job->getUser()->getId(),
-                    'job' => $job->getId(),
-                    'org' => $job->getOrganization()->getId(),
-                    'jsonLd' => $jsonLd,
-                ];
+                if ($this->plugin(EmailBlacklist::class)->check($mails)) {
+                    $extras = [
+                        'register' => false,
+                        'reason' => 'At least one email domain is blacklisted.',
+                        'jsonLd' => $jsonLd,
+                    ];
+                } else {
+                    $job = ($this->plugin(RegisterJob::class))($spec, ['allowMultiple' => true, 'userMetaType' => UserMetaData::TYPE_INVITED]);
+                    $extras = [
+                        'register' => true,
+                        'user' => $job->getUser()->getId(),
+                        'job' => $job->getId(),
+                        'org' => $job->getOrganization()->getId(),
+                        'jsonLd' => $jsonLd,
+                    ];
+                }
             } catch (\Throwable $e) {
                 return $this->createErrorModel(
                     'Register the user with job and organization failed.',
