@@ -25,7 +25,7 @@ $options['allowedOrigins'] = [];
  * Emails of this domain are not registered in the database
  * even if the register flag is set.
  */
- $options['emailDomainsBlacklist']
+ //$options['emailDomainsBlacklist'] = [];
 
 /*
  * Do not change below
