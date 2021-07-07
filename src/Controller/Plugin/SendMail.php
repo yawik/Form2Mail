@@ -8,7 +8,7 @@
 
 declare(strict_types=1);
 
-namespace Form2Mail\Controller\Plugins;
+namespace Form2Mail\Controller\Plugin;
 
 use Auth\Entity\Info;
 use Core\Mail\MailService;

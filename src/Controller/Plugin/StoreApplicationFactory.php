@@ -9,7 +9,7 @@
 
 declare(strict_types=1);
 
-namespace Form2Mail\Controller\Plugins;
+namespace Form2Mail\Controller\Plugin;
 
 use Form2Mail\Hydrator\ApplicationHydrator;
 use Psr\Container\ContainerInterface;

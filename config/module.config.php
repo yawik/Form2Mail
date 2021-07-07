@@ -103,13 +103,8 @@ return [
         'factories' => [
             Controller\Plugin\RegisterJob::class => Controller\Plugin\RegisterJobFactory::class,
             Controller\Plugin\EmailBlacklist::class => Controller\Plugin\EmailBlacklistFactory::class,
-        ],
-    ],
-
-    'controller_plugins' => [
-        'factories' => [
-            Controller\Plugins\SendMail::class => Controller\Plugins\SendMailFactory::class,
-            Controller\Plugins\StoreApplication::class => Controller\Plugins\StoreApplicationFactory::class,
+            Controller\Plugin\SendMail::class => Controller\Plugin\SendMailFactory::class,
+            Controller\Plugin\StoreApplication::class => Controller\Plugin\StoreApplicationFactory::class,
         ],
     ],
 

@@ -10,11 +10,8 @@ declare(strict_types=1);
 
 namespace Form2Mail\Controller;
 
-use Auth\Entity\Info;
-use Auth\Entity\InfoInterface;
-use Core\Mail\MailService;
-use Form2Mail\Controller\Plugins\SendMail;
-use Form2Mail\Controller\Plugins\StoreApplication;
+use Form2Mail\Controller\Plugin\SendMail;
+use Form2Mail\Controller\Plugin\StoreApplication;
 use Form2Mail\Options\ModuleOptions;
 use Form2Mail\Options\SendmailOrganizationOptionsCollection;
 use Jobs\Repository\Job as JobsRepository;
