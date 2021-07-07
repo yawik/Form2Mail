@@ -30,7 +30,8 @@ class StoreApplicationFactory
         return new StoreApplication(
             $container->get('repositories')->get('Applications'),
             $container->get('HydratorManager')->get(ApplicationHydrator::class),
-            $container->get('Applications/Events')
+            $container->get('Applications/Events'),
+            $container->get('ViewHelperManager')->get('url')
         );
     }
 }

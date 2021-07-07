@@ -16,6 +16,7 @@ use Auth\Entity\AnonymousUser;
 use Core\EventManager\EventManager;
 use Form2Mail\Hydrator\ApplicationHydrator;
 use Laminas\Mvc\Controller\Plugin\AbstractPlugin;
+use Laminas\View\Helper\Url;
 
 /**
  * TODO: description
@@ -29,15 +30,18 @@ class StoreApplication extends AbstractPlugin
     private $applications;
     private $hydrator;
     private $applicationEvents;
+    private $urlHelper;
 
     public function __construct(
         ApplicationsRepository $applications,
         ApplicationHydrator $hydrator,
-        EventManager $appEvents
+        EventManager $appEvents,
+        Url $urlHelper
     ) {
         $this->applications = $applications;
         $this->hydrator = $hydrator;
         $this->applicationEvents = $appEvents;
+        $this->urlHelper = $urlHelper;
     }
 
     public function __invoke($data, $job, $org, $orgOptions, $moduleOptions)
@@ -60,8 +64,16 @@ class StoreApplication extends AbstractPlugin
             'success' => true,
             'message' => 'Application stored successfully',
             'payload' => $data,
-            'uri' => $application->getId(),
-            'token' => $application->getUser()->getToken(),
+            'uri' => ($this->urlHelper)(
+                'lang/applications/detail',
+                ['id' => $application->getId()],
+                [
+                    'force_canonical' => true,
+                    'query' => [
+                        'token' => $application->getUser()->getToken(),
+                    ]
+                ]
+            ),
         ];
     }
 }
