@@ -20,6 +20,12 @@ $options['allowedOrigins'] = [];
 //    'details' => 'GET',
 //];
 
+/*
+ * Array of blacklisted domains.
+ * Emails of this domain are not registered in the database
+ * even if the register flag is set.
+ */
+ //$options['emailDomainsBlacklist'] = [];
 
 /*
  * Do not change below

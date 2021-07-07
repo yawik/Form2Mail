@@ -1,0 +1,66 @@
+<?php
+
+/**
+ * AMS Form2Mail
+ *
+ * @copyright 2013-2021 CROSS Solution
+
+ */
+
+declare(strict_types=1);
+
+$width            = "600px";
+$mail_blue_color  = "#7b1738";
+$mail_white_color = "#fff";
+$style_p          = "font-family: Arial, Helvetica, sans-serif; font-weight: 400; font-size: 15px; line-height: 1.8;";
+$mapLabel = [
+    'age' => 'Alter',
+    'city' => 'Standort',
+    'experience' => 'Erfahrung',
+    'availability' => 'Verfügbarkeit'
+];
+$mapValue = [
+    'partial' => 'Teilzeit',
+    'full' => 'Vollzeit',
+    'half' => 'unter 20 Stunden pro Woche'
+];
+
+?>
+       <?= $this->partial('form2mail/mail/header', [
+            'title' => $mail->getSubject() . ' - Conduent GmbH',
+            'width'=>$width, 'mail_blue_color'=>$mail_blue_color,
+            'mail_white_color' => $mail_white_color,
+            'org' => $org]); ?>
+<h3>
+    <?= $mail->getSubject() ?>
+</h3>
+
+<p>Hallo,</p>
+<p>
+vielen Dank für das Interesse an unserem Unternehmen und an unserer Stellenausschreibung. Wir bestätigen Ihnen
+hiermit den Eingang Ihrer Bewerbung. Unsere Kolleginnen & Kollegen werden sich diesbezüglich schnellstmöglich
+mit Ihnen in Verbindung setzen.
+</p><p>
+Wenn Sie Fragen zu der Ausschreibung oder unserem Bewerbungsverfahren haben, beantworten wir Ihnen diese gerne.
+Wenden Sie sich hierfür bitte per E-Mail an <?=$this->link('bewerbung@conduent.eu')?>
+oder melden Sie sich telefonisch unter <nobr>0151 10841899</nobr>.
+</p>
+<p>
+Viele Grüße,
+Conduent Deutschland
+</p>
+
+
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr><!-- end:tr -->
+            </tr>
+        </table>
+    </div>
+</center>
+</body>
+</html>
+
+

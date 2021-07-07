@@ -9,11 +9,24 @@ namespace Form2Mail;
 
 use Form2Mail\Controller\DetailsController;
 use Form2Mail\Controller\DetailsControllerFactory;
+use Form2Mail\Controller\ExtractEmailsController;
+use Form2Mail\Controller\RegisterJobController;
+use Form2Mail\Controller\RegisterJobControllerFactory;
 use Form2Mail\Controller\SendMailController;
 use Form2Mail\Controller\SendMailControllerFactory;
 use Laminas\ServiceManager\Factory\InvokableFactory;
 
 return [
+    'doctrine' => [
+        'driver' => array(
+            'odm_default' => array(
+                'drivers' => array(
+                    'Form2Mail\Entity' => 'annotation'
+                ),
+            ),
+        ),
+    ],
+
     'router' => [
         'routes' => [
             'sendmail' => [
@@ -37,6 +50,42 @@ return [
                     ],
                 ],
             ],
+            'extract' => [
+                'type' => 'Literal',
+                'options' => [
+                    'route' => '/extract',
+                    'defaults' => [
+                        'controller' => ExtractEmailsController::class,
+                        'action' => 'index',
+                    ],
+                ],
+            ],
+            'register' => [
+                'type' => 'Literal',
+                'options' => [
+                    'route' => '/register',
+                    'defaults' => [
+                        'controller' => RegisterJobController::class,
+                        'action' => 'index',
+                    ],
+                ],
+            ]
+        ],
+    ],
+
+    'console' => [
+        'router' => [
+            'routes' => [
+                'form2mail-invite-recruiters' => [
+                    'options' => [
+                        'route' => 'form2mail invite-recruiters [--limit=]',
+                        'defaults' => [
+                            'controller' => Controller\Console\InviteRecruiterController::class,
+                            'action' => 'index',
+                        ],
+                    ],
+                ],
+            ],
         ],
     ],
 
@@ -44,6 +93,16 @@ return [
         'factories' => [
             SendMailController::class => SendMailControllerFactory::class,
             DetailsController::class => DetailsControllerFactory::class,
+            ExtractEmailsController::class => InvokableFactory::class,
+            RegisterJobController::class => RegisterJobControllerFactory::class,
+            Controller\Console\InviteRecruiterController::class => Controller\Console\InviteRecruiterControllerFactory::class,
+        ],
+    ],
+
+    'controller_plugins' => [
+        'factories' => [
+            Controller\Plugin\RegisterJob::class => Controller\Plugin\RegisterJobFactory::class,
+            Controller\Plugin\EmailBlacklist::class => Controller\Plugin\EmailBlacklistFactory::class,
         ],
     ],
 
@@ -60,9 +119,20 @@ return [
             'layout/application-form' => __DIR__ . '/../view/application-form.phtml',
             'form2mail/mail/sendmail' => __DIR__ . '/../view/mail/sendmail.phtml',
             'form2mail/mail/conduent' => __DIR__ . '/../view/mail/conduent.phtml',
+            'form2mail/mail/conduent-confirm' => __DIR__ . '/../view/mail/conduent-confirm.phtml',
             'form2mail/mail/header' => __DIR__ . '/../view/mail/header.phtml',
             'form2mail/mail/footer' => __DIR__ . '/../view/mail/footer.phtml',
+            'form2mail/mail/invite-recruiter' => __DIR__ . '/../view/mail/invite-recruiter.phtml',
         ]
+    ],
+
+    'view_helpers' => [
+        'factories' => [
+            View\Helper\PortalName::class => InvokableFactory::class
+        ],
+        'aliases' => [
+            'f2mPortalName' => View\Helper\PortalName::class,
+        ],
     ],
 
     'view_helper_config' => [

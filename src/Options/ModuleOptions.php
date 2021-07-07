@@ -10,7 +10,9 @@ declare(strict_types=1);
 
 namespace Form2Mail\Options;
 
+use Jobs\Entity\JobInterface;
 use Laminas\Stdlib\AbstractOptions;
+use Organizations\Entity\OrganizationInterface;
 
 /**
  * TODO: description
@@ -31,6 +33,17 @@ class ModuleOptions extends AbstractOptions
 
     private $doStoreApplications = false;
 
+    /**
+     * use `%s` as placeholder for the job/apply id
+     *
+     * @var string
+     */
+    private $formFrontendUri = '';
+
+    /**
+     * @var array
+     */
+    private $emailDomainsBlacklist = [];
 
     /**
      * Get allowedOrigins
@@ -94,5 +107,45 @@ class ModuleOptions extends AbstractOptions
     public function setDoStoreApplications(bool $doStoreApplications): void
     {
         $this->doStoreApplications = $doStoreApplications;
+    }
+
+    /**
+     * Get formFrontendUri
+     *
+     * @return string
+     */
+    public function getFormFrontendUri(): string
+    {
+        return $this->formFrontendUri;
+    }
+
+    /**
+     * Set formFrontendUri
+     *
+     * @param string $formFrontendUri
+     */
+    public function setFormFrontendUri(string $formFrontendUri): void
+    {
+        $this->formFrontendUri = $formFrontendUri;
+    }
+
+    /**
+     * Get emailDomainsBlacklist
+     *
+     * @return array
+     */
+    public function getEmailDomainsBlacklist(): array
+    {
+        return $this->emailDomainsBlacklist;
+    }
+
+    /**
+     * Set emailDomainsBlacklist
+     *
+     * @param array $emailDomainsBlacklist
+     */
+    public function setEmailDomainsBlacklist(array $emailDomainsBlacklist): void
+    {
+        $this->emailDomainsBlacklist = $emailDomainsBlacklist;
     }
 }

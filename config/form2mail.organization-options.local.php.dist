@@ -1,0 +1,40 @@
+<?php
+
+/**
+ * AMS Form2Mail
+ *
+ * @copyright 2013-2021 CROSS Solution
+ */
+
+declare(strict_types=1);
+
+namespace Form2Mail;
+
+/*
+ * ID of the organization this options should apply to
+ */
+$orgId = '';
+
+$options = [
+    /* Should a confirmation mail be send after a successfull application */
+    'sendConfirmEmail' => false,
+
+    /* The subject of the confirmation mail */
+    //'confirmEmailSubject' => '',
+
+    /*
+     * View template to render the confirmation email with
+     * This template must be mapped in the view_manager config
+     */
+    //'confirmEmailTemplate' => '',
+];
+
+return [
+    'options' => [
+        Options\SendmailOrganizationOptionsCollection::class => [
+            'options' => [ 'options' => [
+                $orgId => $options,
+            ]],
+        ],
+    ],
+];

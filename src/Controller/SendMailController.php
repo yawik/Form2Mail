@@ -11,6 +11,7 @@ declare(strict_types=1);
 namespace Form2Mail\Controller;
 
 use Auth\Entity\Info;
+use Auth\Entity\InfoInterface;
 use Core\Mail\MailService;
 use Form2Mail\Controller\Plugins\SendMail;
 use Form2Mail\Controller\Plugins\StoreApplication;
@@ -167,7 +168,7 @@ class SendMailController extends AbstractActionController
 
         $result = [
             'success' => false,
-            'message' => self::$errors[$type] ?? 'An unknown error occured.',
+            'message' => self::$errors[$type] ?? $type,
         ];
 
         if ($extras) {
@@ -176,22 +177,4 @@ class SendMailController extends AbstractActionController
 
         return new JsonModel($result);
     }
-
-    private function normalizeJsonData($json)
-    {
-        $user = new Info();
-        foreach ($json['user'] as $key => $value) {
-            $setter = "set$key";
-            if (is_callable([$user, $setter])) {
-                $user->$setter($value);
-            }
-        }
-
-        return [
-            'user' => $user,
-            'summary' => $json['summary'] ?? '',
-            'extras' => $json['extras'] ?? [],
-        ];
-    }
-
 }

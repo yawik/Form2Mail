@@ -44,44 +44,70 @@ class SendMail extends AbstractPlugin
             $to = $job->getUser()->getInfo()->getEmail() ?? $org->getUser()->getInfo()->getEmail();
         }
 
+        $files = $this->getRequest()->getFiles()->toArray();
+
         // normalite json data
         /** @var \Core\Mail\HTMLTemplateMessage $mail */
-        $vars = $this->normalizeJsonData($data);
+        $vars = $this->normalizeJsonData($json);
         $vars['job'] = $job;
         $vars['org'] = $org;
+        $vars['photo'] = isset($files['photo']) ? 1 : 0;
         $mail = $this->mails->get('htmltemplate');
         $mail->setTemplate('form2mail/mail/conduent');
         $mail->setVariables($vars);
-        $mail->setSubject($job ? sprintf('Bewerbung auf %s', $job->getTitle()) : 'Initiale Bewerbung');
+        $mail->setSubject($job ? sprintf('Bewerbung auf %s', $job->getTitle()) : 'Initiativbewerbung');
 
         $mail->addTo($to);
 
         // Attachments handling
-        $files = $this->getController()->getRequest()->getFiles()->toArray();
-        if (isset($files['attached']) && count($files['attached'])) {
-            $message = new MimeMessage();
-            $html = new MimePart($mail->getBodyText());
-            $html->type = Mime::TYPE_HTML;
-            $html->disposition = Mime::DISPOSITION_INLINE;
-            $html->charset = 'utf-8';
-            $message->addPart($html);
+        $files = $this->getRequest()->getFiles()->toArray();
 
-            foreach ($files['attached'] as $file) {
+        $message = new MimeMessage();
+        $html = new MimePart($mail->getBodyText());
+        $html->type = Mime::TYPE_HTML;
+        $html->disposition = Mime::DISPOSITION_INLINE;
+        $html->charset = 'utf-8';
+        $message->addPart($html);
+
+        $vcard = $this->createVcard($vars['user'], $files['photo'] ?? null);
+        $attachment = new MimePart($vcard);
+        $attachment->type = Mime::TYPE_TEXT;
+        $attachment->charset = 'utf8';
+        $attachment->disposition = Mime::DISPOSITION_ATTACHMENT;
+        $attachment->filename = 'kontakt.vcf';
+        $message->addPart($attachment);
+
+        if (isset($files['photo']) && $files['photo']['error'] === UPLOAD_ERR_OK) {
+            $file = $files['photo'];
+            $photo = new MimePart(fopen($file['tmp_name'], 'r'));
+            $photo->disposition = Mime::DISPOSITION_INLINE;
+            $photo->id = 'photo';
+            $photo->type = mime_content_type($file['tmp_name']);
+            $photo->filename = $file['name'];
+            $photo->encoding = Mime::ENCODING_BASE64;
+            $message->addPart($photo);
+        }
+
+        if (isset($files['attached']) && count($files['attached'])) {
+            foreach ($files as $file) {
+                if ($file['error'] !== UPLOAD_ERR_OK) {
+                    continue;
+                }
                 $attachment = new MimePart(fopen($file['tmp_name'], 'r'));
+                $attachment->disposition = Mime::DISPOSITION_ATTACHMENT;
                 $attachment->type = mime_content_type($file['tmp_name']);
                 $attachment->filename = $file['name'];
-                $attachment->disposition = Mime::DISPOSITION_ATTACHMENT;
                 $attachment->encoding = Mime::ENCODING_BASE64;
                 $message->addPart($attachment);
             }
-
-            $new = new Message();
-            $new->setBody($message);
-            $new->setSubject($mail->getSubject());
-            $new->addTo($to);
-
-            $mail = $new;
         }
+
+        $new = new Message();
+        $new->setBody($message);
+        $new->setSubject($mail->getSubject());
+        $new->addTo($to);
+
+        $mail = $new;
 
         try {
             $this->mails->send($mail);
@@ -113,5 +139,45 @@ class SendMail extends AbstractPlugin
             'summary' => $json['summary'] ?? '',
             'extras' => $json['extras'] ?? [],
         ];
+    }
+
+    private function createVcard(InfoInterface $user, ?array $photo)
+    {
+        $card = new VCard([
+            'FN' => $user->getDisplayname(false),
+            'N' => [$user->getLastName(), $user->getFirstName(), '', '', ''],
+            'EMAIL' => $user->getEmail(),
+        ]);
+
+        if ($user->getBirthYear()) {
+            $card->add('BDAY', $user->getBirthYear() . '-' . $user->getBirthMonth() . '-' . $user->getBirthDay());
+        }
+        if ($user->getCity()) {
+            $card->add(
+                'ADDR',
+                ['', '', $user->getStreet(), $user->getCity(), '', $user->getPostalCode(), $user->getCountry()],
+                ['TYPE' => 'home']
+            );
+        }
+        if ($user->getPhone()) {
+            $card->add(
+                'TEL',
+                $user->getPhone(),
+                ['TYPE' => 'home']
+            );
+        }
+        if ($photo && $photo['error'] === UPLOAD_ERR_OK) {
+            $data = base64_encode(file_get_contents($photo['tmp_name']));
+            $mime = mime_content_type($photo['tmp_name']);
+            $img = "data:$mime;base64,$data";
+
+            $card->add(
+                'PHOTO',
+                $img,
+                ['VALUE' => 'URI']
+            );
+        }
+
+        return $card->serialize();
     }
 }

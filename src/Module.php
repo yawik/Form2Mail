@@ -14,15 +14,18 @@ namespace Form2Mail;
 use Core\ModuleManager\Feature\VersionProviderInterface;
 use Core\ModuleManager\Feature\VersionProviderTrait;
 use Core\ModuleManager\ModuleConfigLoader;
+use Form2Mail\Controller\AbstractApiResponseController;
+use Form2Mail\Controller\Console\InviteRecruiterController;
 use Form2Mail\Controller\DetailsController;
+use Form2Mail\Controller\ExtractEmailsController;
 use Form2Mail\Controller\SendMailController;
 use Form2Mail\Options\ModuleOptions;
+use Laminas\Console\Adapter\AdapterInterface;
 use Laminas\Http\Request;
 use Laminas\Http\Response;
-use Laminas\Mvc\MvcEvent as MvcMvcEvent;
-use Zend\ModuleManager\Feature;
-use Zend\Console\Console;
-use Zend\Mvc\MvcEvent;
+use Laminas\Mvc\MvcEvent;
+use Laminas\ModuleManager\Feature;
+use Laminas\Console\Console;
 
 /**
  * ${CARET}
@@ -30,7 +33,11 @@ use Zend\Mvc\MvcEvent;
  * @author Mathias Gelhausen <gelhausen@cross-solution.de>
  * @todo write test
  */
-class Module implements Feature\ConfigProviderInterface, VersionProviderInterface
+class Module implements
+    Feature\ConfigProviderInterface,
+    Feature\ConsoleBannerProviderInterface,
+    Feature\ConsoleUsageProviderInterface,
+    VersionProviderInterface
 {
     use VersionProviderTrait;
 
@@ -44,12 +51,22 @@ class Module implements Feature\ConfigProviderInterface, VersionProviderInterfac
     */
     public static $isLoaded=false;
 
+    public function getConsoleBanner(AdapterInterface $console)
+    {
+        return 'Form2Mail ' . $this->getVersion();
+    }
+
+    public function getConsoleUsage(AdapterInterface $console)
+    {
+        return InviteRecruiterController::getConsoleUsage();
+    }
+
     public function getConfig()
     {
         return ModuleConfigLoader::load(__DIR__ . '/../config');
     }
 
-    function onBootstrap(MvcEvent $e)
+    public function onBootstrap(MvcEvent $e)
     {
         self::$isLoaded=true;
         $eventManager = $e->getApplication()->getEventManager();
@@ -89,8 +106,10 @@ class Module implements Feature\ConfigProviderInterface, VersionProviderInterfac
                 }
             };
 
-            $sharedManager->attach(SendMailController::class, MvcMvcEvent::EVENT_DISPATCH, $callback, 100);
-            $sharedManager->attach(DetailsController::class, MvcMvcEvent::EVENT_DISPATCH, $callback, 100);
+            $sharedManager->attach(SendMailController::class, MvcEvent::EVENT_DISPATCH, $callback, 100);
+            $sharedManager->attach(DetailsController::class, MvcEvent::EVENT_DISPATCH, $callback, 100);
+            $sharedManager->attach(ExtractEmailsController::class, MvcEvent::EVENT_DISPATCH, $callback, 100);
+            $sharedManager->attach(AbstractApiResponseController::class, MvcEvent::EVENT_DISPATCH, $callback, 100);
 
             /*
              * use a neutral layout, when rendering the application form and its result page.

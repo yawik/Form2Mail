@@ -39,4 +39,15 @@ class SendmailOrganizationOptionsCollection extends AbstractOptions
             $this->options[$id] ?? []
         );
     }
+
+    public function __call($method, $args)
+    {
+        if (0 === strpos($method, 'set')) {
+            $key = substr($method, 3);
+            $this->options[$key] = $args[0] ?? [];
+            return;
+        }
+
+        throw new \BadMethodCallException('Unknown method: ' . $method);
+    }
 }

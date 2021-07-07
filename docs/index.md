@@ -1,6 +1,6 @@
 # Form2Mail
 
-form2mail takes formular data of an application form and generates a Mail.
+form2mail takes formular data of an [application form](https://gitlab.com/yawik/applicationform) and generates a Mail.
 
 ## Requirements
 
