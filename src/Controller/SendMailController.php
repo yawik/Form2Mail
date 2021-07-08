@@ -138,6 +138,7 @@ class SendMailController extends AbstractActionController
 
         $orgOptions = $this->getOrganizationOptions()->getOrganizationOptions($job->getOrganization()->getId());
         $moduleOptions = $this->getModuleoptions();
+        $files = $this->getRequest()->getFiles()->toArray();
 
         if ($moduleOptions->doStoreApplications() || $orgOptions->doStoreApplications()) {
             $plugin = $this->plugin(StoreApplication::class);
@@ -146,7 +147,7 @@ class SendMailController extends AbstractActionController
         }
 
         try {
-            $result = $plugin($json, $job, $org, $orgOptions, $moduleOptions);
+            $result = $plugin($json, $files, $job, $org, $orgOptions, $moduleOptions);
         } catch (\Laminas\Mail\Exception\ExceptionInterface $e) {
             /** @var \Throwable $e */
             return $this->createErrorModel(

@@ -11,7 +11,7 @@ declare(strict_types=1);
 namespace Form2Mail\Hydrator;
 
 use Applications\Entity\Attachment;
-use Auth\Entity\Info;
+use Applications\Entity\Contact;
 use Core\Entity\Hydrator\EntityHydrator;
 use Form2Mail\Filter\JsonDataFilter;
 
@@ -45,14 +45,26 @@ class ApplicationHydrator extends EntityHydrator
         $filter = $this->getJsonDataFilter();
         $data = $filter($data);
 
-        $contact = new Info();
+        if ($data['photo'] && $data['photo']['error'] === UPLOAD_ERR_OK) {
+            $image = new Attachment();
+            $image->setName($data['photo']['name']);
+            $image->setType(mime_content_type($data['photo']['tmp_name']));
+            $image->setFile($data['photo']['tmp_name']);
+
+            $data['contact']['image'] = $image;
+        }
+
+        $contact = new Contact();
         $data['contact'] = parent::hydrate($data['contact'], $contact);
 
         $attachments = $object->getAttachments();
         foreach ($data['attachments'] as $tmpFile) {
+            if ($tmpFile['error'] != UPLOAD_ERR_OK) {
+                continue;
+            }
             $file = new Attachment();
             $file->setName($tmpFile['name']);
-            $file->setType($tmpFile['type']);
+            $file->setType(mime_content_type($tmpFile['tmp_name']));
             $file->setFile($tmpFile['tmp_name']);
 
             $attachments->add($file);

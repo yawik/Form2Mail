@@ -35,7 +35,7 @@ class SendMail extends AbstractPlugin
         $this->mails = $mails;
     }
 
-    public function __invoke($data, $job, $org, $options)
+    public function __invoke($data, $files, $job, $org, $options)
     {
 
         if (!$job) {
@@ -43,8 +43,6 @@ class SendMail extends AbstractPlugin
         } else {
             $to = $job->getUser()->getInfo()->getEmail() ?? $org->getUser()->getInfo()->getEmail();
         }
-
-        $files = $this->getRequest()->getFiles()->toArray();
 
         // normalite json data
         /** @var \Core\Mail\HTMLTemplateMessage $mail */
@@ -60,7 +58,6 @@ class SendMail extends AbstractPlugin
         $mail->addTo($to);
 
         // Attachments handling
-        $files = $this->getRequest()->getFiles()->toArray();
 
         $message = new MimeMessage();
         $html = new MimePart($mail->getBodyText());

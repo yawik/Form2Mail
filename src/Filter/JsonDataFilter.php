@@ -22,14 +22,17 @@ use Laminas\Stdlib\ArrayUtils;
 class JsonDataFilter extends AbstractFilter
 {
 
-    public function filter($value)
+    public function filter($valueAndFiles)
     {
+        [$value, $uploads] = $valueAndFiles;
+
         if (!is_array($value)) {
             throw new \InvalidArgumentException('Expected array, but got ' . gettype($value));
         }
 
         $contact = isset($value['user']) && is_array($value['user']) ? $value['user'] : [];
-        $files = isset($value['attached']) && is_array($value['attached']) ? $value['attached'] : [];
+        $photo = isset($uploads['photo']) ? $uploads['photo'] : false;
+        $files = isset($uploads['attached']) && is_array($uploads['attached']) ? $uploads['attached'] : [];
         $summary = $value['summary'] ?? '';
 
         foreach (($value['extras'] ?? []) as $key => $extra) {
@@ -44,13 +47,13 @@ class JsonDataFilter extends AbstractFilter
                     }
                 }
             } else {
-                $summary .= "$key: $value";
+                $summary .= "$key: $extra";
             }
         }
 
-
         return [
             'contact' => $contact,
+            'photo' => $photo,
             'attachments' => $files,
             'summary' => $summary,
         ];

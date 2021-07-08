@@ -10,6 +10,7 @@ declare(strict_types=1);
 
 namespace Form2Mail\Controller\Plugin;
 
+use Applications\Entity\Status;
 use Applications\Listener\Events\ApplicationEvent;
 use Applications\Repository\Application as ApplicationsRepository;
 use Auth\Entity\AnonymousUser;
@@ -44,13 +45,14 @@ class StoreApplication extends AbstractPlugin
         $this->urlHelper = $urlHelper;
     }
 
-    public function __invoke($data, $job, $org, $orgOptions, $moduleOptions)
+    public function __invoke($data, $files, $job, $org, $orgOptions, $moduleOptions)
     {
         /** @var \Applications\Entity\Application $application */
         $application = $this->applications->create();
-        $application = $this->hydrator->hydrate($data, $application);
+        $application = $this->hydrator->hydrate([$data, $files], $application);
         $application->setJob($job);
         $application->setUser(new AnonymousUser());
+        $application->setStatus(new Status());
 
         $this->applications->store($application);
 
