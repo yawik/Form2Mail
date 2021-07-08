@@ -10,23 +10,17 @@ declare(strict_types=1);
 
 namespace Form2Mail\Controller;
 
-use Auth\Entity\Info;
-use Auth\Entity\InfoInterface;
-use Core\Mail\MailService;
+use Form2Mail\Controller\Plugin\SendMail;
+use Form2Mail\Controller\Plugin\StoreApplication;
+use Form2Mail\Options\ModuleOptions;
 use Form2Mail\Options\SendmailOrganizationOptionsCollection;
 use Jobs\Repository\Job as JobsRepository;
 use Organizations\Repository\Organization as OrganizationRepository;
 use Laminas\Http\Request;
 use Laminas\Http\Response;
 use Laminas\Json\Json;
-use Laminas\Mail\Message;
-use Laminas\Mime\Message as MimeMessage;
-use Laminas\Mime\Mime;
-use Laminas\Mime\Part as MimePart;
 use Laminas\Mvc\Controller\AbstractActionController;
 use Laminas\View\Model\JsonModel;
-use Laminas\View\Model\ViewModel;
-use Sabre\VObject\Component\VCard;
 
 /**
  * TODO: description
@@ -41,6 +35,7 @@ class SendMailController extends AbstractActionController
     const ERROR_NO_ENTITY = 'NO_ENTITY';
     const ERROR_INVALID_JSON = 'INVALID_JSON';
     const ERROR_MAIL_FAILED = 'MAIL_FAILED';
+    const ERROR_STORE_FAILED = 'STORE_FAILED';
 
     protected static $errors = [
         self::ERROR_NO_POST => 'Must use POST request',
@@ -48,16 +43,16 @@ class SendMailController extends AbstractActionController
         self::ERROR_NO_REF => 'Missing job or organization reference',
         self::ERROR_NO_ENTITY => 'No job or organization found',
         self::ERROR_MAIL_FAILED => 'Sending of mail failed',
+        self::ERROR_STORE_FAILED => 'Storing application failed',
     ];
 
-    private $mails;
     private $jobs;
     private $orgs;
     private $organizationOptions;
+    private $moduleOptions;
 
-    public function __construct(MailService $mails, JobsRepository $jobs, OrganizationRepository $orgs)
+    public function __construct(JobsRepository $jobs, OrganizationRepository $orgs)
     {
-        $this->mails = $mails;
         $this->jobs = $jobs;
         $this->orgs = $orgs;
     }
@@ -74,6 +69,30 @@ class SendMailController extends AbstractActionController
         }
 
         return $this->organizationOptions;
+    }
+
+    /**
+     * Get moduleoptions
+     *
+     * @return ModuleOptions
+     */
+    public function getModuleoptions(): ModuleOptions
+    {
+        if (!$this->moduleOptions) {
+            $this->setModuleOptions(new ModuleOptions());
+        }
+
+        return $this->moduleOptions;
+    }
+
+    /**
+     * Set moduleoptions
+     *
+     * @param ModuleOptions $moduleoptions
+     */
+    public function setModuleoOtions(ModuleOptions $moduleOptions): void
+    {
+        $this->moduleOptions = $moduleOptions;
     }
 
     public function indexAction()
@@ -113,121 +132,32 @@ class SendMailController extends AbstractActionController
                     ['ref' => $applyId]
                 );
             }
-            $to  = $org->getUser()->getInfo()->getEmail();
         } else {
             $org = $job->getOrganization();
-            $to = $job->getUser()->getInfo()->getEmail() ?? $org->getUser()->getInfo()->getEmail();
         }
 
-        $options = $this->getOrganizationOptions()->getOrganizationOptions($org->getId());
-
+        $orgOptions = $this->getOrganizationOptions()->getOrganizationOptions($job->getOrganization()->getId());
+        $moduleOptions = $this->getModuleoptions();
         $files = $this->getRequest()->getFiles()->toArray();
 
-        // normalite json data
-        /** @var \Core\Mail\HTMLTemplateMessage $mail */
-        $vars = $this->normalizeJsonData($json);
-        $vars['job'] = $job;
-        $vars['org'] = $org;
-        $vars['photo'] = isset($files['photo']) ? 1 : 0;
-        $mail = $this->mails->get('htmltemplate');
-        $mail->setTemplate('form2mail/mail/conduent');
-        $mail->setVariables($vars);
-        $mail->setSubject($job ? sprintf('Bewerbung auf %s', $job->getTitle()) : 'Initiativbewerbung');
-
-        $mail->addTo($to);
-
-        // Attachments handling
-        $files = $this->getRequest()->getFiles()->toArray();
-
-        $message = new MimeMessage();
-        $html = new MimePart($mail->getBodyText());
-        $html->type = Mime::TYPE_HTML;
-        $html->disposition = Mime::DISPOSITION_INLINE;
-        $html->charset = 'utf-8';
-        $message->addPart($html);
-
-        $vcard = $this->createVcard($vars['user'], $files['photo'] ?? null);
-        $attachment = new MimePart($vcard);
-        $attachment->type = Mime::TYPE_TEXT;
-        $attachment->charset = 'utf8';
-        $attachment->disposition = Mime::DISPOSITION_ATTACHMENT;
-        $attachment->filename = 'kontakt.vcf';
-        $message->addPart($attachment);
-
-        if (isset($files['photo']) && $files['photo']['error'] === UPLOAD_ERR_OK) {
-            $file = $files['photo'];
-            $photo = new MimePart(fopen($file['tmp_name'], 'r'));
-            $photo->disposition = Mime::DISPOSITION_INLINE;
-            $photo->id = 'photo';
-            $photo->type = mime_content_type($file['tmp_name']);
-            $photo->filename = $file['name'];
-            $photo->encoding = Mime::ENCODING_BASE64;
-            $message->addPart($photo);
+        if ($moduleOptions->doStoreApplications() || $orgOptions->doStoreApplications()) {
+            $plugin = $this->plugin(StoreApplication::class);
+        } else {
+            $plugin = $this->plugin(SendMail::class);
         }
-
-        if (isset($files['attached']) && count($files['attached'])) {
-            foreach ($files as $file) {
-                if ($file['error'] !== UPLOAD_ERR_OK) {
-                    continue;
-                }
-                $attachment = new MimePart(fopen($file['tmp_name'], 'r'));
-                $attachment->disposition = Mime::DISPOSITION_ATTACHMENT;
-                $attachment->type = mime_content_type($file['tmp_name']);
-                $attachment->filename = $file['name'];
-                $attachment->encoding = Mime::ENCODING_BASE64;
-                $message->addPart($attachment);
-            }
-        }
-
-        $new = new Message();
-        $new->setBody($message);
-        $new->setSubject($mail->getSubject());
-        $new->addTo($to);
-
-        $mail = $new;
 
         try {
-            $this->mails->send($mail);
+            $result = $plugin($json, $files, $job, $org, $orgOptions, $moduleOptions);
         } catch (\Laminas\Mail\Exception\ExceptionInterface $e) {
             /** @var \Throwable $e */
-            return $this->createErrorModel(self::ERROR_MAIL_FAILED, Response::STATUS_CODE_500, ['error' => $e->getMessage()]);
+            return $this->createErrorModel(
+                $plugin instanceof SendMail ? self::ERROR_MAIL_FAILED : self::ERROR_STORE_FAILED,
+                Response::STATUS_CODE_500,
+                ['error' => $e->getMessage()]
+            );
         }
 
-        $extras = [
-            'payload' => $json,
-            'mail' => $mail->toString(),
-        ];
-
-        if ($options->shouldSendConfirmEmail() && ($emailAddress = $vars['user']->getEmail())) {
-            $mail = $this->mails->get('htmltemplate');
-            $mail->addTo($emailAddress);
-            $mail->setSubject($options->getConfirmEmailSubject());
-            $mail->setTemplate($options->getConfirmEmailTemplate());
-            $mail->setVariables([
-                'org' => $org,
-                'job' => $job,
-                'recruiter' => $job ? $job->getUser() : $org->getUser(),
-                'applicant' => $vars['user'],
-            ]);
-            try {
-                $this->mails->send($mail);
-                $extras['confirmMailSuccess'] = true;
-                $extras['confirmMail'] = $mail->toString();
-            } catch (\Throwable $e) {
-                $extras['confirmMailSuccess'] = false;
-                $extras['confirmMail'] = sprintf(
-                    '[%s] %s',
-                    get_class($e),
-                    $e->getMessage()
-                );
-            }
-        }
-
-        return new JsonModel([
-            'success' => true,
-            'message' => 'Mail send successfully',
-            'extras' => $extras
-        ]);
+        return new JsonModel($result);
     }
 
     protected function createErrorModel(string $type, $code = null, ?array $extras = null)
@@ -244,62 +174,5 @@ class SendMailController extends AbstractActionController
         }
 
         return new JsonModel($result);
-    }
-
-    private function normalizeJsonData($json)
-    {
-        $user = new Info();
-        foreach ($json['user'] as $key => $value) {
-            $setter = "set$key";
-            if (is_callable([$user, $setter])) {
-                $user->$setter($value);
-            }
-        }
-
-        return [
-            'user' => $user,
-            'summary' => $json['summary'] ?? '',
-            'extras' => $json['extras'] ?? [],
-        ];
-    }
-
-    private function createVcard(InfoInterface $user, ?array $photo)
-    {
-        $card = new VCard([
-            'FN' => $user->getDisplayname(false),
-            'N' => [$user->getLastName(), $user->getFirstName(), '', '', ''],
-            'EMAIL' => $user->getEmail(),
-        ]);
-
-        if ($user->getBirthYear()) {
-            $card->add('BDAY', $user->getBirthYear() . '-' . $user->getBirthMonth() . '-' . $user->getBirthDay());
-        }
-        if ($user->getCity()) {
-            $card->add(
-                'ADDR',
-                ['', '', $user->getStreet(), $user->getCity(), '', $user->getPostalCode(), $user->getCountry()],
-                ['TYPE' => 'home']
-            );
-        }
-        if ($user->getPhone()) {
-            $card->add(
-                'TEL',
-                $user->getPhone(),
-                ['TYPE' => 'home']
-            );
-        }
-        if ($photo && $photo['error'] === UPLOAD_ERR_OK) {
-            $data = base64_encode(file_get_contents($photo['tmp_name']));
-            $mime = mime_content_type($photo['tmp_name']);
-            $img = "data:$mime;base64,$data";
-
-            $card->add(
-                'PHOTO',
-                $img,
-                ['VALUE' => 'URI']
-            );
-        }
-
-        return $card->serialize();
     }
 }

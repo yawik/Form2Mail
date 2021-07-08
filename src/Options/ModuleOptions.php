@@ -31,6 +31,8 @@ class ModuleOptions extends AbstractOptions
         'details' => 'GET',
     ];
 
+    private $doStoreApplications = false;
+
     /**
      * use `%s` as placeholder for the job/apply id
      *
@@ -85,6 +87,26 @@ class ModuleOptions extends AbstractOptions
     public function setAllowedMethods(array $allowedMethods): void
     {
         $this->allowedMethods = $allowedMethods;
+    }
+
+    /**
+     * Get doStoreApplication
+     *
+     * @return bool
+     */
+    public function doStoreApplications(): bool
+    {
+        return $this->doStoreApplications;
+    }
+
+    /**
+     * Set doStoreApplication
+     *
+     * @param bool $doStoreApplication
+     */
+    public function setDoStoreApplications(bool $doStoreApplications): void
+    {
+        $this->doStoreApplications = $doStoreApplications;
     }
 
     /**

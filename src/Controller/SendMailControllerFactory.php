@@ -11,6 +11,7 @@ declare(strict_types=1);
 
 namespace Form2Mail\Controller;
 
+use Form2Mail\Options\ModuleOptions;
 use Form2Mail\Options\SendmailOrganizationOptionsCollection;
 use Psr\Container\ContainerInterface;
 
@@ -30,12 +31,12 @@ class SendMailControllerFactory
         $repos = $container->get('repositories');
 
         $controller = new SendMailController(
-            $container->get('Core/MailService'),
             $repos->get('Jobs'),
             $repos->get('Organizations')
         );
 
         $controller->setOrganizationOptions($container->get(SendmailOrganizationOptionsCollection::class));
+        $controller->setModuleoOtions($container->get(ModuleOptions::class));
 
         return $controller;
     }

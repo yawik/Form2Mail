@@ -24,6 +24,28 @@ class SendmailOrganizationOptions extends AbstractOptions
     private $confirmEmailSubject = '';
     private $confirmEmailTemplate = '';
 
+    private $doStoreApplications = false;
+
+    /**
+     * Get doStoreApplication
+     *
+     * @return bool
+     */
+    public function doStoreApplications(): bool
+    {
+        return $this->doStoreApplications;
+    }
+
+    /**
+     * Set doStoreApplication
+     *
+     * @param bool $doStoreApplication
+     */
+    public function setDoStoreApplications(bool $doStoreApplications): void
+    {
+        $this->doStoreApplications = $doStoreApplications;
+    }
+
     public function setSendConfirmEmail(bool $flag): void
     {
         $this->sendConfirmEmail = $flag;
