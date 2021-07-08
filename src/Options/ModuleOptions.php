@@ -46,6 +46,11 @@ class ModuleOptions extends AbstractOptions
     private $emailDomainsBlacklist = [];
 
     /**
+     * @var bool
+     */
+    private $injectApplyUri = false;
+
+    /**
      * Get allowedOrigins
      *
      * @return array
@@ -147,5 +152,25 @@ class ModuleOptions extends AbstractOptions
     public function setEmailDomainsBlacklist(array $emailDomainsBlacklist): void
     {
         $this->emailDomainsBlacklist = $emailDomainsBlacklist;
+    }
+
+    /**
+     * Get injectApplyUrl
+     *
+     * @return bool
+     */
+    public function doInjectApplyUri(): bool
+    {
+        return $this->injectApplyUri;
+    }
+
+    /**
+     * Set injectApplyUrl
+     *
+     * @param bool $injectApplyUri
+     */
+    public function setInjectApplyUri(bool $injectApplyUri): void
+    {
+        $this->injectApplyUri = $injectApplyUri;
     }
 }

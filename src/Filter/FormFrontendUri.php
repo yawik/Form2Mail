@@ -35,7 +35,7 @@ class FormFrontendUri extends AbstractFilter
     {
         switch (true) {
             case $value instanceof JobInterface:
-                $replace = [$value->getJobId(), $value->getApplyId()];
+                $replace = [$value->getId(), $value->getApplyId()];
                 break;
 
             case is_array($value):

@@ -19,7 +19,9 @@ use Form2Mail\Controller\Console\InviteRecruiterController;
 use Form2Mail\Controller\DetailsController;
 use Form2Mail\Controller\ExtractEmailsController;
 use Form2Mail\Controller\SendMailController;
+use Form2Mail\Listener\InjectApplyUrlListener;
 use Form2Mail\Options\ModuleOptions;
+use Jobs\Listener\Events\JobEvent;
 use Laminas\Console\Adapter\AdapterInterface;
 use Laminas\Http\Request;
 use Laminas\Http\Response;
@@ -110,6 +112,14 @@ class Module implements
             $sharedManager->attach(DetailsController::class, MvcEvent::EVENT_DISPATCH, $callback, 100);
             $sharedManager->attach(ExtractEmailsController::class, MvcEvent::EVENT_DISPATCH, $callback, 100);
             $sharedManager->attach(AbstractApiResponseController::class, MvcEvent::EVENT_DISPATCH, $callback, 100);
+
+            /** @var ModuleOptions $options */
+            $options = $services->get(ModuleOptions::class);
+            if ($options->doInjectApplyUri()) {
+                $listener = $services->get(InjectApplyUrlListener::class);
+                $events = $services->get('Jobs/Events');
+                $events->attach(JobEvent::EVENT_JOB_CREATED, $listener, -1);
+            }
 
             /*
              * use a neutral layout, when rendering the application form and its result page.

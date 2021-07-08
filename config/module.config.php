@@ -89,6 +89,12 @@ return [
         ],
     ],
 
+    'service_manager' => [
+        'factories' => [
+            Listener\InjectApplyUrlListener::class => Listener\InjectApplyUrlListenerFactory::class,
+        ],
+    ],
+
     'controllers' => [
         'factories' => [
             SendMailController::class => SendMailControllerFactory::class,
