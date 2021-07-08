@@ -89,6 +89,12 @@ return [
         ],
     ],
 
+    'service_manager' => [
+        'factories' => [
+            Listener\InjectApplyUrlListener::class => Listener\InjectApplyUrlListenerFactory::class,
+        ],
+    ],
+
     'controllers' => [
         'factories' => [
             SendMailController::class => SendMailControllerFactory::class,
@@ -155,6 +161,7 @@ return [
     'filters' => [
         'factories' => [
             Filter\JsonDataFilter::class => InvokableFactory::class,
+            Filter\FormFrontendUri::class => Filter\FormFrontendUriFactory::class,
         ],
     ],
 

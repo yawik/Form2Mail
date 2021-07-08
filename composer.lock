@@ -8,16 +8,16 @@
     "packages": [
         {
             "name": "alcaeus/mongo-php-adapter",
-            "version": "1.2.0",
+            "version": "1.2.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/alcaeus/mongo-php-adapter.git",
-                "reference": "b828ebc06cd3c270997b13c97dadc94731b36354"
+                "reference": "e9f2cb6ab4ccc59f28eba1360aba96051e02fa33"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/alcaeus/mongo-php-adapter/zipball/b828ebc06cd3c270997b13c97dadc94731b36354",
-                "reference": "b828ebc06cd3c270997b13c97dadc94731b36354",
+                "url": "https://api.github.com/repos/alcaeus/mongo-php-adapter/zipball/e9f2cb6ab4ccc59f28eba1360aba96051e02fa33",
+                "reference": "e9f2cb6ab4ccc59f28eba1360aba96051e02fa33",
                 "shasum": ""
             },
             "require": {
@@ -32,7 +32,7 @@
             },
             "require-dev": {
                 "squizlabs/php_codesniffer": "^3.2",
-                "symfony/phpunit-bridge": "5.x-dev"
+                "symfony/phpunit-bridge": "^4.4.16 || ^5.2"
             },
             "type": "library",
             "extra": {
@@ -70,9 +70,9 @@
             ],
             "support": {
                 "issues": "https://github.com/alcaeus/mongo-php-adapter/issues",
-                "source": "https://github.com/alcaeus/mongo-php-adapter/tree/1.2.0"
+                "source": "https://github.com/alcaeus/mongo-php-adapter/tree/1.2.1"
             },
-            "time": "2020-11-11T14:05:46+00:00"
+            "time": "2021-07-08T11:24:49+00:00"
         },
         {
             "name": "brick/varexporter",
@@ -1597,16 +1597,16 @@
         },
         {
             "name": "hybridauth/hybridauth",
-            "version": "v2.17.0",
+            "version": "v2.18.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/hybridauth/hybridauth.git",
-                "reference": "06909cd8cbc1201f01db8a8d36bc8c06dd27223d"
+                "reference": "a879408ad340b68c79faeea2e7a85b95a1f261ba"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/hybridauth/hybridauth/zipball/06909cd8cbc1201f01db8a8d36bc8c06dd27223d",
-                "reference": "06909cd8cbc1201f01db8a8d36bc8c06dd27223d",
+                "url": "https://api.github.com/repos/hybridauth/hybridauth/zipball/a879408ad340b68c79faeea2e7a85b95a1f261ba",
+                "reference": "a879408ad340b68c79faeea2e7a85b95a1f261ba",
                 "shasum": ""
             },
             "require": {
@@ -1655,9 +1655,9 @@
                 "forum": "https://groups.google.com/d/forum/hybridauth",
                 "gitter": "https://gitter.im/hybridauth/hybridauth",
                 "issues": "https://github.com/hybridauth/hybridauth/issues",
-                "source": "https://github.com/hybridauth/hybridauth/tree/v2"
+                "source": "https://github.com/hybridauth/hybridauth/tree/v2.18.0"
             },
-            "time": "2019-12-13T11:20:07+00:00"
+            "time": "2021-03-08T13:17:31+00:00"
         },
         {
             "name": "imagine/imagine",
@@ -8343,7 +8343,7 @@
         },
         {
             "name": "yawik/applications",
-            "version": "v0.35.6",
+            "version": "0.35.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/yawik/applications.git",
@@ -8406,7 +8406,7 @@
         },
         {
             "name": "yawik/auth",
-            "version": "v0.35.6",
+            "version": "0.35.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/yawik/auth.git",
@@ -8540,16 +8540,16 @@
         },
         {
             "name": "yawik/core",
-            "version": "v0.35.6",
+            "version": "0.35.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/yawik/core.git",
-                "reference": "be374ffbba3c0c43a6744190d01ef60c02f56979"
+                "reference": "9c8ed2216cd48c2ba043e0666bd6f61c0c81acdb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/yawik/core/zipball/be374ffbba3c0c43a6744190d01ef60c02f56979",
-                "reference": "be374ffbba3c0c43a6744190d01ef60c02f56979",
+                "url": "https://api.github.com/repos/yawik/core/zipball/9c8ed2216cd48c2ba043e0666bd6f61c0c81acdb",
+                "reference": "9c8ed2216cd48c2ba043e0666bd6f61c0c81acdb",
                 "shasum": ""
             },
             "require": {
@@ -8648,7 +8648,7 @@
                 "yawik"
             ],
             "support": {
-                "source": "https://github.com/yawik/core/tree/v0.35.6"
+                "source": "https://github.com/yawik/core/tree/0.35.7"
             },
             "funding": [
                 {
@@ -8656,11 +8656,11 @@
                     "type": "github"
                 }
             ],
-            "time": "2021-04-20T16:54:40+00:00"
+            "time": "2021-07-08T15:05:34+00:00"
         },
         {
             "name": "yawik/cv",
-            "version": "v0.35.6",
+            "version": "0.35.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/yawik/cv.git",
@@ -8785,16 +8785,16 @@
         },
         {
             "name": "yawik/jobs",
-            "version": "v0.35.6",
+            "version": "0.35.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/yawik/jobs.git",
-                "reference": "a7813b98a5208371fd0b666d4b74c53d9d1ed208"
+                "reference": "d1583bcb10ff31ba77fc7b461ca787b8efea90d8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/yawik/jobs/zipball/a7813b98a5208371fd0b666d4b74c53d9d1ed208",
-                "reference": "a7813b98a5208371fd0b666d4b74c53d9d1ed208",
+                "url": "https://api.github.com/repos/yawik/jobs/zipball/d1583bcb10ff31ba77fc7b461ca787b8efea90d8",
+                "reference": "d1583bcb10ff31ba77fc7b461ca787b8efea90d8",
                 "shasum": ""
             },
             "require": {
@@ -8841,13 +8841,13 @@
             ],
             "support": {
                 "issues": "https://github.com/yawik/jobs/issues",
-                "source": "https://github.com/yawik/jobs/tree/v0.35.6"
+                "source": "https://github.com/yawik/jobs/tree/0.35.7"
             },
-            "time": "2021-04-07T16:02:06+00:00"
+            "time": "2021-06-14T15:53:31+00:00"
         },
         {
             "name": "yawik/organizations",
-            "version": "v0.35.6",
+            "version": "0.35.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/yawik/organizations.git",
@@ -8909,7 +8909,7 @@
         },
         {
             "name": "yawik/pdf",
-            "version": "v0.35.6",
+            "version": "0.35.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/yawik/pdf.git",
@@ -8972,7 +8972,7 @@
         },
         {
             "name": "yawik/settings",
-            "version": "v0.35.6",
+            "version": "0.35.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/yawik/settings.git",
@@ -10905,7 +10905,7 @@
         },
         {
             "name": "yawik/install",
-            "version": "v0.35.6",
+            "version": "0.35.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/yawik/install.git",

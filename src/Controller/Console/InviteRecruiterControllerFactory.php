@@ -12,6 +12,7 @@ declare(strict_types=1);
 namespace Form2Mail\Controller\Console;
 
 use Form2Mail\Entity\UserMetaData;
+use Form2Mail\Filter\FormFrontendUri;
 use Form2Mail\Options\ModuleOptions;
 use Psr\Container\ContainerInterface;
 
@@ -31,7 +32,8 @@ class InviteRecruiterControllerFactory
         return new InviteRecruiterController(
             $container->get('repositories')->get(UserMetaData::class),
             $container->get('Core/MailService'),
-            $container->get(ModuleOptions::class)
+            $container->get(ModuleOptions::class),
+            $container->get('FilterManager')->get(FormFrontendUri::class)
         );
     }
 }
