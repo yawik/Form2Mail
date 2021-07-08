@@ -12,6 +12,7 @@ namespace Form2Mail\Controller\Console;
 
 use Core\Mail\MailService;
 use Form2Mail\Entity\UserMetaData;
+use Form2Mail\Filter\FormFrontendUri;
 use Form2Mail\Options\ModuleOptions;
 use Form2Mail\Repository\UserMetaDataRepository;
 use Laminas\Mvc\Console\Controller\AbstractConsoleController;
@@ -28,6 +29,7 @@ class InviteRecruiterController extends AbstractConsoleController
     private $mails;
     private $meta;
     private $options;
+    private $uriFilter;
 
     public static function getConsoleUsage()
     {
@@ -52,11 +54,13 @@ class InviteRecruiterController extends AbstractConsoleController
     public function __construct(
         UserMetaDataRepository $meta,
         MailService $mails,
-        ModuleOptions $options
+        ModuleOptions $options,
+        FormFrontendUri $uriFilter
     ) {
         $this->meta = $meta;
         $this->mails = $mails;
         $this->options = $options;
+        $this->uriFilter = $uriFilter;
     }
 
     public function indexAction()
@@ -74,7 +78,7 @@ class InviteRecruiterController extends AbstractConsoleController
         foreach ($data as $meta) {
             $user = $meta->getUser();
             $job = $meta->getJob();
-            $link = $this->options->getFormFrontendUri() . '?job=' . $job->getApplyId();
+            $link = ($this->uriFilter)($job);
             $variables = [
                 'user' => $user,
                 'org' => $user->getOrganization()->getOrganization(),

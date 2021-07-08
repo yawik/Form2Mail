@@ -155,6 +155,7 @@ return [
     'filters' => [
         'factories' => [
             Filter\JsonDataFilter::class => InvokableFactory::class,
+            Filter\FormFrontendUri::class => Filter\FormFrontendUriFactory::class,
         ],
     ],
 
