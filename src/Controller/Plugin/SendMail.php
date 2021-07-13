@@ -11,13 +11,14 @@ declare(strict_types=1);
 namespace Form2Mail\Controller\Plugin;
 
 use Auth\Entity\Info;
+use Auth\Entity\InfoInterface;
 use Core\Mail\MailService;
 use Laminas\Mvc\Controller\Plugin\AbstractPlugin;
-use Laminas\Http\Response;
 use Laminas\Mail\Message;
 use Laminas\Mime\Message as MimeMessage;
 use Laminas\Mime\Mime;
 use Laminas\Mime\Part as MimePart;
+use Sabre\VObject\Component\VCard;
 
 /**
  * TODO: description
@@ -46,7 +47,7 @@ class SendMail extends AbstractPlugin
 
         // normalite json data
         /** @var \Core\Mail\HTMLTemplateMessage $mail */
-        $vars = $this->normalizeJsonData($json);
+        $vars = $this->normalizeJsonData($data);
         $vars['job'] = $job;
         $vars['org'] = $org;
         $vars['photo'] = isset($files['photo']) ? 1 : 0;
