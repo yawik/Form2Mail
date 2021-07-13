@@ -53,6 +53,7 @@ class StoreApplication extends AbstractPlugin
         $application->setJob($job);
         $application->setUser(new AnonymousUser());
         $application->setStatus(new Status());
+        $application->getPermissions()->inherit($job->getPermissions());
 
         $this->applications->store($application);
 
