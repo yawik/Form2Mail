@@ -51,6 +51,11 @@ class ModuleOptions extends AbstractOptions
     private $injectApplyUri = false;
 
     /**
+     * @var ?string
+     */
+    private $initialApplicationJobTitle;
+
+    /**
      * Get allowedOrigins
      *
      * @return array
@@ -172,5 +177,25 @@ class ModuleOptions extends AbstractOptions
     public function setInjectApplyUri(bool $injectApplyUri): void
     {
         $this->injectApplyUri = $injectApplyUri;
+    }
+
+    /**
+     * Get initialApplicationJobTitle
+     *
+     * @return ?string
+     */
+    public function getInitialApplicationJobTitle(): ?string
+    {
+        return $this->initialApplicationJobTitle;
+    }
+
+    /**
+     * Set initialApplicationJobTitle
+     *
+     * @param ?string $initialApplicationJobTitle
+     */
+    public function setInitialApplicationJobTitle(?string $initialApplicationJobTitle): void
+    {
+        $this->initialApplicationJobTitle = $initialApplicationJobTitle;
     }
 }
