@@ -189,6 +189,13 @@ class SendMailController extends AbstractActionController
     private function createInitialJob($org)
     {
         $options = $this->getModuleoptions();
+        $jobTitle = $options->getInitialApplicationJobTitle() ?? 'Initial application';
+        $job = $this->jobs->findOneBy(['title' => $jobTitle, 'organization' => $org]);
+
+        if ($job) {
+            return $job;
+        }
+
         $job = $this->jobs->create([
             'title' => $options->getInitialApplicationJobTitle() ?? 'Initial application',
             'organization' => $org,
