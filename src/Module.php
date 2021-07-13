@@ -55,7 +55,11 @@ class Module implements
 
     public function getConsoleBanner(AdapterInterface $console)
     {
-        return 'Form2Mail ' . $this->getVersion();
+        return sprintf(
+            '%s %s',
+            $this->getName(),
+            $this->getVersion()
+        );
     }
 
     public function getConsoleUsage(AdapterInterface $console)

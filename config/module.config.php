@@ -78,7 +78,7 @@ return [
             'routes' => [
                 'form2mail-invite-recruiters' => [
                     'options' => [
-                        'route' => 'form2mail invite-recruiters [--limit=]',
+                        'route' => 'form2mail invite-recruiters [--limit=] [--text]',
                         'defaults' => [
                             'controller' => Controller\Console\InviteRecruiterController::class,
                             'action' => 'index',
@@ -114,6 +114,12 @@ return [
         ],
     ],
 
+    'mails' => [
+        'factories' => [
+            'stringtemplate' => Mail\TextTemplateMailFactory::class,
+        ],
+    ],
+
     'view_manager' => [
         'template_map' => [
             'startpage'  => __DIR__ . '/../view/startpage.phtml',
@@ -124,6 +130,7 @@ return [
             'form2mail/mail/header' => __DIR__ . '/../view/mail/header.phtml',
             'form2mail/mail/footer' => __DIR__ . '/../view/mail/footer.phtml',
             'form2mail/mail/invite-recruiter' => __DIR__ . '/../view/mail/invite-recruiter.phtml',
+            'form2mail/mail/invite-recruiter-text' => __DIR__ . '/../view/mail/invite-recruiter-text.phtml',
         ]
     ],
 

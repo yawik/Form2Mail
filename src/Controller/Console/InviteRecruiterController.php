@@ -39,6 +39,7 @@ class InviteRecruiterController extends AbstractConsoleController
             'that were not receiving a mail yet.',
             "",
             ['--limit=INT', 'Send the invite email only to the first INT recruiters'],
+            ['--text', 'Use text emails instead of html formatted mails.'],
             "",
             'Following variables are passed to the mail template ',
             ['user', 'User entity of the recruiter'],
@@ -71,6 +72,13 @@ class InviteRecruiterController extends AbstractConsoleController
         $data = $this->meta->findMetaDataOfInvitableUsers(
             (int) $this->params('limit')
         );
+        if ($this->params('text', false)) {
+            $template = 'form2mail/mail/invite-recruiter-text';
+            $mailType = 'stringtemplate';
+        } else {
+            $template = 'form2mail/mail/invite-recruiter';
+            $mailType = 'htmltemplate';
+        }
 
         $console->writeLine('Found ' . count($data) . ' recruiters.');
 
@@ -87,14 +95,15 @@ class InviteRecruiterController extends AbstractConsoleController
                 'options' => $this->options,
             ];
 
-            $mail = $this->mails->build('htmltemplate');
+            $mail = $this->mails->build($mailType);
             $mail->addTo($user->getInfo()->getEmail());
             $mail->setSubject('Erstellen Sie Ihr Bewerbungs-Formular');
             $mail->setVariables($variables);
-            $mail->setTemplate('form2mail/mail/invite-recruiter');
+            $mail->setTemplate($template);
 
             try {
                 $this->mails->send($mail);
+                exit;
                 $meta->setState(UserMetaData::STATE_PENDING);
                 $this->meta->store($meta);
                 $console->writeLine(' - Mail send: ' . $user->getInfo()->getEmail());

@@ -1,0 +1,28 @@
+<?php
+
+/**
+ * Form2Mail
+ * template for the invite recruiter TEXT mail
+ *
+ * available Variables:
+ *
+ *  * $mail: The mail object
+ *  * $user: The recruiter user object
+ *  * $org:  The recruiters' organization
+ *  * $job:  The job advertisement
+ *  * $formLink: Link to the application form (Frontend)
+ *  * $options: Form2Mail Module options
+ */
+
+declare(strict_types=1);
+
+$this->mail->setSubject('Test Subject aus dem Email-Template')
+?>
+
+Erstellen Sie Ihr Bewerbungsformular
+====================================
+
+Einleitungstext
+
+Link zum Formular <?=$this->formLink?>
+
