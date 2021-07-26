@@ -103,7 +103,6 @@ class InviteRecruiterController extends AbstractConsoleController
 
             try {
                 $this->mails->send($mail);
-                exit;
                 $meta->setState(UserMetaData::STATE_PENDING);
                 $this->meta->store($meta);
                 $console->writeLine(' - Mail send: ' . $user->getInfo()->getEmail());
