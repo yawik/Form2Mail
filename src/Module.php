@@ -43,7 +43,7 @@ class Module implements
 {
     use VersionProviderTrait;
 
-    const VERSION = '0.2.1';
+    const VERSION = '0.3.0';
 
    /**
     * indicates, that the autoload configuration for this module should be loaded.
