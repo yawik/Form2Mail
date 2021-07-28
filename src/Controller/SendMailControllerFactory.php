@@ -32,6 +32,7 @@ class SendMailControllerFactory
 
         $controller = new SendMailController(
             $repos->get('Jobs'),
+            $container->get('Jobs/Events'),
             $repos->get('Organizations')
         );
 

@@ -10,10 +10,14 @@ declare(strict_types=1);
 
 namespace Form2Mail\Controller;
 
+use Core\EventManager\EventManager;
 use Form2Mail\Controller\Plugin\SendMail;
 use Form2Mail\Controller\Plugin\StoreApplication;
 use Form2Mail\Options\ModuleOptions;
 use Form2Mail\Options\SendmailOrganizationOptionsCollection;
+use Jobs\Entity\JobInterface;
+use Jobs\Entity\StatusInterface;
+use Jobs\Listener\Events\JobEvent;
 use Jobs\Repository\Job as JobsRepository;
 use Organizations\Repository\Organization as OrganizationRepository;
 use Laminas\Http\Request;
@@ -47,13 +51,18 @@ class SendMailController extends AbstractActionController
     ];
 
     private $jobs;
+    private $jobEvents;
     private $orgs;
     private $organizationOptions;
     private $moduleOptions;
 
-    public function __construct(JobsRepository $jobs, OrganizationRepository $orgs)
-    {
+    public function __construct(
+        JobsRepository $jobs,
+        EventManager $jobEvents,
+        OrganizationRepository $orgs
+    ) {
         $this->jobs = $jobs;
+        $this->jobEvvents = $jobEvents;
         $this->orgs = $orgs;
     }
 
@@ -132,6 +141,7 @@ class SendMailController extends AbstractActionController
                     ['ref' => $applyId]
                 );
             }
+            $job = $this->createInitialJob($org);
         } else {
             $org = $job->getOrganization();
         }
@@ -174,5 +184,31 @@ class SendMailController extends AbstractActionController
         }
 
         return new JsonModel($result);
+    }
+
+    private function createInitialJob($org)
+    {
+        $options = $this->getModuleoptions();
+        $jobTitle = $options->getInitialApplicationJobTitle() ?? 'Initial application';
+        $job = $this->jobs->findOneBy(['title' => $jobTitle, 'organization' => $org]);
+
+        if ($job) {
+            return $job;
+        }
+
+        $job = $this->jobs->create([
+            'title' => $options->getInitialApplicationJobTitle() ?? 'Initial application',
+            'organization' => $org,
+            'user' => $org->getUser(),
+        ]);
+        $job->setReference($this->jobs->getUniqueReference());
+        $job->changeStatus(StatusInterface::CREATED, "job was created by " . get_class($this));
+        $job->setAtsEnabled(true);
+
+        // sets ATS-Mode on intern
+        $job->getAtsMode();
+
+        $this->jobEvents->trigger(JobEvent::EVENT_JOB_CREATED, $this, array('job' => $job));
+        return $job;
     }
 }
