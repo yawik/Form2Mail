@@ -161,7 +161,7 @@ return [
 
     'hydrators' => [
         'factories' => [
-            Hydrator\ApplicationHydrator::class => InvokableFactory::class,
+            Hydrator\ApplicationHydrator::class => Hydrator\ApplicationHydratorFactory::class,
         ],
     ],
 

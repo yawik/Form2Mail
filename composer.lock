@@ -119,16 +119,16 @@
         },
         {
             "name": "composer/package-versions-deprecated",
-            "version": "1.11.99.2",
+            "version": "1.11.99.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/composer/package-versions-deprecated.git",
-                "reference": "c6522afe5540d5fc46675043d3ed5a45a740b27c"
+                "reference": "fff576ac850c045158a250e7e27666e146e78d18"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/composer/package-versions-deprecated/zipball/c6522afe5540d5fc46675043d3ed5a45a740b27c",
-                "reference": "c6522afe5540d5fc46675043d3ed5a45a740b27c",
+                "url": "https://api.github.com/repos/composer/package-versions-deprecated/zipball/fff576ac850c045158a250e7e27666e146e78d18",
+                "reference": "fff576ac850c045158a250e7e27666e146e78d18",
                 "shasum": ""
             },
             "require": {
@@ -172,7 +172,7 @@
             "description": "Composer plugin that provides efficient querying for installed package versions (no runtime IO)",
             "support": {
                 "issues": "https://github.com/composer/package-versions-deprecated/issues",
-                "source": "https://github.com/composer/package-versions-deprecated/tree/1.11.99.2"
+                "source": "https://github.com/composer/package-versions-deprecated/tree/1.11.99.3"
             },
             "funding": [
                 {
@@ -188,7 +188,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2021-05-24T07:46:03+00:00"
+            "time": "2021-08-17T13:49:14+00:00"
         },
         {
             "name": "container-interop/container-interop",
@@ -228,16 +228,16 @@
         },
         {
             "name": "doctrine/annotations",
-            "version": "1.13.1",
+            "version": "1.13.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/annotations.git",
-                "reference": "e6e7b7d5b45a2f2abc5460cc6396480b2b1d321f"
+                "reference": "5b668aef16090008790395c02c893b1ba13f7e08"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/annotations/zipball/e6e7b7d5b45a2f2abc5460cc6396480b2b1d321f",
-                "reference": "e6e7b7d5b45a2f2abc5460cc6396480b2b1d321f",
+                "url": "https://api.github.com/repos/doctrine/annotations/zipball/5b668aef16090008790395c02c893b1ba13f7e08",
+                "reference": "5b668aef16090008790395c02c893b1ba13f7e08",
                 "shasum": ""
             },
             "require": {
@@ -294,9 +294,9 @@
             ],
             "support": {
                 "issues": "https://github.com/doctrine/annotations/issues",
-                "source": "https://github.com/doctrine/annotations/tree/1.13.1"
+                "source": "https://github.com/doctrine/annotations/tree/1.13.2"
             },
-            "time": "2021-05-16T18:07:53+00:00"
+            "time": "2021-08-05T19:00:23+00:00"
         },
         {
             "name": "doctrine/cache",
@@ -399,26 +399,26 @@
         },
         {
             "name": "doctrine/collections",
-            "version": "1.6.7",
+            "version": "1.6.8",
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/collections.git",
-                "reference": "55f8b799269a1a472457bd1a41b4f379d4cfba4a"
+                "reference": "1958a744696c6bb3bb0d28db2611dc11610e78af"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/collections/zipball/55f8b799269a1a472457bd1a41b4f379d4cfba4a",
-                "reference": "55f8b799269a1a472457bd1a41b4f379d4cfba4a",
+                "url": "https://api.github.com/repos/doctrine/collections/zipball/1958a744696c6bb3bb0d28db2611dc11610e78af",
+                "reference": "1958a744696c6bb3bb0d28db2611dc11610e78af",
                 "shasum": ""
             },
             "require": {
                 "php": "^7.1.3 || ^8.0"
             },
             "require-dev": {
-                "doctrine/coding-standard": "^6.0",
-                "phpstan/phpstan-shim": "^0.9.2",
-                "phpunit/phpunit": "^7.0",
-                "vimeo/psalm": "^3.8.1"
+                "doctrine/coding-standard": "^9.0",
+                "phpstan/phpstan": "^0.12",
+                "phpunit/phpunit": "^7.5 || ^8.5 || ^9.1.5",
+                "vimeo/psalm": "^4.2.1"
             },
             "type": "library",
             "autoload": {
@@ -462,9 +462,9 @@
             ],
             "support": {
                 "issues": "https://github.com/doctrine/collections/issues",
-                "source": "https://github.com/doctrine/collections/tree/1.6.7"
+                "source": "https://github.com/doctrine/collections/tree/1.6.8"
             },
-            "time": "2020-07-27T17:53:49+00:00"
+            "time": "2021-08-10T18:51:53+00:00"
         },
         {
             "name": "doctrine/deprecations",
@@ -1147,16 +1147,16 @@
         },
         {
             "name": "doctrine/mongodb-odm",
-            "version": "2.2.1",
+            "version": "2.2.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/mongodb-odm.git",
-                "reference": "5ca00af8b053404f1ae1a0662d702d1959f9a49d"
+                "reference": "9ca6f5f9b0198da8ee930796255b4714c75db07d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/mongodb-odm/zipball/5ca00af8b053404f1ae1a0662d702d1959f9a49d",
-                "reference": "5ca00af8b053404f1ae1a0662d702d1959f9a49d",
+                "url": "https://api.github.com/repos/doctrine/mongodb-odm/zipball/9ca6f5f9b0198da8ee930796255b4714c75db07d",
+                "reference": "9ca6f5f9b0198da8ee930796255b4714c75db07d",
                 "shasum": ""
             },
             "require": {
@@ -1179,7 +1179,7 @@
                 "doctrine/coding-standard": "^8.2",
                 "ext-bcmath": "*",
                 "jmikola/geojson": "^1.0",
-                "phpbench/phpbench": "^1.0.0-alpha3",
+                "phpbench/phpbench": "^1.0.0",
                 "phpstan/phpstan": "^0.12.32",
                 "phpunit/phpunit": "^8.5 || ^9",
                 "squizlabs/php_codesniffer": "^3.5",
@@ -1237,7 +1237,7 @@
             ],
             "support": {
                 "issues": "https://github.com/doctrine/mongodb-odm/issues",
-                "source": "https://github.com/doctrine/mongodb-odm/tree/2.2.1"
+                "source": "https://github.com/doctrine/mongodb-odm/tree/2.2.2"
             },
             "funding": [
                 {
@@ -1253,20 +1253,20 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2021-04-22T11:54:32+00:00"
+            "time": "2021-08-04T13:20:42+00:00"
         },
         {
             "name": "doctrine/persistence",
-            "version": "2.2.1",
+            "version": "2.2.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/persistence.git",
-                "reference": "d138f3ab5f761055cab1054070377cfd3222e368"
+                "reference": "4ce4712e6dc84a156176a0fbbb11954a25c93103"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/persistence/zipball/d138f3ab5f761055cab1054070377cfd3222e368",
-                "reference": "d138f3ab5f761055cab1054070377cfd3222e368",
+                "url": "https://api.github.com/repos/doctrine/persistence/zipball/4ce4712e6dc84a156176a0fbbb11954a25c93103",
+                "reference": "4ce4712e6dc84a156176a0fbbb11954a25c93103",
                 "shasum": ""
             },
             "require": {
@@ -1338,9 +1338,9 @@
             ],
             "support": {
                 "issues": "https://github.com/doctrine/persistence/issues",
-                "source": "https://github.com/doctrine/persistence/tree/2.2.1"
+                "source": "https://github.com/doctrine/persistence/tree/2.2.2"
             },
-            "time": "2021-05-19T07:07:01+00:00"
+            "time": "2021-08-10T19:01:29+00:00"
         },
         {
             "name": "ezyang/htmlpurifier",
@@ -2145,16 +2145,16 @@
         },
         {
             "name": "laminas/laminas-cache-storage-adapter-ext-mongodb",
-            "version": "1.1.0",
+            "version": "1.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laminas/laminas-cache-storage-adapter-ext-mongodb.git",
-                "reference": "5810c3ffb442527b8b3429b0d29dce1ddabc92f2"
+                "reference": "72f68589cc8323fa688167a4720b795dd0907f4e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laminas/laminas-cache-storage-adapter-ext-mongodb/zipball/5810c3ffb442527b8b3429b0d29dce1ddabc92f2",
-                "reference": "5810c3ffb442527b8b3429b0d29dce1ddabc92f2",
+                "url": "https://api.github.com/repos/laminas/laminas-cache-storage-adapter-ext-mongodb/zipball/72f68589cc8323fa688167a4720b795dd0907f4e",
+                "reference": "72f68589cc8323fa688167a4720b795dd0907f4e",
                 "shasum": ""
             },
             "require": {
@@ -2170,10 +2170,11 @@
             "require-dev": {
                 "laminas/laminas-cache": "^2.10.3",
                 "laminas/laminas-cache-storage-adapter-test": "^1.1.1",
-                "laminas/laminas-coding-standard": "~1.0.0",
+                "laminas/laminas-coding-standard": "~2.2.0",
                 "laminas/laminas-serializer": "^2.10.1",
                 "mongodb/mongodb": "^1.8.0",
-                "squizlabs/php_codesniffer": "^2.7"
+                "psalm/plugin-phpunit": "^0.16.1",
+                "vimeo/psalm": "^4.9"
             },
             "suggest": {
                 "mongodb/mongodb": "MongoDB, to use the ExtMongoDb storage adapter"
@@ -2206,7 +2207,7 @@
                     "type": "community_bridge"
                 }
             ],
-            "time": "2021-05-06T07:52:48+00:00"
+            "time": "2021-08-10T18:17:48+00:00"
         },
         {
             "name": "laminas/laminas-cache-storage-adapter-filesystem",
@@ -2335,20 +2336,20 @@
         },
         {
             "name": "laminas/laminas-cache-storage-adapter-memcached",
-            "version": "1.1.0",
+            "version": "1.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laminas/laminas-cache-storage-adapter-memcached.git",
-                "reference": "f5d35cc2ef6264c76021bcc798569182103baa91"
+                "reference": "d05f33e43a352b85c6d0208e9cfbf2a59f02ede3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laminas/laminas-cache-storage-adapter-memcached/zipball/f5d35cc2ef6264c76021bcc798569182103baa91",
-                "reference": "f5d35cc2ef6264c76021bcc798569182103baa91",
+                "url": "https://api.github.com/repos/laminas/laminas-cache-storage-adapter-memcached/zipball/d05f33e43a352b85c6d0208e9cfbf2a59f02ede3",
+                "reference": "d05f33e43a352b85c6d0208e9cfbf2a59f02ede3",
                 "shasum": ""
             },
             "require": {
-                "php": "^7.3"
+                "php": "^7.3 || ~8.0.0"
             },
             "conflict": {
                 "laminas/laminas-cache": "<2.10"
@@ -2359,9 +2360,8 @@
             "require-dev": {
                 "laminas/laminas-cache": "^2.10",
                 "laminas/laminas-cache-storage-adapter-test": "^1.0.2",
-                "laminas/laminas-coding-standard": "~1.0.0",
-                "phpunit/phpunit": "^7.5.20",
-                "squizlabs/php_codesniffer": "^2.7"
+                "laminas/laminas-coding-standard": "~2.2.0",
+                "phpunit/phpunit": "^9.5.8"
             },
             "suggest": {
                 "ext-memcached": "Memcached >= 1.0.0 to use the Memcached storage adapter"
@@ -2395,7 +2395,7 @@
                     "type": "community_bridge"
                 }
             ],
-            "time": "2021-04-24T20:06:16+00:00"
+            "time": "2021-08-08T14:51:12+00:00"
         },
         {
             "name": "laminas/laminas-cache-storage-adapter-memory",
@@ -3743,16 +3743,16 @@
         },
         {
             "name": "laminas/laminas-i18n",
-            "version": "2.11.1",
+            "version": "2.11.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laminas/laminas-i18n.git",
-                "reference": "5e85a8facc5534e856cc7f5b4326533eede84b8a"
+                "reference": "78adb53ebf6c0bc63f92273fd7809dabc554f786"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laminas/laminas-i18n/zipball/5e85a8facc5534e856cc7f5b4326533eede84b8a",
-                "reference": "5e85a8facc5534e856cc7f5b4326533eede84b8a",
+                "url": "https://api.github.com/repos/laminas/laminas-i18n/zipball/78adb53ebf6c0bc63f92273fd7809dabc554f786",
+                "reference": "78adb53ebf6c0bc63f92273fd7809dabc554f786",
                 "shasum": ""
             },
             "require": {
@@ -3824,7 +3824,7 @@
                     "type": "community_bridge"
                 }
             ],
-            "time": "2021-04-07T21:10:50+00:00"
+            "time": "2021-08-20T08:23:04+00:00"
         },
         {
             "name": "laminas/laminas-i18n-resources",
@@ -5771,24 +5771,23 @@
         },
         {
             "name": "laminas/laminas-stdlib",
-            "version": "3.4.0",
+            "version": "3.5.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laminas/laminas-stdlib.git",
-                "reference": "e89c2268c9cad25099f562f7f015c28c5dd383c9"
+                "reference": "c8ac6a76a133e682acfabc821d4a2ec646934b12"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laminas/laminas-stdlib/zipball/e89c2268c9cad25099f562f7f015c28c5dd383c9",
-                "reference": "e89c2268c9cad25099f562f7f015c28c5dd383c9",
+                "url": "https://api.github.com/repos/laminas/laminas-stdlib/zipball/c8ac6a76a133e682acfabc821d4a2ec646934b12",
+                "reference": "c8ac6a76a133e682acfabc821d4a2ec646934b12",
                 "shasum": ""
             },
             "require": {
-                "laminas/laminas-zendframework-bridge": "^1.0",
                 "php": "^7.3 || ^8.0"
             },
-            "replace": {
-                "zendframework/zend-stdlib": "^3.2.1"
+            "conflict": {
+                "zendframework/zend-stdlib": "*"
             },
             "require-dev": {
                 "laminas/laminas-coding-standard": "~2.3.0",
@@ -5827,7 +5826,7 @@
                     "type": "community_bridge"
                 }
             ],
-            "time": "2021-06-28T21:37:31+00:00"
+            "time": "2021-08-03T13:40:40+00:00"
         },
         {
             "name": "laminas/laminas-text",
@@ -6965,47 +6964,47 @@
         },
         {
             "name": "slm/queue",
-            "version": "1.0.4",
+            "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/JouwWeb/SlmQueue.git",
-                "reference": "6f0d92a04ef3dfa088fac9a3f9638c554968fe77"
+                "reference": "5deeaa8cf53c5e6b12e374ddc5e1ec5ca83b3a85"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/JouwWeb/SlmQueue/zipball/6f0d92a04ef3dfa088fac9a3f9638c554968fe77",
-                "reference": "6f0d92a04ef3dfa088fac9a3f9638c554968fe77",
+                "url": "https://api.github.com/repos/JouwWeb/SlmQueue/zipball/5deeaa8cf53c5e6b12e374ddc5e1ec5ca83b3a85",
+                "reference": "5deeaa8cf53c5e6b12e374ddc5e1ec5ca83b3a85",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.5",
-                "zendframework/zend-eventmanager": "^2.6 || ^3.0",
-                "zendframework/zend-servicemanager": "^2.7 || ^3.0",
-                "zendframework/zend-stdlib": "^2.7 || ^3.0"
+                "laminas/laminas-eventmanager": "^3.3",
+                "laminas/laminas-servicemanager": "^3.6",
+                "laminas/laminas-stdlib": "^3.3",
+                "php": "^7.3 || ^8.0"
             },
             "require-dev": {
-                "phpunit/phpunit": "^4.8",
-                "squizlabs/php_codesniffer": "^2.0",
-                "zendframework/zend-config": "^2.6",
-                "zendframework/zend-console": "^2.6",
-                "zendframework/zend-i18n": "^2.6",
-                "zendframework/zend-log": "^2.7",
-                "zendframework/zend-modulemanager": "^2.5",
-                "zendframework/zend-mvc": "^2.5",
-                "zendframework/zend-serializer": "^2.6",
-                "zendframework/zend-view": "^2.7"
+                "laminas/laminas-config": "^3.4",
+                "laminas/laminas-i18n": "^2.11",
+                "laminas/laminas-log": "^2.13",
+                "laminas/laminas-modulemanager": "^2.10",
+                "laminas/laminas-mvc": "^3.2",
+                "laminas/laminas-serializer": "^2.10.1",
+                "laminas/laminas-view": "^2.12",
+                "phpunit/phpunit": "^9.3"
             },
             "suggest": {
+                "rnd-cosoft/slm-queue-rabbitmq": "If you are using RabbitMQ",
                 "slm/queue-beanstalkd": "If you are using Beanstalk",
                 "slm/queue-doctrine": "If you are using Doctrine ORM",
                 "slm/queue-sqs": "If you are using Amazon SQS"
             },
+            "default-branch": true,
             "type": "library",
             "extra": {
                 "branch-alias": {
                     "dev-master": "1.1.x-dev"
                 },
-                "zf": {
+                "laminas": {
                     "module": "SlmQueue",
                     "config-provider": "SlmQueue\\ConfigProvider"
                 }
@@ -7040,21 +7039,19 @@
                     "homepage": "http://www.roelvanduijnhoven.nl"
                 }
             ],
-            "description": "Zend Framework module that integrates with various queue management systems",
+            "description": "Laminas module that integrates with various queue management systems",
             "homepage": "https://github.com/juriansluiman/SlmQueue",
             "keywords": [
-                "ZendFramework",
-                "expressive",
                 "job",
-                "queue",
-                "zf2",
-                "zf3"
+                "laminas",
+                "mezzio",
+                "queue"
             ],
             "support": {
                 "issues": "https://github.com/JouwWeb/SlmQueue/issues",
-                "source": "https://github.com/JouwWeb/SlmQueue/tree/master"
+                "source": "https://github.com/JouwWeb/SlmQueue/tree/3.0-beta.3"
             },
-            "time": "2019-03-21T12:39:36+00:00"
+            "time": "2021-07-09T12:12:20+00:00"
         },
         {
             "name": "symfony/console",
@@ -7219,21 +7216,20 @@
         },
         {
             "name": "symfony/dotenv",
-            "version": "v4.4.27",
+            "version": "v4.4.29",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/dotenv.git",
-                "reference": "51791c28e2fb56ff5b508fd8d5d5e3c0514c6b7a"
+                "reference": "2b078eff6268875f4639cf16e48e321982c671bb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/dotenv/zipball/51791c28e2fb56ff5b508fd8d5d5e3c0514c6b7a",
-                "reference": "51791c28e2fb56ff5b508fd8d5d5e3c0514c6b7a",
+                "url": "https://api.github.com/repos/symfony/dotenv/zipball/2b078eff6268875f4639cf16e48e321982c671bb",
+                "reference": "2b078eff6268875f4639cf16e48e321982c671bb",
                 "shasum": ""
             },
             "require": {
-                "php": ">=7.1.3",
-                "symfony/polyfill-php80": "^1.16"
+                "php": ">=7.1.3"
             },
             "require-dev": {
                 "symfony/process": "^3.4.2|^4.0|^5.0"
@@ -7269,7 +7265,7 @@
                 "environment"
             ],
             "support": {
-                "source": "https://github.com/symfony/dotenv/tree/v4.4.27"
+                "source": "https://github.com/symfony/dotenv/tree/v4.4.29"
             },
             "funding": [
                 {
@@ -7285,7 +7281,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2021-07-21T12:19:41+00:00"
+            "time": "2021-07-27T16:19:30+00:00"
         },
         {
             "name": "symfony/filesystem",
@@ -7493,16 +7489,16 @@
         },
         {
             "name": "symfony/polyfill-mbstring",
-            "version": "v1.23.0",
+            "version": "v1.23.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/polyfill-mbstring.git",
-                "reference": "2df51500adbaebdc4c38dea4c89a2e131c45c8a1"
+                "reference": "9174a3d80210dca8daa7f31fec659150bbeabfc6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/polyfill-mbstring/zipball/2df51500adbaebdc4c38dea4c89a2e131c45c8a1",
-                "reference": "2df51500adbaebdc4c38dea4c89a2e131c45c8a1",
+                "url": "https://api.github.com/repos/symfony/polyfill-mbstring/zipball/9174a3d80210dca8daa7f31fec659150bbeabfc6",
+                "reference": "9174a3d80210dca8daa7f31fec659150bbeabfc6",
                 "shasum": ""
             },
             "require": {
@@ -7553,7 +7549,7 @@
                 "shim"
             ],
             "support": {
-                "source": "https://github.com/symfony/polyfill-mbstring/tree/v1.23.0"
+                "source": "https://github.com/symfony/polyfill-mbstring/tree/v1.23.1"
             },
             "funding": [
                 {
@@ -7569,7 +7565,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2021-05-27T09:27:20+00:00"
+            "time": "2021-05-27T12:26:48+00:00"
         },
         {
             "name": "symfony/polyfill-php73",
@@ -7652,16 +7648,16 @@
         },
         {
             "name": "symfony/polyfill-php80",
-            "version": "v1.23.0",
+            "version": "v1.23.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/polyfill-php80.git",
-                "reference": "eca0bf41ed421bed1b57c4958bab16aa86b757d0"
+                "reference": "1100343ed1a92e3a38f9ae122fc0eb21602547be"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/polyfill-php80/zipball/eca0bf41ed421bed1b57c4958bab16aa86b757d0",
-                "reference": "eca0bf41ed421bed1b57c4958bab16aa86b757d0",
+                "url": "https://api.github.com/repos/symfony/polyfill-php80/zipball/1100343ed1a92e3a38f9ae122fc0eb21602547be",
+                "reference": "1100343ed1a92e3a38f9ae122fc0eb21602547be",
                 "shasum": ""
             },
             "require": {
@@ -7715,7 +7711,7 @@
                 "shim"
             ],
             "support": {
-                "source": "https://github.com/symfony/polyfill-php80/tree/v1.23.0"
+                "source": "https://github.com/symfony/polyfill-php80/tree/v1.23.1"
             },
             "funding": [
                 {
@@ -7731,7 +7727,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2021-02-19T12:13:01+00:00"
+            "time": "2021-07-28T13:41:28+00:00"
         },
         {
             "name": "symfony/process",
@@ -7876,16 +7872,16 @@
         },
         {
             "name": "symfony/var-dumper",
-            "version": "v5.3.4",
+            "version": "v5.3.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/var-dumper.git",
-                "reference": "a895407f7cf55da42aa1480935d707684b690bfc"
+                "reference": "3dd8ddd1e260e58ecc61bb78da3b6584b3bfcba0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/var-dumper/zipball/a895407f7cf55da42aa1480935d707684b690bfc",
-                "reference": "a895407f7cf55da42aa1480935d707684b690bfc",
+                "url": "https://api.github.com/repos/symfony/var-dumper/zipball/3dd8ddd1e260e58ecc61bb78da3b6584b3bfcba0",
+                "reference": "3dd8ddd1e260e58ecc61bb78da3b6584b3bfcba0",
                 "shasum": ""
             },
             "require": {
@@ -7944,7 +7940,7 @@
                 "dump"
             ],
             "support": {
-                "source": "https://github.com/symfony/var-dumper/tree/v5.3.4"
+                "source": "https://github.com/symfony/var-dumper/tree/v5.3.6"
             },
             "funding": [
                 {
@@ -7960,26 +7956,26 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2021-07-23T15:55:36+00:00"
+            "time": "2021-07-27T01:56:02+00:00"
         },
         {
             "name": "tracy/tracy",
-            "version": "v2.8.5",
+            "version": "v2.8.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/nette/tracy.git",
-                "reference": "b23da41363546aa750d9f698f21e14815bd78913"
+                "reference": "8e708de7c611f626c8792d43f1c78812ea24e6f6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nette/tracy/zipball/b23da41363546aa750d9f698f21e14815bd78913",
-                "reference": "b23da41363546aa750d9f698f21e14815bd78913",
+                "url": "https://api.github.com/repos/nette/tracy/zipball/8e708de7c611f626c8792d43f1c78812ea24e6f6",
+                "reference": "8e708de7c611f626c8792d43f1c78812ea24e6f6",
                 "shasum": ""
             },
             "require": {
                 "ext-json": "*",
                 "ext-session": "*",
-                "php": ">=7.2 <8.1"
+                "php": ">=7.2 <8.2"
             },
             "conflict": {
                 "nette/di": "<3.0"
@@ -8032,9 +8028,9 @@
             ],
             "support": {
                 "issues": "https://github.com/nette/tracy/issues",
-                "source": "https://github.com/nette/tracy/tree/v2.8.5"
+                "source": "https://github.com/nette/tracy/tree/v2.8.7"
             },
-            "time": "2021-06-02T15:42:54+00:00"
+            "time": "2021-08-24T16:26:27+00:00"
         },
         {
             "name": "true/punycode",
@@ -8147,20 +8143,20 @@
         },
         {
             "name": "yawik/applications",
-            "version": "1.0.0",
+            "version": "1.0.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/yawik/applications.git",
-                "reference": "737fa9e84183db6cedfa84d59e4afdb1a61c52c5"
+                "reference": "808a304a31d1ae21327129576171ad7232bca854"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/yawik/applications/zipball/737fa9e84183db6cedfa84d59e4afdb1a61c52c5",
-                "reference": "737fa9e84183db6cedfa84d59e4afdb1a61c52c5",
+                "url": "https://api.github.com/repos/yawik/applications/zipball/808a304a31d1ae21327129576171ad7232bca854",
+                "reference": "808a304a31d1ae21327129576171ad7232bca854",
                 "shasum": ""
             },
             "require": {
-                "yawik/core": ">=0.33@dev"
+                "yawik/core": "^1.0"
             },
             "type": "yawik-module",
             "extra": {
@@ -8204,27 +8200,27 @@
                 "yawik"
             ],
             "support": {
-                "source": "https://github.com/yawik/applications/tree/1.0.0"
+                "source": "https://github.com/yawik/applications/tree/1.0.5"
             },
-            "time": "2021-07-27T14:07:48+00:00"
+            "time": "2021-08-05T16:57:36+00:00"
         },
         {
             "name": "yawik/auth",
-            "version": "1.0.0",
+            "version": "1.0.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/yawik/auth.git",
-                "reference": "166ca333f55e5ec3c0eef7afbe059459752b65e7"
+                "reference": "1e036dd9b7995b9430d635cdd657ff8029d24008"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/yawik/auth/zipball/166ca333f55e5ec3c0eef7afbe059459752b65e7",
-                "reference": "166ca333f55e5ec3c0eef7afbe059459752b65e7",
+                "url": "https://api.github.com/repos/yawik/auth/zipball/1e036dd9b7995b9430d635cdd657ff8029d24008",
+                "reference": "1e036dd9b7995b9430d635cdd657ff8029d24008",
                 "shasum": ""
             },
             "require": {
                 "hybridauth/hybridauth": "^2.10",
-                "yawik/core": ">=0.33@dev"
+                "yawik/core": "^1.0"
             },
             "type": "yawik-module",
             "extra": {
@@ -8267,22 +8263,22 @@
                 "yawik"
             ],
             "support": {
-                "source": "https://github.com/yawik/auth/tree/1.0.0"
+                "source": "https://github.com/yawik/auth/tree/1.0.5"
             },
-            "time": "2021-07-26T10:50:02+00:00"
+            "time": "2021-07-28T16:03:10+00:00"
         },
         {
             "name": "yawik/core",
-            "version": "1.0.0",
+            "version": "1.0.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/yawik/core.git",
-                "reference": "7fd4ab268478f276e8e4b54751388f4dfdb21e1f"
+                "reference": "201635e554f2b3b37a725266c38bbef45621ac4b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/yawik/core/zipball/7fd4ab268478f276e8e4b54751388f4dfdb21e1f",
-                "reference": "7fd4ab268478f276e8e4b54751388f4dfdb21e1f",
+                "url": "https://api.github.com/repos/yawik/core/zipball/201635e554f2b3b37a725266c38bbef45621ac4b",
+                "reference": "201635e554f2b3b37a725266c38bbef45621ac4b",
                 "shasum": ""
             },
             "require": {
@@ -8382,7 +8378,7 @@
                 "yawik"
             ],
             "support": {
-                "source": "https://github.com/yawik/core/tree/1.0.0"
+                "source": "https://github.com/yawik/core/tree/1.0.5"
             },
             "funding": [
                 {
@@ -8390,24 +8386,24 @@
                     "type": "github"
                 }
             ],
-            "time": "2021-07-27T14:13:35+00:00"
+            "time": "2021-08-06T11:47:26+00:00"
         },
         {
             "name": "yawik/jobs",
-            "version": "1.0.0",
+            "version": "1.0.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/yawik/jobs.git",
-                "reference": "c6d483b6e1b8dc44adddfc6315e16fbf4450037b"
+                "reference": "06e4ecf419eeedc5b6def5886027e9e204ce270e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/yawik/jobs/zipball/c6d483b6e1b8dc44adddfc6315e16fbf4450037b",
-                "reference": "c6d483b6e1b8dc44adddfc6315e16fbf4450037b",
+                "url": "https://api.github.com/repos/yawik/jobs/zipball/06e4ecf419eeedc5b6def5886027e9e204ce270e",
+                "reference": "06e4ecf419eeedc5b6def5886027e9e204ce270e",
                 "shasum": ""
             },
             "require": {
-                "yawik/core": ">=0.33@dev"
+                "yawik/core": "^1.0"
             },
             "type": "yawik-module",
             "extra": {
@@ -8450,26 +8446,26 @@
             ],
             "support": {
                 "issues": "https://github.com/yawik/jobs/issues",
-                "source": "https://github.com/yawik/jobs/tree/1.0.0"
+                "source": "https://github.com/yawik/jobs/tree/1.0.5"
             },
-            "time": "2021-07-27T09:18:23+00:00"
+            "time": "2021-07-30T15:22:04+00:00"
         },
         {
             "name": "yawik/organizations",
-            "version": "1.0.0",
+            "version": "1.0.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/yawik/organizations.git",
-                "reference": "ceb9b9dd493b2df640912230c303dbff62ebeabe"
+                "reference": "f9ebefa914442f570145a5b20430e5132c72a00e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/yawik/organizations/zipball/ceb9b9dd493b2df640912230c303dbff62ebeabe",
-                "reference": "ceb9b9dd493b2df640912230c303dbff62ebeabe",
+                "url": "https://api.github.com/repos/yawik/organizations/zipball/f9ebefa914442f570145a5b20430e5132c72a00e",
+                "reference": "f9ebefa914442f570145a5b20430e5132c72a00e",
                 "shasum": ""
             },
             "require": {
-                "yawik/core": ">=0.33@dev"
+                "yawik/core": "^1.0"
             },
             "type": "yawik-module",
             "extra": {
@@ -8512,9 +8508,9 @@
             ],
             "support": {
                 "issues": "https://github.com/yawik/organizations/issues",
-                "source": "https://github.com/yawik/organizations/tree/1.0.0"
+                "source": "https://github.com/yawik/organizations/tree/1.0.5"
             },
-            "time": "2021-07-26T10:50:02+00:00"
+            "time": "2021-07-29T17:18:42+00:00"
         }
     ],
     "packages-dev": [
@@ -9479,16 +9475,16 @@
         },
         {
             "name": "phpstan/phpstan",
-            "version": "0.12.93",
+            "version": "0.12.96",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpstan/phpstan.git",
-                "reference": "7b7602f05d340ffa418c59299f8c053ac6c3e7ea"
+                "reference": "a98bdc51318f20fcae8c953d266f81a70254917f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/7b7602f05d340ffa418c59299f8c053ac6c3e7ea",
-                "reference": "7b7602f05d340ffa418c59299f8c053ac6c3e7ea",
+                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/a98bdc51318f20fcae8c953d266f81a70254917f",
+                "reference": "a98bdc51318f20fcae8c953d266f81a70254917f",
                 "shasum": ""
             },
             "require": {
@@ -9519,7 +9515,7 @@
             "description": "PHPStan - PHP Static Analysis Tool",
             "support": {
                 "issues": "https://github.com/phpstan/phpstan/issues",
-                "source": "https://github.com/phpstan/phpstan/tree/0.12.93"
+                "source": "https://github.com/phpstan/phpstan/tree/0.12.96"
             },
             "funding": [
                 {
@@ -9539,7 +9535,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2021-07-20T10:49:53+00:00"
+            "time": "2021-08-21T11:55:13+00:00"
         },
         {
             "name": "psr/event-dispatcher",
@@ -10494,23 +10490,22 @@
         },
         {
             "name": "symfony/yaml",
-            "version": "v5.3.4",
+            "version": "v5.3.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/yaml.git",
-                "reference": "90909bd7352ae57411a93fcd67b09e6199340547"
+                "reference": "4500fe63dc9c6ffc32d3b1cb0448c329f9c814b7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/yaml/zipball/90909bd7352ae57411a93fcd67b09e6199340547",
-                "reference": "90909bd7352ae57411a93fcd67b09e6199340547",
+                "url": "https://api.github.com/repos/symfony/yaml/zipball/4500fe63dc9c6ffc32d3b1cb0448c329f9c814b7",
+                "reference": "4500fe63dc9c6ffc32d3b1cb0448c329f9c814b7",
                 "shasum": ""
             },
             "require": {
                 "php": ">=7.2.5",
                 "symfony/deprecation-contracts": "^2.1",
-                "symfony/polyfill-ctype": "~1.8",
-                "symfony/polyfill-php80": "^1.16"
+                "symfony/polyfill-ctype": "~1.8"
             },
             "conflict": {
                 "symfony/console": "<4.4"
@@ -10550,7 +10545,7 @@
             "description": "Loads and dumps YAML files",
             "homepage": "https://symfony.com",
             "support": {
-                "source": "https://github.com/symfony/yaml/tree/v5.3.4"
+                "source": "https://github.com/symfony/yaml/tree/v5.3.6"
             },
             "funding": [
                 {
@@ -10566,7 +10561,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2021-07-21T12:40:44+00:00"
+            "time": "2021-07-29T06:20:01+00:00"
         },
         {
             "name": "yawik/behat",
@@ -10713,20 +10708,20 @@
         },
         {
             "name": "yawik/cv",
-            "version": "1.0.0",
+            "version": "1.0.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/yawik/cv.git",
-                "reference": "db3090991f19a293137c3f10c4d6f29beacb527a"
+                "reference": "7151930f33b14519c6bc4653f8ad3a8db175c7b0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/yawik/cv/zipball/db3090991f19a293137c3f10c4d6f29beacb527a",
-                "reference": "db3090991f19a293137c3f10c4d6f29beacb527a",
+                "url": "https://api.github.com/repos/yawik/cv/zipball/7151930f33b14519c6bc4653f8ad3a8db175c7b0",
+                "reference": "7151930f33b14519c6bc4653f8ad3a8db175c7b0",
                 "shasum": ""
             },
             "require": {
-                "yawik/core": ">=0.33@dev"
+                "yawik/core": "^1.0"
             },
             "type": "yawik-module",
             "extra": {
@@ -10770,9 +10765,9 @@
                 "yawik"
             ],
             "support": {
-                "source": "https://github.com/yawik/cv/tree/1.0.0"
+                "source": "https://github.com/yawik/cv/tree/1.0.5"
             },
-            "time": "2021-02-15T11:51:37+00:00"
+            "time": "2021-07-29T17:18:42+00:00"
         },
         {
             "name": "yawik/geo",
@@ -10838,20 +10833,20 @@
         },
         {
             "name": "yawik/install",
-            "version": "1.0.0",
+            "version": "1.0.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/yawik/install.git",
-                "reference": "2bad655823d54d43e7fd904fb5f69c2d8471467a"
+                "reference": "aa92e148b5600fa7451e41f74a65c27b9d501f5f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/yawik/install/zipball/2bad655823d54d43e7fd904fb5f69c2d8471467a",
-                "reference": "2bad655823d54d43e7fd904fb5f69c2d8471467a",
+                "url": "https://api.github.com/repos/yawik/install/zipball/aa92e148b5600fa7451e41f74a65c27b9d501f5f",
+                "reference": "aa92e148b5600fa7451e41f74a65c27b9d501f5f",
                 "shasum": ""
             },
             "require": {
-                "yawik/core": ">=0.33@dev"
+                "yawik/core": "^1.0"
             },
             "type": "yawik-module",
             "extra": {
@@ -10890,27 +10885,27 @@
             ],
             "support": {
                 "issues": "https://github.com/yawik/install/issues",
-                "source": "https://github.com/yawik/install/tree/1.0.0"
+                "source": "https://github.com/yawik/install/tree/1.0.5"
             },
-            "time": "2021-02-15T11:51:37+00:00"
+            "time": "2021-07-29T17:18:42+00:00"
         },
         {
             "name": "yawik/pdf",
-            "version": "1.0.0",
+            "version": "1.0.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/yawik/pdf.git",
-                "reference": "660fe0b842750c8a09b679d9df92ad8951d714d9"
+                "reference": "50bd8ed96d0e05aed8c5ef7ae2c4f05d7685a542"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/yawik/pdf/zipball/660fe0b842750c8a09b679d9df92ad8951d714d9",
-                "reference": "660fe0b842750c8a09b679d9df92ad8951d714d9",
+                "url": "https://api.github.com/repos/yawik/pdf/zipball/50bd8ed96d0e05aed8c5ef7ae2c4f05d7685a542",
+                "reference": "50bd8ed96d0e05aed8c5ef7ae2c4f05d7685a542",
                 "shasum": ""
             },
             "require": {
                 "mpdf/mpdf": "^8.0",
-                "yawik/core": ">=0.33@dev"
+                "yawik/core": "^1.0"
             },
             "type": "yawik-module",
             "extra": {
@@ -10953,26 +10948,26 @@
             ],
             "support": {
                 "issues": "https://github.com/yawik/pdf/issues",
-                "source": "https://github.com/yawik/pdf/tree/v0.34.8"
+                "source": "https://github.com/yawik/pdf/tree/1.0.5"
             },
-            "time": "2020-06-24T08:06:04+00:00"
+            "time": "2021-07-28T16:03:10+00:00"
         },
         {
             "name": "yawik/settings",
-            "version": "1.0.0",
+            "version": "1.0.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/yawik/settings.git",
-                "reference": "8a616d2a6e1cc5c85f0bed514402522b14b0be9e"
+                "reference": "11d73ceed05f882b3e6c3094dacddef747a74fca"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/yawik/settings/zipball/8a616d2a6e1cc5c85f0bed514402522b14b0be9e",
-                "reference": "8a616d2a6e1cc5c85f0bed514402522b14b0be9e",
+                "url": "https://api.github.com/repos/yawik/settings/zipball/11d73ceed05f882b3e6c3094dacddef747a74fca",
+                "reference": "11d73ceed05f882b3e6c3094dacddef747a74fca",
                 "shasum": ""
             },
             "require": {
-                "yawik/core": ">=0.33@dev"
+                "yawik/core": "^1.0"
             },
             "type": "yawik-module",
             "extra": {
@@ -11015,9 +11010,9 @@
             ],
             "support": {
                 "issues": "https://github.com/yawik/settings/issues",
-                "source": "https://github.com/yawik/settings/tree/1.0.0"
+                "source": "https://github.com/yawik/settings/tree/1.0.5"
             },
-            "time": "2021-02-15T11:51:37+00:00"
+            "time": "2021-07-29T17:18:42+00:00"
         }
     ],
     "aliases": [],
@@ -11030,5 +11025,5 @@
     "platform-overrides": {
         "ext-mongo": "1.6.16"
     },
-    "plugin-api-version": "2.0.0"
+    "plugin-api-version": "2.1.0"
 }

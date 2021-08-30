@@ -12,7 +12,9 @@ namespace Form2Mail\Hydrator;
 
 use Applications\Entity\Attachment;
 use Applications\Entity\Contact;
+use Core\Entity\FileMetadata;
 use Core\Entity\Hydrator\EntityHydrator;
+use Core\Service\FileManager;
 use Form2Mail\Filter\JsonDataFilter;
 
 /**
@@ -25,6 +27,12 @@ class ApplicationHydrator extends EntityHydrator
 {
 
     private $jsonDataFilter;
+    private $fileManager;
+
+    public function __construct(FileManager $fileManager)
+    {
+        $this->fileManager = $fileManager;
+    }
 
     public function setJsonDataFilter($filter)
     {
@@ -43,13 +51,21 @@ class ApplicationHydrator extends EntityHydrator
     public function hydrate(array $data, $object)
     {
         $filter = $this->getJsonDataFilter();
+        $fileManager = $this->fileManager;
         $data = $filter($data);
 
         if ($data['photo'] && $data['photo']['error'] === UPLOAD_ERR_OK) {
-            $image = new Attachment();
-            $image->setName($data['photo']['name']);
-            $image->setType(mime_content_type($data['photo']['tmp_name']));
-            $image->setFile($data['photo']['tmp_name']);
+
+            $metadata = new FileMetadata();
+            $metadata->setContentType(mime_content_type($data['photo']['tmp_name']));
+            $metadata->setName($data['photo']['name']);
+
+            $image = $fileManager->uploadFromFile(
+                Attachment::class,
+                $metadata,
+                $data['photo']['tmp_name'],
+                $data['photo']['name']
+            );
 
             $data['contact']['image'] = $image;
         }
@@ -62,10 +78,16 @@ class ApplicationHydrator extends EntityHydrator
             if ($tmpFile['error'] != UPLOAD_ERR_OK) {
                 continue;
             }
-            $file = new Attachment();
-            $file->setName($tmpFile['name']);
-            $file->setType(mime_content_type($tmpFile['tmp_name']));
-            $file->setFile($tmpFile['tmp_name']);
+            $metadata = new FileMetadata();
+            $metadata->setContentType(mime_content_type($tmpFile['tmp_name']));
+            $metadata->setName($tmpFile['name']);
+
+            $file = $fileManager->uploadFromFile(
+                Attachment::class,
+                $metadata,
+                $tmpFile['tmp_name'],
+                $tmpFile['name']
+            );
 
             $attachments->add($file);
         }
